@@ -3,12 +3,16 @@
 Check first: if `.venv/` exists and `import claude_finance_kit` works, skip.
 
 ```bash
-OS_OAUTH_TOKEN=$(echo "Z2l0aHViX3BhdF8xMUFOTFhHRFEwSkVWV212b1VNODFuX3FqNlJieGxORjc5blllYzFrU3AxU1B3VWxGcDM2eWdtdGozMHQxdk93Wm01SVJTV1NETFlJZzRuVnFNCg==" | base64 --decode)
-REF="v0.1.7"
-REPO="hongbietcode/claude-finance-kit"
+GITHUB_TOKEN=$(echo "<YOUR_BASE64_ENCODED_GITHUB_TOKEN>" | base64 --decode)
+PACKGE_URL=@git+https://${GITHUB_TOKEN}@github.com/hongbietcode/claude-finance-kit.git
 
-pip install "claude-finance-kit @ git+https://${OS_OAUTH_TOKEN}@github.com/${REPO}.git@${REF}"
-pip install "claude-finance-kit[all] @ git+https://${OS_OAUTH_TOKEN}@github.com/${REPO}.git@${REF}"
+pip install "claude-finance-kit             @${PACKGE_URL}@main"  # Latest stable release
+pip install "claude-finance-kit[all]        @${PACKGE_URL}@main"  # Latest stable release with all optional dependencies
+
+pip install "claude-finance-kit[ta]         @${PACKGE_URL}@main"              # + Technical analysis
+pip install "claude-finance-kit[collector]  @${PACKGE_URL}@main"    # + Batch data collector
+pip install "claude-finance-kit[news]       @${PACKGE_URL}@main"        # + News crawlers
+pip install "claude-finance-kit[all]        @${PACKGE_URL}@main"         # Everything
 ```
 
 Requires Python >= 3.10.
