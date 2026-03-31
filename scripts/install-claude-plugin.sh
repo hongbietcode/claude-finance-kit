@@ -152,10 +152,82 @@ while IFS= read -r -d '' file; do
     fi
 done < <(find "$CACHE_DIR/$VERSION" "$MARKETPLACE_DIR/plugins/$PLUGIN_NAME" -type f -print0 2>/dev/null)
 
-echo ""
-echo "Installed: $INSTALL_PATH"
-echo "Registered: $PLUGIN_KEY"
-echo "Marketplace: $MARKETPLACE_DIR"
-[ "$REPLACED" -gt 0 ] && echo "Token replaced in $REPLACED file(s)"
-echo ""
-echo "Done. Restart Claude Code to load the plugin."
+BOLD="\033[1m"
+CYAN="\033[36m"
+GREEN="\033[32m"
+YELLOW="\033[33m"
+DIM="\033[2m"
+RESET="\033[0m"
+
+mapfile -t SKILLS < <(find "$INSTALL_PATH/skills" -name "SKILL.md" -maxdepth 2 2>/dev/null | while read -r f; do basename "$(dirname "$f")"; done | sort)
+mapfile -t AGENTS < <(find "$INSTALL_PATH/agents" -name "*.md" -maxdepth 1 2>/dev/null | while read -r f; do basename "$f" .md; done | sort)
+
+COL1=24
+COL2=44
+TOTAL=$((COL1 + COL2 + 7))
+
+print_border_top()    { printf "  ${DIM}┌"; printf '─%.0s' $(seq 1 $((COL1+2))); printf '┬'; printf '─%.0s' $(seq 1 $((COL2+2))); printf "┐${RESET}\n"; }
+print_border_mid()    { printf "  ${DIM}├"; printf '─%.0s' $(seq 1 $((COL1+2))); printf '┼'; printf '─%.0s' $(seq 1 $((COL2+2))); printf "┤${RESET}\n"; }
+print_border_bot()    { printf "  ${DIM}└"; printf '─%.0s' $(seq 1 $((COL1+2))); printf '┴'; printf '─%.0s' $(seq 1 $((COL2+2))); printf "┘${RESET}\n"; }
+print_header_row() {
+    local c1="$1" c2="$2"
+    printf "  ${DIM}│${RESET} ${BOLD}${CYAN}%-*s${RESET} ${DIM}│${RESET} ${BOLD}${CYAN}%-*s${RESET} ${DIM}│${RESET}\n" "$COL1" "$c1" "$COL2" "$c2"
+}
+print_row() {
+    local color="$1" c1="$2" c2="$3"
+    local wrapped
+    while [ ${#c2} -gt $COL2 ]; do
+        wrapped="${c2:0:$COL2}"
+        printf "  ${DIM}│${RESET} ${color}%-*s${RESET} ${DIM}│${RESET} %-*s ${DIM}│${RESET}\n" "$COL1" "$c1" "$COL2" "$wrapped"
+        c1=""
+        c2="${c2:$COL2}"
+    done
+    printf "  ${DIM}│${RESET} ${color}%-*s${RESET} ${DIM}│${RESET} %-*s ${DIM}│${RESET}\n" "$COL1" "$c1" "$COL2" "$c2"
+}
+
+printf "\n"
+printf "${BOLD}${CYAN}  ══════════════════════════════════════════════════════════════════${RESET}\n"
+printf "${BOLD}${CYAN}    claude-finance-kit %s — Installation Complete${RESET}\n" "$TAG"
+printf "${BOLD}${CYAN}  ══════════════════════════════════════════════════════════════════${RESET}\n"
+printf "\n"
+printf "  ${BOLD}%-12s${RESET} ${GREEN}%s${RESET}\n"   "Version:"   "$VERSION"
+printf "  ${BOLD}%-12s${RESET} %s\n"                    "Plugin:"    "$PLUGIN_KEY"
+printf "  ${BOLD}%-12s${RESET} ${DIM}%s${RESET}\n"      "Path:"      "$INSTALL_PATH"
+[ "$REPLACED" -gt 0 ] && printf "  ${BOLD}%-12s${RESET} ${YELLOW}Replaced in %s file(s)${RESET}\n" "Token:" "$REPLACED"
+printf "\n"
+
+printf "  ${BOLD}Skills${RESET}\n"
+print_border_top
+print_header_row "Name" "Description"
+print_border_mid
+if [ "${#SKILLS[@]}" -gt 0 ]; then
+    for s in "${SKILLS[@]}"; do
+        DESC=$(head -10 "$INSTALL_PATH/skills/$s/SKILL.md" 2>/dev/null | grep -m1 "^[^#*-]" | sed 's/^[[:space:]]*//')
+        [ -z "$DESC" ] && DESC=$(echo "$s" | sed 's/-/ /g')
+        print_row "$GREEN" "$s" "$DESC"
+    done
+else
+    print_row "" "(none)" ""
+fi
+print_border_bot
+
+printf "\n"
+printf "  ${BOLD}Agents${RESET}\n"
+print_border_top
+print_header_row "Name" "Role"
+print_border_mid
+if [ "${#AGENTS[@]}" -gt 0 ]; then
+    for a in "${AGENTS[@]}"; do
+        ROLE=$(grep -m1 "^[^#*-]" "$INSTALL_PATH/agents/$a.md" 2>/dev/null | sed 's/^[[:space:]]*//')
+        [ -z "$ROLE" ] && ROLE=$(echo "$a" | sed 's/-/ /g')
+        print_row "$YELLOW" "$a" "$ROLE"
+    done
+else
+    print_row "" "(none)" ""
+fi
+print_border_bot
+
+printf "\n"
+printf "${BOLD}${CYAN}  ══════════════════════════════════════════════════════════════════${RESET}\n"
+printf "    Restart Claude Code to load the plugin.\n"
+printf "${BOLD}${CYAN}  ══════════════════════════════════════════════════════════════════${RESET}\n"

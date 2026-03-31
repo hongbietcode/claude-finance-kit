@@ -29,7 +29,7 @@ For each module, extract: class names, public methods, method signatures (params
 - `references/common-patterns.md` ← from `_internal/`, `core/exceptions.py`
 - `references/analysis-methodology.md` ← keep as-is (domain knowledge, not code-derived)
 - `references/html-report-styles.md` ← keep as-is (presentation, not code-derived)
-- `references/claude-finance-kit-install-guide.md` ← verify extras match `pyproject.toml`
+- `references/finance-kit-install-guide.md` ← verify extras match `pyproject.toml`
 
 ### 3. `docs/` — Module documentation
 - `docs/README.md` ← package structure overview, reference file table

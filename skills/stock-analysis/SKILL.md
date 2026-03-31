@@ -5,7 +5,7 @@ description: Orchestration skill for Vietnamese stock market analysis. Activate 
 
 # Stock Analysis — Vietnamese Market
 
-> **Install:** `claude-finance-kit` must be installed — see [`references/claude-finance-kit-install-guide.md`](../../references/claude-finance-kit-install-guide.md) for setup command.
+> **Install:** `claude-finance-kit` must be installed — see [`references/finance-kit-install-guide.md`](../../references/finance-kit-install-guide.md) for setup command.
 
 Orchestration skill: uses `claude-finance-kit` as data layer, Claude's reasoning as analysis layer. Routes queries to the right agent structure based on complexity.
 
@@ -117,7 +117,7 @@ Strictly follow with clear headings, bullet points, bold key figures:
 
 | File                                                                                             | Content                                                                                                |
 | ------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------ |
-| [`references/claude-finance-kit-install-guide.md`](../../references/claude-finance-kit-install-guide.md)         | Installation instructions, requirements, environment variables                                         |
+| [`references/finance-kit-install-guide.md`](../../references/finance-kit-install-guide.md)       | Installation instructions, requirements, environment variables                                         |
 | [`references/common-patterns.md`](../../references/common-patterns.md)                           | Common coding patterns for data fetching, TA, news crawling, error handling, caching, batch processing |
 | [`references/api-stock-and-company.md`](../../references/api-stock-and-company.md)               | Stock, Quote, Company, Finance, Listing, Trading APIs                                                  |
 | [`references/api-technical-analysis.md`](../../references/api-technical-analysis.md)             | All TA indicators with params                                                                          |

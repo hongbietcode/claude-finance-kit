@@ -9,7 +9,7 @@ Does NOT handle: portfolio management, trading bots, brokerage integrations, non
 
 ## Installation
 
-See `references/claude-finance-kit-install-guide.md` for full setup instructions.
+See `references/finance-kit-install-guide.md` for full setup instructions.
 
 ## Quick API Lookup
 

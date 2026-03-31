@@ -5,7 +5,7 @@ description: Vietnamese market overview — VNINDEX valuation, macro indicators,
 
 # Market Research
 
-> **Install:** `claude-finance-kit` must be installed — see [`references/claude-finance-kit-install-guide.md`](../../references/claude-finance-kit-install-guide.md) for setup command.
+> **Install:** `claude-finance-kit` must be installed — see [`references/finance-kit-install-guide.md`](../../references/finance-kit-install-guide.md) for setup command.
 
 ## Workflow Router
 
@@ -82,11 +82,11 @@ Dàn ý báo cáo thị trường đạt yêu cầu (5 sections):
 
 ⚠️ **READ THESE WHEN:** You need detailed API documentation, valuation zones, or macro thresholds beyond what SKILL.md provides.
 
-| File | Content |
-|------|---------|
-| [`references/claude-finance-kit-install-guide.md`](../../references/claude-finance-kit-install-guide.md) | Installation instructions, requirements, environment variables |
-| [`references/common-patterns.md`](../../references/common-patterns.md) | Common coding patterns for data fetching, error handling, batch processing |
-| [`references/api-market-macro-fund.md`](../../references/api-market-macro-fund.md) | Market, Macro, Fund, Commodity APIs |
-| [`references/analysis-methodology.md`](../../references/analysis-methodology.md) | Valuation zones, macro thresholds |
-| [`references/orchestration-protocol.md`](../../references/orchestration-protocol.md) | Complexity routing, agent communication |
-| [`references/html-report-styles.md`](../../references/html-report-styles.md) | HTML report design system: Tailwind config, components, placeholders |
+| File                                                                                       | Content                                                                    |
+| ------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------- |
+| [`references/finance-kit-install-guide.md`](../../references/finance-kit-install-guide.md) | Installation instructions, requirements, environment variables             |
+| [`references/common-patterns.md`](../../references/common-patterns.md)                     | Common coding patterns for data fetching, error handling, batch processing |
+| [`references/api-market-macro-fund.md`](../../references/api-market-macro-fund.md)         | Market, Macro, Fund, Commodity APIs                                        |
+| [`references/analysis-methodology.md`](../../references/analysis-methodology.md)           | Valuation zones, macro thresholds                                          |
+| [`references/orchestration-protocol.md`](../../references/orchestration-protocol.md)       | Complexity routing, agent communication                                    |
+| [`references/html-report-styles.md`](../../references/html-report-styles.md)               | HTML report design system: Tailwind config, components, placeholders       |
