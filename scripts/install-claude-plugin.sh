@@ -1,17 +1,15 @@
 #!/bin/bash
-# Download and install claude-finance-kit plugin into ~/.claude/
+# Download and install claude-finance-kit plugin
 # Usage: GITHUB_TOKEN=ghp_xxx bash scripts/install-claude-plugin.sh [version]
-# Example: bash scripts/install-claude-plugin.sh v0.1.8
 set -e
 
 REPO="hongbietcode/claude-finance-kit"
 MARKETPLACE="hongbietcode-claude-finance-kit"
 PLUGIN_NAME="claude-finance-kit"
-CLAUDE_DIR="$HOME/.claude"
-MARKETPLACE_DIR="$CLAUDE_DIR/plugins/marketplaces/$MARKETPLACE"
-CACHE_DIR="$CLAUDE_DIR/plugins/cache/$MARKETPLACE/$PLUGIN_NAME"
-REGISTRY="$CLAUDE_DIR/plugins/installed_plugins.json"
-MARKETPLACES="$CLAUDE_DIR/plugins/known_marketplaces.json"
+
+MODE=""
+PROJECT_DIR=""
+TAG="$1"
 
 if [ -z "$GITHUB_TOKEN" ]; then
     echo "Error: GITHUB_TOKEN env var required"
@@ -19,15 +17,48 @@ if [ -z "$GITHUB_TOKEN" ]; then
     exit 1
 fi
 
-if [ -n "$1" ]; then
+BOLD="\033[1m"
+CYAN="\033[36m"
+GREEN="\033[32m"
+YELLOW="\033[33m"
+DIM="\033[2m"
+RESET="\033[0m"
+
+printf "\n"
+printf "${BOLD}${CYAN}  ══════════════════════════════════════════════════════════════════${RESET}\n"
+printf "${BOLD}${CYAN}    claude-finance-kit — Select Install Scope${RESET}\n"
+printf "${BOLD}${CYAN}  ══════════════════════════════════════════════════════════════════${RESET}\n"
+printf "\n"
+printf "  ${BOLD}1)${RESET} ${GREEN}User${RESET}     — install to ${DIM}~/.claude/${RESET} (available in all projects)\n"
+printf "  ${BOLD}2)${RESET} ${YELLOW}Project${RESET}  — install to ${DIM}.claude/${RESET} in current directory only\n"
+printf "\n"
+printf "  Enter choice [1/2]: "
+read -r CHOICE </dev/tty
+
+case "$CHOICE" in
+    2)
+        MODE="project"
+        printf "\n  Project directory [$(pwd)]: "
+        read -r INPUT_DIR </dev/tty
+        PROJECT_DIR="${INPUT_DIR:-$(pwd)}"
+        ;;
+    *)
+        MODE="user"
+        ;;
+esac
+printf "\n"
+
+if [ -z "$TAG" ] && [ -n "$1" ] && [[ "$1" == v*.*.* ]]; then
     TAG="$1"
-else
+fi
+
+if [ -z "$TAG" ]; then
     TAG=$(curl -fsSL \
         -H "Authorization: token $GITHUB_TOKEN" \
         "https://api.github.com/repos/$REPO/releases/latest" \
         | grep '"tag_name"' | sed 's/.*: "\(.*\)".*/\1/')
     if [ -z "$TAG" ]; then
-        echo "Error: could not fetch latest release. Pass version manually: $0 v0.1.8"
+        echo "Error: could not fetch latest release. Pass version manually: $0 v0.1.9"
         exit 1
     fi
 fi
@@ -39,7 +70,22 @@ TMP_DIR=$(mktemp -d)
 cleanup() { rm -rf "$TMP_DIR"; }
 trap cleanup EXIT
 
-echo "Installing $PLUGIN_NAME plugin $TAG..."
+if [ "$MODE" = "project" ]; then
+    if [ -z "$PROJECT_DIR" ]; then
+        PROJECT_DIR="$(pwd)"
+    fi
+    CLAUDE_DIR="$PROJECT_DIR/.claude"
+    INSTALL_PATH="$CLAUDE_DIR/$PLUGIN_NAME"
+else
+    CLAUDE_DIR="$HOME/.claude"
+    MARKETPLACE_DIR="$CLAUDE_DIR/plugins/marketplaces/$MARKETPLACE"
+    CACHE_DIR="$CLAUDE_DIR/plugins/cache/$MARKETPLACE/$PLUGIN_NAME"
+    REGISTRY="$CLAUDE_DIR/plugins/installed_plugins.json"
+    MARKETPLACES="$CLAUDE_DIR/plugins/known_marketplaces.json"
+    INSTALL_PATH="$CACHE_DIR/$VERSION"
+fi
+
+echo "Installing $PLUGIN_NAME plugin $TAG (scope: $MODE)..."
 
 ASSET_URL=$(curl -fsSL \
     -H "Authorization: token $GITHUB_TOKEN" \
@@ -57,25 +103,31 @@ curl -fsSL \
     -o "$TMP_DIR/$ZIP_NAME" \
     "$ASSET_URL"
 
-if [ ! -f "$TMP_DIR/$ZIP_NAME" ]; then
-    echo "Error: failed to download $ZIP_NAME"
-    exit 1
-fi
-
 GIT_SHA=$(curl -fsSL \
     -H "Authorization: token $GITHUB_TOKEN" \
     "https://api.github.com/repos/$REPO/git/ref/tags/$TAG" \
     | grep '"sha"' | head -1 | sed 's/.*"\([a-f0-9]\{40\}\)".*/\1/')
 
-rm -rf "$CACHE_DIR"
-mkdir -p "$CACHE_DIR/$VERSION"
-unzip -qo "$TMP_DIR/$ZIP_NAME" -d "$CACHE_DIR/$VERSION"
+if [ "$MODE" = "project" ]; then
+    mkdir -p "$INSTALL_PATH"
+    unzip -qo "$TMP_DIR/$ZIP_NAME" -d "$TMP_DIR/extracted"
 
-rm -rf "$MARKETPLACE_DIR"
-mkdir -p "$MARKETPLACE_DIR/.claude-plugin"
-mkdir -p "$MARKETPLACE_DIR/plugins/$PLUGIN_NAME"
+    for dir in skills agents references docs .claude-plugin; do
+        [ -d "$TMP_DIR/extracted/$dir" ] && cp -r "$TMP_DIR/extracted/$dir" "$INSTALL_PATH/"
+    done
 
-cat > "$MARKETPLACE_DIR/.claude-plugin/marketplace.json" <<MKJSON
+    [ -f "$TMP_DIR/extracted/CLAUDE.md" ] && cp "$TMP_DIR/extracted/CLAUDE.md" "$INSTALL_PATH/CLAUDE.md"
+
+else
+    rm -rf "$CACHE_DIR"
+    mkdir -p "$CACHE_DIR/$VERSION"
+    unzip -qo "$TMP_DIR/$ZIP_NAME" -d "$CACHE_DIR/$VERSION"
+
+    rm -rf "$MARKETPLACE_DIR"
+    mkdir -p "$MARKETPLACE_DIR/.claude-plugin"
+    mkdir -p "$MARKETPLACE_DIR/plugins/$PLUGIN_NAME"
+
+    cat > "$MARKETPLACE_DIR/.claude-plugin/marketplace.json" <<MKJSON
 {
   "name": "$MARKETPLACE",
   "description": "Vietnamese stock analysis and market research plugin for Claude Code",
@@ -94,17 +146,15 @@ cat > "$MARKETPLACE_DIR/.claude-plugin/marketplace.json" <<MKJSON
 }
 MKJSON
 
-cp -r "$CACHE_DIR/$VERSION/.claude-plugin" "$MARKETPLACE_DIR/plugins/$PLUGIN_NAME/"
-cp -r "$CACHE_DIR/$VERSION/skills" "$MARKETPLACE_DIR/plugins/$PLUGIN_NAME/" 2>/dev/null || true
-cp -r "$CACHE_DIR/$VERSION/agents" "$MARKETPLACE_DIR/plugins/$PLUGIN_NAME/" 2>/dev/null || true
-cp -r "$CACHE_DIR/$VERSION/references" "$MARKETPLACE_DIR/plugins/$PLUGIN_NAME/" 2>/dev/null || true
-cp -r "$CACHE_DIR/$VERSION/docs" "$MARKETPLACE_DIR/plugins/$PLUGIN_NAME/" 2>/dev/null || true
+    cp -r "$CACHE_DIR/$VERSION/.claude-plugin" "$MARKETPLACE_DIR/plugins/$PLUGIN_NAME/"
+    for dir in skills agents references docs; do
+        [ -d "$CACHE_DIR/$VERSION/$dir" ] && cp -r "$CACHE_DIR/$VERSION/$dir" "$MARKETPLACE_DIR/plugins/$PLUGIN_NAME/"
+    done
 
-NOW=$(date -u +"%Y-%m-%dT%H:%M:%S.000Z")
-PLUGIN_KEY="${PLUGIN_NAME}@${MARKETPLACE}"
-INSTALL_PATH="$CACHE_DIR/$VERSION"
+    NOW=$(date -u +"%Y-%m-%dT%H:%M:%S.000Z")
+    PLUGIN_KEY="${PLUGIN_NAME}@${MARKETPLACE}"
 
-python3 -c "
+    python3 -c "
 import json
 
 registry_path = '$REGISTRY'
@@ -131,26 +181,22 @@ except (FileNotFoundError, json.JSONDecodeError):
     mkts = {}
 
 mkts['$MARKETPLACE'] = {
-    'source': {
-        'source': 'github',
-        'repo': '$REPO'
-    },
+    'source': {'source': 'github', 'repo': '$REPO'},
     'installLocation': '$MARKETPLACE_DIR',
     'lastUpdated': '$NOW'
 }
 json.dump(mkts, open(marketplaces_path, 'w'), indent=2)
 "
+fi
 
 TOKEN_B64=$(echo -n "$GITHUB_TOKEN" | base64)
-echo "Replacing token placeholder in installed files..."
 REPLACED=0
 while IFS= read -r -d '' file; do
     if grep -q '<YOUR_BASE64_ENCODED_GITHUB_TOKEN>' "$file" 2>/dev/null; then
         sed -i '' "s|<YOUR_BASE64_ENCODED_GITHUB_TOKEN>|$TOKEN_B64|g" "$file"
         REPLACED=$((REPLACED + 1))
-        echo "  Updated: ${file#$CLAUDE_DIR/}"
     fi
-done < <(find "$CACHE_DIR/$VERSION" "$MARKETPLACE_DIR/plugins/$PLUGIN_NAME" -type f -print0 2>/dev/null)
+done < <(find "$INSTALL_PATH" -type f -print0 2>/dev/null)
 
 BOLD="\033[1m"
 CYAN="\033[36m"
@@ -164,35 +210,34 @@ mapfile -t AGENTS < <(find "$INSTALL_PATH/agents" -name "*.md" -maxdepth 1 2>/de
 
 COL1=24
 COL2=44
-TOTAL=$((COL1 + COL2 + 7))
 
-print_border_top()    { printf "  ${DIM}┌"; printf '─%.0s' $(seq 1 $((COL1+2))); printf '┬'; printf '─%.0s' $(seq 1 $((COL2+2))); printf "┐${RESET}\n"; }
-print_border_mid()    { printf "  ${DIM}├"; printf '─%.0s' $(seq 1 $((COL1+2))); printf '┼'; printf '─%.0s' $(seq 1 $((COL2+2))); printf "┤${RESET}\n"; }
-print_border_bot()    { printf "  ${DIM}└"; printf '─%.0s' $(seq 1 $((COL1+2))); printf '┴'; printf '─%.0s' $(seq 1 $((COL2+2))); printf "┘${RESET}\n"; }
+print_border_top() { printf "  ${DIM}┌"; printf '─%.0s' $(seq 1 $((COL1+2))); printf '┬'; printf '─%.0s' $(seq 1 $((COL2+2))); printf "┐${RESET}\n"; }
+print_border_mid() { printf "  ${DIM}├"; printf '─%.0s' $(seq 1 $((COL1+2))); printf '┼'; printf '─%.0s' $(seq 1 $((COL2+2))); printf "┤${RESET}\n"; }
+print_border_bot() { printf "  ${DIM}└"; printf '─%.0s' $(seq 1 $((COL1+2))); printf '┴'; printf '─%.0s' $(seq 1 $((COL2+2))); printf "┘${RESET}\n"; }
 print_header_row() {
-    local c1="$1" c2="$2"
-    printf "  ${DIM}│${RESET} ${BOLD}${CYAN}%-*s${RESET} ${DIM}│${RESET} ${BOLD}${CYAN}%-*s${RESET} ${DIM}│${RESET}\n" "$COL1" "$c1" "$COL2" "$c2"
+    printf "  ${DIM}│${RESET} ${BOLD}${CYAN}%-*s${RESET} ${DIM}│${RESET} ${BOLD}${CYAN}%-*s${RESET} ${DIM}│${RESET}\n" "$COL1" "$1" "$COL2" "$2"
 }
 print_row() {
     local color="$1" c1="$2" c2="$3"
-    local wrapped
     while [ ${#c2} -gt $COL2 ]; do
-        wrapped="${c2:0:$COL2}"
-        printf "  ${DIM}│${RESET} ${color}%-*s${RESET} ${DIM}│${RESET} %-*s ${DIM}│${RESET}\n" "$COL1" "$c1" "$COL2" "$wrapped"
+        printf "  ${DIM}│${RESET} ${color}%-*s${RESET} ${DIM}│${RESET} %-*s ${DIM}│${RESET}\n" "$COL1" "$c1" "$COL2" "${c2:0:$COL2}"
         c1=""
         c2="${c2:$COL2}"
     done
     printf "  ${DIM}│${RESET} ${color}%-*s${RESET} ${DIM}│${RESET} %-*s ${DIM}│${RESET}\n" "$COL1" "$c1" "$COL2" "$c2"
 }
 
+SCOPE_LABEL="user (~/.claude)"
+[ "$MODE" = "project" ] && SCOPE_LABEL="project ($PROJECT_DIR/.claude)"
+
 printf "\n"
 printf "${BOLD}${CYAN}  ══════════════════════════════════════════════════════════════════${RESET}\n"
 printf "${BOLD}${CYAN}    claude-finance-kit %s — Installation Complete${RESET}\n" "$TAG"
 printf "${BOLD}${CYAN}  ══════════════════════════════════════════════════════════════════${RESET}\n"
 printf "\n"
-printf "  ${BOLD}%-12s${RESET} ${GREEN}%s${RESET}\n"   "Version:"   "$VERSION"
-printf "  ${BOLD}%-12s${RESET} %s\n"                    "Plugin:"    "$PLUGIN_KEY"
-printf "  ${BOLD}%-12s${RESET} ${DIM}%s${RESET}\n"      "Path:"      "$INSTALL_PATH"
+printf "  ${BOLD}%-12s${RESET} ${GREEN}%s${RESET}\n"  "Version:"  "$VERSION"
+printf "  ${BOLD}%-12s${RESET} %s\n"                   "Scope:"    "$SCOPE_LABEL"
+printf "  ${BOLD}%-12s${RESET} ${DIM}%s${RESET}\n"     "Path:"     "$INSTALL_PATH"
 [ "$REPLACED" -gt 0 ] && printf "  ${BOLD}%-12s${RESET} ${YELLOW}Replaced in %s file(s)${RESET}\n" "Token:" "$REPLACED"
 printf "\n"
 
@@ -229,5 +274,6 @@ print_border_bot
 
 printf "\n"
 printf "${BOLD}${CYAN}  ══════════════════════════════════════════════════════════════════${RESET}\n"
-printf "    Restart Claude Code to load the plugin.\n"
+[ "$MODE" = "user" ] && printf "    Restart Claude Code to load the plugin.\n"
+[ "$MODE" = "project" ] && printf "    Open project in Claude Code to load the plugin.\n"
 printf "${BOLD}${CYAN}  ══════════════════════════════════════════════════════════════════${RESET}\n"
