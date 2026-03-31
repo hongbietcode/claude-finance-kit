@@ -20,16 +20,8 @@ See [`references/orchestration-protocol.md`](../../references/orchestration-prot
 
 ## Market Valuation
 
-```python
-from claude_finance_kit import Market
-
-market = Market("VNINDEX")
-pe_hist = market.pe(duration="5Y")
-pb_hist = market.pb(duration="5Y")
-gainers = market.top_gainer(limit=10)
-losers = market.top_loser(limit=10)
-liquidity = market.top_liquidity(limit=10)
-```
+> **Code patterns:** See [`references/api-market-macro-fund.md`](../../references/api-market-macro-fund.md) for `Market`, `Macro`, `Fund`, `Commodity` APIs.
+> **Error handling & caching:** See [`references/common-patterns.md`](../../references/common-patterns.md).
 
 ### VNINDEX P/E Zones
 
@@ -41,18 +33,6 @@ liquidity = market.top_liquidity(limit=10)
 | >20   | Overvalued         | Defensive       |
 
 ## Macro Research
-
-```python
-from claude_finance_kit import Macro
-
-macro = Macro()
-gdp = macro.gdp(start="2023-01", period="quarter")
-cpi = macro.cpi(length="2Y", period="month")
-rates = macro.interest_rate()
-fx = macro.exchange_rate()
-fdi = macro.fdi(period="month")
-trade = macro.trade_balance(period="month")
-```
 
 ### Macro Signals
 
@@ -66,40 +46,15 @@ trade = macro.trade_balance(period="month")
 
 ## Sector Comparison
 
-```python
-from claude_finance_kit import Stock
-
-stock = Stock("FPT")
-by_industry = stock.listing.symbols_by_industries()
-vn30 = stock.listing.symbols_by_group("VN30")
-```
-
-Compare financials across symbols in same industry for relative valuation.
+Compare financials across symbols in same industry for relative valuation using `stock.listing.symbols_by_industries()` and `symbols_by_group()`.
 
 ## Fund Analysis
 
-```python
-from claude_finance_kit import Fund
-
-fund = Fund()
-funds = fund.listing(fund_type="STOCK")
-fund_id = fund.fund_filter(symbol="SSISCA")['id'].iloc[0]
-holdings = fund.top_holding(fund_id=fund_id)
-sectors = fund.industry_holding(fund_id=fund_id)
-nav = fund.nav_report(fund_id=fund_id)
-```
+Use `Fund()` for listing, fund_filter, top_holding, industry_holding, nav_report. Note: fund methods use `fund_id` (string) from `fund.fund_filter(symbol)['id'].iloc[0]`.
 
 ## Commodity Prices
 
-```python
-from claude_finance_kit import Commodity
-
-commodity = Commodity()
-gold = commodity.gold()
-oil = commodity.oil()
-steel = commodity.steel()
-gas = commodity.gas()
-```
+Use `Commodity()` for gold, oil, steel, gas, fertilizer, agricultural prices.
 
 ## Report Structure
 

@@ -368,3 +368,63 @@ class TrendIndicators:
         vwma = pv.rolling(window=period).sum() / volume.rolling(window=period).sum().replace(0, np.nan)
         vwma.name = f"VWMA_{period}"
         return vwma
+
+    def dema(self, length: int = 14) -> pd.Series:
+        """Double Exponential Moving Average (DEMA).
+
+        Reduces lag compared to standard EMA: 2*EMA - EMA(EMA).
+
+        Args:
+            length: EMA period. Default 14.
+
+        Returns:
+            pd.Series with DEMA values.
+        """
+        close = self._df["close"]
+        ema1 = close.ewm(span=length, adjust=False).mean()
+        ema2 = ema1.ewm(span=length, adjust=False).mean()
+        dema = 2 * ema1 - ema2
+        dema.name = f"DEMA_{length}"
+        return dema
+
+    def tema(self, length: int = 14) -> pd.Series:
+        """Triple Exponential Moving Average (TEMA).
+
+        Further lag reduction: 3*EMA - 3*EMA(EMA) + EMA(EMA(EMA)).
+
+        Args:
+            length: EMA period. Default 14.
+
+        Returns:
+            pd.Series with TEMA values.
+        """
+        close = self._df["close"]
+        ema1 = close.ewm(span=length, adjust=False).mean()
+        ema2 = ema1.ewm(span=length, adjust=False).mean()
+        ema3 = ema2.ewm(span=length, adjust=False).mean()
+        tema = 3 * ema1 - 3 * ema2 + ema3
+        tema.name = f"TEMA_{length}"
+        return tema
+
+    def donchian(self, period: int = 20) -> pd.DataFrame:
+        """Donchian Channel.
+
+        Highest high and lowest low over N periods, with midline.
+
+        Args:
+            period: Lookback period. Default 20.
+
+        Returns:
+            pd.DataFrame with columns: DCL (lower), DCM (mid), DCU (upper).
+        """
+        upper = self._df["high"].rolling(window=period).max()
+        lower = self._df["low"].rolling(window=period).min()
+        mid = (upper + lower) / 2
+
+        return pd.DataFrame(
+            {
+                f"DCL_{period}": lower,
+                f"DCM_{period}": mid,
+                f"DCU_{period}": upper,
+            }
+        )

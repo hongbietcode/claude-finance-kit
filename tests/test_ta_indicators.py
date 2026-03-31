@@ -114,6 +114,31 @@ class TestTrendIndicators:
         assert isinstance(wma, pd.Series)
         assert len(wma) == len(sample_ohlcv_df)
 
+    def test_dema_calculation(self, sample_ohlcv_df):
+        """DEMA can be calculated."""
+        ind = Indicator(sample_ohlcv_df)
+        dema = ind.trend.dema(14)
+        assert isinstance(dema, pd.Series)
+        assert dema.name == "DEMA_14"
+
+    def test_tema_calculation(self, sample_ohlcv_df):
+        """TEMA can be calculated."""
+        ind = Indicator(sample_ohlcv_df)
+        tema = ind.trend.tema(14)
+        assert isinstance(tema, pd.Series)
+        assert tema.name == "TEMA_14"
+
+    def test_donchian_calculation(self, sample_ohlcv_df):
+        """Donchian Channel returns upper, mid, lower bands."""
+        ind = Indicator(sample_ohlcv_df)
+        dc = ind.trend.donchian(20)
+        assert isinstance(dc, pd.DataFrame)
+        assert dc.shape[1] == 3
+        cols = dc.columns.tolist()
+        assert any("DCL" in c for c in cols)
+        assert any("DCM" in c for c in cols)
+        assert any("DCU" in c for c in cols)
+
 
 class TestMomentumIndicators:
     """Test momentum indicators."""
@@ -172,6 +197,38 @@ class TestMomentumIndicators:
         assert isinstance(stoch, pd.DataFrame)
         assert len(stoch) == len(sample_ohlcv_df)
 
+    def test_cci_calculation(self, sample_ohlcv_df):
+        """CCI can be calculated with correct name."""
+        ind = Indicator(sample_ohlcv_df)
+        cci = ind.momentum.cci(20)
+        assert isinstance(cci, pd.Series)
+        assert cci.name == "CCI_20"
+        assert len(cci) == len(sample_ohlcv_df)
+
+    def test_tsi_calculation(self, sample_ohlcv_df):
+        """TSI returns values in expected range."""
+        ind = Indicator(sample_ohlcv_df)
+        tsi = ind.momentum.tsi(25, 13)
+        assert isinstance(tsi, pd.Series)
+        assert tsi.name == "TSI_25_13"
+        valid = tsi.dropna()
+        assert (valid >= -100).all() and (valid <= 100).all()
+
+    def test_uo_calculation(self, sample_ohlcv_df):
+        """Ultimate Oscillator returns values in [0, 100]."""
+        ind = Indicator(sample_ohlcv_df)
+        uo = ind.momentum.uo()
+        assert isinstance(uo, pd.Series)
+        valid = uo.dropna()
+        assert (valid >= 0).all() and (valid <= 100).all()
+
+    def test_ao_calculation(self, sample_ohlcv_df):
+        """Awesome Oscillator can be calculated."""
+        ind = Indicator(sample_ohlcv_df)
+        ao = ind.momentum.ao()
+        assert isinstance(ao, pd.Series)
+        assert ao.name == "AO_5_34"
+
 
 class TestVolatilityIndicators:
     """Test volatility indicators."""
@@ -199,6 +256,24 @@ class TestVolatilityIndicators:
 
         assert isinstance(kc, pd.DataFrame)
         assert len(kc) == len(sample_ohlcv_df)
+
+    def test_hv_calculation(self, sample_ohlcv_df):
+        """Historical Volatility returns positive annualized values."""
+        ind = Indicator(sample_ohlcv_df)
+        hv = ind.volatility.hv(20)
+        assert isinstance(hv, pd.Series)
+        assert hv.name == "HV_20"
+        valid = hv.dropna()
+        assert (valid >= 0).all()
+
+    def test_ulcer_index_calculation(self, sample_ohlcv_df):
+        """Ulcer Index returns non-negative values."""
+        ind = Indicator(sample_ohlcv_df)
+        ui = ind.volatility.ulcer(14)
+        assert isinstance(ui, pd.Series)
+        assert ui.name == "UI_14"
+        valid = ui.dropna()
+        assert (valid >= 0).all()
 
 
 class TestVolumeIndicators:
@@ -228,6 +303,36 @@ class TestVolumeIndicators:
 
         assert isinstance(mfi, pd.Series)
         assert len(mfi) == len(sample_ohlcv_df)
+
+    def test_adl_calculation(self, sample_ohlcv_df):
+        """Accumulation/Distribution Line can be calculated."""
+        ind = Indicator(sample_ohlcv_df)
+        adl = ind.volume.adl()
+        assert isinstance(adl, pd.Series)
+        assert adl.name == "ADL"
+
+    def test_cmf_calculation(self, sample_ohlcv_df):
+        """Chaikin Money Flow returns values in [-1, 1]."""
+        ind = Indicator(sample_ohlcv_df)
+        cmf = ind.volume.cmf(20)
+        assert isinstance(cmf, pd.Series)
+        assert cmf.name == "CMF_20"
+        valid = cmf.dropna()
+        assert (valid >= -1).all() and (valid <= 1).all()
+
+    def test_pvt_calculation(self, sample_ohlcv_df):
+        """Price Volume Trend can be calculated."""
+        ind = Indicator(sample_ohlcv_df)
+        pvt = ind.volume.pvt()
+        assert isinstance(pvt, pd.Series)
+        assert pvt.name == "PVT"
+
+    def test_emv_calculation(self, sample_ohlcv_df):
+        """Ease of Movement can be calculated."""
+        ind = Indicator(sample_ohlcv_df)
+        emv = ind.volume.emv(14)
+        assert isinstance(emv, pd.Series)
+        assert emv.name == "EMV_14"
 
 
 class TestIndicatorEdgeCases:

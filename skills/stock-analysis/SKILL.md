@@ -9,6 +9,9 @@ description: Orchestration skill for Vietnamese stock market analysis. Activate 
 
 Orchestration skill: uses `claude-finance-kit` as data layer, Claude's reasoning as analysis layer. Routes queries to the right agent structure based on complexity.
 
+> **Code patterns & error handling:** See [`references/common-patterns.md`](../../references/common-patterns.md).
+> **API reference:** See files in [`references/`](../../references/) for detailed API docs — avoid writing code inline in this skill.
+
 ## Scope
 
 **Handles:** Stock valuation, financial health scoring, technical analysis, screening, news sentiment, macro research, sector analysis, fund flows — all for Vietnamese market via claude-finance-kit.

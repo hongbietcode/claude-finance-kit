@@ -26,7 +26,7 @@ Top movers     → Market("VNINDEX").top_gainer(limit=10) / top_loser(10) / top_
 Macro          → Macro().gdp() / cpi() / interest_rate() / exchange_rate() / fdi() / trade_balance()
 Fund           → Fund().listing("STOCK") / fund_filter("VESAF") / top_holding(id) / nav_report(id) / asset_holding(id)
 Commodity      → Commodity().gold() / oil() / steel() / gas() / fertilizer() / agricultural()
-TA indicators  → Indicator(df).trend.sma(20) / momentum.rsi(14) / volatility.atr(14) / volume.obv()
+TA indicators  → Indicator(df).trend.sma/ema/dema/tema/donchian / momentum.rsi/macd/cci/tsi/uo/ao / volatility.atr/hv/ulcer / volume.obv/adl/cmf/pvt/emv
 News           → Crawler("cafef").get_latest_articles(10) / get_articles(10) / get_article_details(url)
 Collector      → from claude_finance_kit.collector import run_ohlcv_task, run_financial_task, run_intraday_task
 Search         → PerplexitySearch().search("query") / search_multi(["q1","q2"])

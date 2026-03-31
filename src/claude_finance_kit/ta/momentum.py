@@ -161,3 +161,92 @@ class MomentumIndicators:
         cmo = 100 * (sum_gains - sum_losses) / denom
         cmo.name = f"CMO_{length}"
         return cmo
+
+    def cci(self, length: int = 20) -> pd.Series:
+        """Commodity Channel Index (CCI).
+
+        Measures deviation of typical price from its SMA,
+        normalized by mean absolute deviation. Range: unbounded, ±100 as thresholds.
+
+        Args:
+            length: Lookback period. Default 20.
+
+        Returns:
+            pd.Series with CCI values.
+        """
+        tp = (self._df["high"] + self._df["low"] + self._df["close"]) / 3
+        sma = tp.rolling(window=length).mean()
+        mad = tp.rolling(window=length).apply(
+            lambda x: np.mean(np.abs(x - np.mean(x))), raw=True
+        )
+        cci = (tp - sma) / (0.015 * mad.replace(0, np.nan))
+        cci.name = f"CCI_{length}"
+        return cci
+
+    def tsi(self, long: int = 25, short: int = 13) -> pd.Series:
+        """True Strength Index (TSI).
+
+        Double-smoothed momentum oscillator. Range: [-100, 100].
+
+        Args:
+            long: Long EMA period. Default 25.
+            short: Short EMA period. Default 13.
+
+        Returns:
+            pd.Series with TSI values.
+        """
+        delta = self._df["close"].diff()
+        smooth1 = delta.ewm(span=long, adjust=False).mean().ewm(span=short, adjust=False).mean()
+        smooth2 = delta.abs().ewm(span=long, adjust=False).mean().ewm(span=short, adjust=False).mean()
+        tsi = 100 * smooth1 / smooth2.replace(0, np.nan)
+        tsi.name = f"TSI_{long}_{short}"
+        return tsi
+
+    def uo(self, fast: int = 7, medium: int = 14, slow: int = 28) -> pd.Series:
+        """Ultimate Oscillator (UO).
+
+        Multi-timeframe momentum combining 3 periods. Range: [0, 100].
+
+        Args:
+            fast: Short period. Default 7.
+            medium: Medium period. Default 14.
+            slow: Long period. Default 28.
+
+        Returns:
+            pd.Series with UO values.
+        """
+        close = self._df["close"]
+        high = self._df["high"]
+        low = self._df["low"]
+
+        prev_close = close.shift(1)
+        true_low = pd.concat([low, prev_close], axis=1).min(axis=1)
+        true_high = pd.concat([high, prev_close], axis=1).max(axis=1)
+
+        bp = close - true_low
+        tr = true_high - true_low
+
+        avg_fast = bp.rolling(fast).sum() / tr.rolling(fast).sum().replace(0, np.nan)
+        avg_medium = bp.rolling(medium).sum() / tr.rolling(medium).sum().replace(0, np.nan)
+        avg_slow = bp.rolling(slow).sum() / tr.rolling(slow).sum().replace(0, np.nan)
+
+        uo = 100 * (4 * avg_fast + 2 * avg_medium + avg_slow) / 7
+        uo.name = f"UO_{fast}_{medium}_{slow}"
+        return uo
+
+    def ao(self, fast: int = 5, slow: int = 34) -> pd.Series:
+        """Awesome Oscillator (AO).
+
+        Difference between fast and slow SMA of midpoint price.
+
+        Args:
+            fast: Fast SMA period. Default 5.
+            slow: Slow SMA period. Default 34.
+
+        Returns:
+            pd.Series with AO values.
+        """
+        midpoint = (self._df["high"] + self._df["low"]) / 2
+        ao = midpoint.rolling(fast).mean() - midpoint.rolling(slow).mean()
+        ao.name = f"AO_{fast}_{slow}"
+        return ao

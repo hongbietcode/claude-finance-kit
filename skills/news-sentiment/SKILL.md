@@ -19,17 +19,10 @@ Default: single agent (T1). Research shows sentiment analysis quality drops from
 
 ## Data Collection
 
-```python
-from claude_finance_kit.news import Crawler, BatchCrawler
+> **Code patterns:** See [`references/api-news-and-collector.md`](../../references/api-news-and-collector.md) for Crawler & BatchCrawler APIs.
+> **Error handling:** See [`references/common-patterns.md`](../../references/common-patterns.md).
 
-c = Crawler(site_name="cafef")
-articles = c.get_latest_articles(limit=10)
-combined = c.get_articles(limit=10)  # prefers RSS, fallback sitemap
-details = c.get_article_details(url=articles[0]['url'])
-
-bc = BatchCrawler(site_name="cafef", request_delay=1.0)
-batch = bc.fetch_articles(limit=100)
-```
+Use `Crawler(site_name)` for single-site crawling, `BatchCrawler(site_name, request_delay)` for large batches.
 
 ## Available Sites
 

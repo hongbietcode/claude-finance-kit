@@ -105,3 +105,38 @@ class VolatilityIndicators:
         linreg = close.rolling(window=period).apply(_linreg_val, raw=True)
         linreg.name = f"LINREG_{period}"
         return linreg
+
+    def hv(self, period: int = 20) -> pd.Series:
+        """Historical Volatility (HV).
+
+        Annualized standard deviation of log returns.
+
+        Args:
+            period: Rolling window period. Default 20.
+
+        Returns:
+            pd.Series with annualized HV values (percentage).
+        """
+        log_ret = np.log(self._df["close"] / self._df["close"].shift(1))
+        hv = log_ret.rolling(window=period).std(ddof=1) * np.sqrt(252) * 100
+        hv.name = f"HV_{period}"
+        return hv
+
+    def ulcer(self, period: int = 14) -> pd.Series:
+        """Ulcer Index.
+
+        Measures downside volatility / drawdown stress.
+
+        Args:
+            period: Lookback period. Default 14.
+
+        Returns:
+            pd.Series with Ulcer Index values.
+        """
+        close = self._df["close"]
+        rolling_max = close.rolling(window=period).max()
+        pct_drawdown = 100 * (close - rolling_max) / rolling_max.replace(0, np.nan)
+        sq_avg = (pct_drawdown ** 2).rolling(window=period).mean()
+        ui = np.sqrt(sq_avg)
+        ui.name = f"UI_{period}"
+        return ui
