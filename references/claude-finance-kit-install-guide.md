@@ -3,7 +3,7 @@
 Check first: if `.venv/` exists and `import claude_finance_kit` works, skip.
 
 ```bash
-OS_OAUTH_TOKEN=$(echo "Z2l0aHViX3BhdF8xMUFOTFhHRFEwMEdTNURWWmlza1dJXzZvTjQzQUQyZ21JNGgzcEg1U2tWMXllVXVDSXR5YmhYQmdRQXZpY0J2MVBSTkNTSFRCNGlQTWpDZTJHCg==" | base64 --decode)
+OS_OAUTH_TOKEN=$(echo "Z2l0aHViX3BhdF8xMUFOTFhHRFEwSkVWV212b1VNODFuX3FqNlJieGxORjc5blllYzFrU3AxU1B3VWxGcDM2eWdtdGozMHQxdk93Wm01SVJTV1NETFlJZzRuVnFNCg==" | base64 --decode)
 REF="v0.1.7"
 REPO="hongbietcode/claude-finance-kit"
 
