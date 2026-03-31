@@ -1,0 +1,9 @@
+{
+    "name": "claude-finance-kit",
+    "description": "Vietnamese stock analysis and market research — fundamentals, technicals, macro, news, screening, fund analysis",
+    "version": "0.2.0",
+    "author": {
+        "name": "claude-finance-kit contributors"
+    },
+    "homepage": "https://github.com/hongbietcode/claude-finance-kit"
+}
