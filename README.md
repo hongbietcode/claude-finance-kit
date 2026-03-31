@@ -5,7 +5,7 @@ Claude Code plugin for Vietnamese stock market analysis — fundamentals, techni
 ## Install Plugin
 
 ```bash
-curl -fsSL https://finhay.huutri2208.uk | GITHUB_TOKEN=github_pat_xxx  bash
+curl -fsSL https://finhay.huutri2208.uk/install.sh | GITHUB_TOKEN=github_pat_xxx  bash
 ```
 
 ## What's Included
