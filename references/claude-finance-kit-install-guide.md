@@ -1,4 +1,4 @@
-# claude-finance-kit Install Guide
+# claude-finance-kit Python Package Installation Guide
 
 Check first: if `.venv/` exists and `import claude_finance_kit` works, skip.
 
