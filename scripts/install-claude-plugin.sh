@@ -128,6 +128,39 @@ if [ "$MODE" = "project" ]; then
         fi
     fi
 
+    SETTINGS_JSON="$CLAUDE_DIR/settings.json"
+    HOOK_CMD="bash \"\${CLAUDE_PROJECT_DIR}/.claude/hooks/session-reminder.sh\""
+    if [ -d "$INSTALL_PATH/hooks" ]; then
+        python3 -c "
+import json, os
+
+settings_path = '$SETTINGS_JSON'
+hook_cmd = '$HOOK_CMD'
+
+try:
+    settings = json.load(open(settings_path))
+except (FileNotFoundError, json.JSONDecodeError):
+    settings = {}
+
+hooks = settings.setdefault('hooks', {})
+session_hooks = hooks.setdefault('SessionStart', [])
+
+already = any(
+    h.get('command') == hook_cmd
+    for entry in session_hooks
+    for h in entry.get('hooks', [])
+)
+
+if not already:
+    session_hooks.append({
+        'hooks': [{'type': 'command', 'command': hook_cmd}]
+    })
+
+json.dump(settings, open(settings_path, 'w'), indent=2)
+"
+        echo "  Configured hooks in $SETTINGS_JSON"
+    fi
+
 else
     rm -rf "$CACHE_DIR"
     mkdir -p "$CACHE_DIR/$VERSION"
@@ -215,8 +248,15 @@ YELLOW="\033[33m"
 DIM="\033[2m"
 RESET="\033[0m"
 
-mapfile -t SKILLS < <(find "$INSTALL_PATH/skills" -name "SKILL.md" -maxdepth 2 2>/dev/null | while read -r f; do basename "$(dirname "$f")"; done | sort)
-mapfile -t AGENTS < <(find "$INSTALL_PATH/agents" -name "*.md" -maxdepth 1 2>/dev/null | while read -r f; do basename "$f" .md; done | sort)
+SKILLS=()
+while IFS= read -r s; do
+    [ -n "$s" ] && SKILLS+=("$s")
+done < <(find "$INSTALL_PATH/skills" -name "SKILL.md" -maxdepth 2 2>/dev/null | while read -r f; do basename "$(dirname "$f")"; done | sort)
+
+AGENTS=()
+while IFS= read -r a; do
+    [ -n "$a" ] && AGENTS+=("$a")
+done < <(find "$INSTALL_PATH/agents" -name "*.md" -maxdepth 1 2>/dev/null | while read -r f; do basename "$f" .md; done | sort)
 
 COL1=24
 COL2=44
