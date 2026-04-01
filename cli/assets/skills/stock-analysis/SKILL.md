@@ -5,11 +5,11 @@ description: Orchestration skill for Vietnamese stock market analysis. Activate 
 
 # Stock Analysis — Vietnamese Market
 
-> **Install:** `claude-finance-kit` must be installed — see [`references/finance-kit-install-guide.md`](./references/finance-kit-install-guide.md) for setup command.
+> **Install:** `claude-finance-kit` must be installed — see [`references/finance-kit-install-guide.md`](../../references/finance-kit-install-guide.md) for setup command.
 
 Orchestration skill: uses `claude-finance-kit` as data layer, Claude's reasoning as analysis layer. Routes queries to the right agent structure based on complexity.
 
-> **Code patterns & error handling:** See [`references/common-patterns.md`](./references/common-patterns.md).
+> **Code patterns & error handling:** See [`references/common-patterns.md`](../../references/common-patterns.md).
 
 ## Operating Principles
 
@@ -41,7 +41,7 @@ Orchestration skill: uses `claude-finance-kit` as data layer, Claude's reasoning
 | "portfolio", "danh mục", "holdings"                                 | Portfolio Check    | T4   | lead-analyst → fundamental + technical + macro |
 | "macro outlook + recommendation", "sector rotation"                 | Macro + Rotation   | T4   | lead-analyst → macro + fundamental             |
 
-See [`references/orchestration-protocol.md`](./references/orchestration-protocol.md) for full tier definitions and communication rules.
+See [`references/orchestration-protocol.md`](../../references/orchestration-protocol.md) for full tier definitions and communication rules.
 
 ## Composite Workflows
 
@@ -92,7 +92,7 @@ lead-analyst coordinates:
 ## Report Structure
 
 > **IMPORTANT:** Always write the report in the user's language (Vietnamese if user writes in Vietnamese, English if user writes in English).
-> **MANDATORY:** Every analysis MUST produce a self-contained HTML report file. Follow styles and layout in [`references/html-report-styles.md`](./references/html-report-styles.md).
+> **MANDATORY:** Every analysis MUST produce a self-contained HTML report file. Follow styles and layout in [`references/html-report-styles.md`](../../references/html-report-styles.md).
 
 Strictly follow 8 sections with clear headings, bullet points, bold key figures:
 
@@ -144,17 +144,17 @@ Strictly follow 8 sections with clear headings, bullet points, bold key figures:
 
 | File                                                                                             | Content                                                                                                |
 | ------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------ |
-| [`references/finance-kit-install-guide.md`](./references/finance-kit-install-guide.md)           | Installation instructions, requirements, environment variables                                         |
-| [`references/common-patterns.md`](./references/common-patterns.md)                               | Common coding patterns for data fetching, TA, news crawling, error handling, caching, batch processing |
-| [`references/api-stock-and-company.md`](./references/api-stock-and-company.md)                   | Stock, Quote, Company, Finance, Listing, Trading APIs                                                  |
-| [`references/api-technical-analysis.md`](./references/api-technical-analysis.md)                 | All TA indicators with params                                                                          |
-| [`references/api-market-macro-fund.md`](./references/api-market-macro-fund.md)                   | Market, Macro, Fund, Commodity APIs                                                                    |
-| [`references/api-news-and-collector.md`](./references/api-news-and-collector.md)                 | News crawlers, Collector tasks                                                                         |
-| [`references/analysis-methodology.md`](./references/analysis-methodology.md)                     | Valuation, financial health, TA signals                                                                |
-| [`references/orchestration-protocol.md`](./references/orchestration-protocol.md)                 | Complexity routing, agent communication tiers                                                          |
-| [`references/html-report-styles.md`](./references/html-report-styles.md)                         | HTML report design system: Tailwind config, components, placeholders                                   |
-| [`references/fundamental-analysis-workflows.md`](./references/fundamental-analysis-workflows.md) | DCF, DDM, DuPont, Z-score, F-score                                                                     |
-| [`references/technical-analysis-workflows.md`](./references/technical-analysis-workflows.md)     | Composite scoring system                                                                               |
-| [`references/screening-strategies.md`](./references/screening-strategies.md)                     | Magic Formula, CAN SLIM, multi-factor                                                                  |
-| [`references/sentiment-macro-workflows.md`](./references/sentiment-macro-workflows.md)           | News classification, macro dashboard, fund flows                                                       |
-| [`references/sector-specific-analysis.md`](./references/sector-specific-analysis.md)             | Banking, real estate, consumer metrics                                                                 |
+| [`references/finance-kit-install-guide.md`](../../references/finance-kit-install-guide.md)           | Installation instructions, requirements, environment variables                                         |
+| [`references/common-patterns.md`](../../references/common-patterns.md)                               | Common coding patterns for data fetching, TA, news crawling, error handling, caching, batch processing |
+| [`references/api-stock-and-company.md`](../../references/api-stock-and-company.md)                   | Stock, Quote, Company, Finance, Listing, Trading APIs                                                  |
+| [`references/api-technical-analysis.md`](../../references/api-technical-analysis.md)                 | All TA indicators with params                                                                          |
+| [`references/api-market-macro-fund.md`](../../references/api-market-macro-fund.md)                   | Market, Macro, Fund, Commodity APIs                                                                    |
+| [`references/api-news-and-collector.md`](../../references/api-news-and-collector.md)                 | News crawlers, Collector tasks                                                                         |
+| [`references/analysis-methodology.md`](../../references/analysis-methodology.md)                     | Valuation, financial health, TA signals                                                                |
+| [`references/orchestration-protocol.md`](../../references/orchestration-protocol.md)                 | Complexity routing, agent communication tiers                                                          |
+| [`references/html-report-styles.md`](../../references/html-report-styles.md)                         | HTML report design system: Tailwind config, components, placeholders                                   |
+| [`references/fundamental-analysis-workflows.md`](../../references/fundamental-analysis-workflows.md) | DCF, DDM, DuPont, Z-score, F-score                                                                     |
+| [`references/technical-analysis-workflows.md`](../../references/technical-analysis-workflows.md)     | Composite scoring system                                                                               |
+| [`references/screening-strategies.md`](../../references/screening-strategies.md)                     | Magic Formula, CAN SLIM, multi-factor                                                                  |
+| [`references/sentiment-macro-workflows.md`](../../references/sentiment-macro-workflows.md)           | News classification, macro dashboard, fund flows                                                       |
+| [`references/sector-specific-analysis.md`](../../references/sector-specific-analysis.md)             | Banking, real estate, consumer metrics                                                                 |

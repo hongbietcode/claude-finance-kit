@@ -1,4 +1,4 @@
-import { readFile, mkdir, cp, readdir, stat } from 'node:fs/promises';
+import { readFile, writeFile, mkdir, cp, readdir, stat } from 'node:fs/promises';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import type { PlatformConfig } from '../types/index.js';
@@ -26,6 +26,21 @@ async function dirExists(path: string): Promise<boolean> {
   }
 }
 
+async function rewriteRefPaths(dir: string, targetRelPath: string): Promise<void> {
+  const entries = await readdir(dir, { withFileTypes: true });
+  for (const entry of entries) {
+    const fullPath = join(dir, entry.name);
+    if (entry.isDirectory()) {
+      await rewriteRefPaths(fullPath, targetRelPath);
+    } else if (entry.name.endsWith('.md')) {
+      const content = await readFile(fullPath, 'utf-8');
+      if (content.includes('../../references/')) {
+        await writeFile(fullPath, content.replaceAll('../../references/', targetRelPath), 'utf-8');
+      }
+    }
+  }
+}
+
 export async function generateForPlatform(
   targetDir: string,
   config: PlatformConfig
@@ -46,6 +61,13 @@ export async function generateForPlatform(
         await copyDir(skillSrc, skillDest);
       }
       createdFolders.push(`${config.folderStructure.root}/${config.folderStructure.skillPath}/`);
+
+      const depth = config.folderStructure.skillPath.split('/').length + 1;
+      if (depth > 2) {
+        const refRelPath = '../'.repeat(depth) + 'references/';
+        const skillsDest = join(rootDir, config.folderStructure.skillPath);
+        await rewriteRefPaths(skillsDest, refRelPath);
+      }
     }
   }
 
