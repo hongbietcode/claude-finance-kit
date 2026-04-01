@@ -1,4 +1,4 @@
-name: Auto Release
+name: Auto Release & Publish
 
 on:
   pull_request:
@@ -11,15 +11,22 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+    outputs:
+      version: ${{ steps.bump.outputs.version }}
+      tag: ${{ steps.bump.outputs.tag }}
     steps:
       - uses: actions/checkout@v5
         with:
           fetch-depth: 0
+          fetch-tags: true
 
       - name: Get latest tag version
         id: current
         run: |
-          LATEST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.0")
+          LATEST_TAG=$(git tag -l 'v*' --sort=-v:refname | head -1)
+          if [ -z "$LATEST_TAG" ]; then
+            LATEST_TAG="v0.0.0"
+          fi
           VERSION="${LATEST_TAG#v}"
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
           echo "tag=$LATEST_TAG" >> "$GITHUB_OUTPUT"
@@ -55,7 +62,7 @@ jobs:
             echo "EOF"
           } >> "$GITHUB_OUTPUT"
 
-      - name: Create release (auto-creates tag via GitHub API)
+      - name: Create release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
@@ -63,3 +70,85 @@ jobs:
             --target main \
             --title "v${{ steps.bump.outputs.version }}" \
             --notes "${{ steps.changelog.outputs.body }}"
+
+  publish-pypi:
+    needs: release
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Set version
+        run: |
+          sed -i "s/^version = \".*\"/version = \"${{ needs.release.outputs.version }}\"/" pyproject.toml
+
+      - name: Build
+        run: |
+          pip install build
+          python -m build --wheel --sdist
+
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+
+  package-plugin:
+    needs: release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: "20"
+
+      - name: Install and build CLI
+        working-directory: cli
+        run: |
+          npm ci
+          npm run build
+
+      - name: Package plugin
+        working-directory: cli
+        run: npm run package
+
+      - name: Upload plugin to release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release upload "${{ needs.release.outputs.tag }}" \
+            "cli/claude-finance-kit-${{ needs.release.outputs.version }}.zip" \
+            --clobber
+
+  publish-npm:
+    needs: release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: "20"
+          registry-url: "https://registry.npmjs.org"
+
+      - name: Set version
+        working-directory: cli
+        run: |
+          npm version "${{ needs.release.outputs.version }}" --no-git-tag-version --allow-same-version
+
+      - name: Install and build CLI
+        working-directory: cli
+        run: |
+          npm ci
+          npm run build
+
+      - name: Publish to npm
+        working-directory: cli
+        run: npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
