@@ -73,7 +73,7 @@ jobs:
         working-directory: cli
         run: |
           VERSION="${GITHUB_REF_NAME#v}"
-          npm version "${VERSION}" --no-git-tag-version
+          npm version "${VERSION}" --no-git-tag-version --allow-same-version
 
       - name: Install and build CLI
         working-directory: cli
