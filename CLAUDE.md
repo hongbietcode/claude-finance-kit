@@ -103,6 +103,7 @@ Queries route to different agent structures based on complexity. See `references
 
 ## Rules
 
+- **HTML Report (MANDATORY):** Every analysis MUST produce a self-contained HTML report file saved to `{CWD}/plans/reports/{slug}-report.html`, then auto-open via `open`. See `references/html-report-styles.md` for styling.
 - Date format: always `YYYY-MM-DD`
 - Always `try-except` + check `df.empty` before processing
 - TA requires `df.set_index('time')` before `Indicator()`

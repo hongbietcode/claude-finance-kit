@@ -1,0 +1,18 @@
+{
+  "platform": "copilot",
+  "displayName": "GitHub Copilot",
+  "folderStructure": {
+    "root": ".github",
+    "skillPath": "prompts/claude-finance-kit",
+    "filename": "PROMPT.md"
+  },
+  "components": {
+    "skills": true,
+    "references": true,
+    "agents": false
+  },
+  "frontmatter": {
+    "format": "yaml"
+  },
+  "description": "claude-finance-kit skills and API references for GitHub Copilot."
+}
