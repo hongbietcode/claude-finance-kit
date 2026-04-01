@@ -14,10 +14,7 @@
         "build": "tsc",
         "dev": "tsc --watch",
         "sync": "node dist/scripts/sync-assets.js",
-        "package-plugin": "node dist/scripts/package-plugin.js",
-        "export-requirements": "node dist/scripts/export-requirements.js",
-        "bump": "node dist/scripts/bump-version.js",
-        "release": "npm run package-plugin && cd .. && python -m build --wheel --sdist"
+        "bump": "node dist/scripts/bump-version.js"
     },
     "keywords": [
         "claude",
