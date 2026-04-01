@@ -5,7 +5,7 @@ description: Vietnamese market overview — VNINDEX valuation, macro indicators,
 
 # Market Research
 
-> **Install:** `claude-finance-kit` must be installed — see [`references/finance-kit-install-guide.md`](../../references/finance-kit-install-guide.md) for setup command.
+> **Install:** `claude-finance-kit` must be installed — see [`references/finance-kit-install-guide.md`](./references/finance-kit-install-guide.md) for setup command.
 
 ## Operating Principles
 
@@ -23,12 +23,12 @@ description: Vietnamese market overview — VNINDEX valuation, macro indicators,
 | "sector comparison", "sector rotation", "so sánh ngành" | T3   | macro + fundamental → lead-analyst              |
 | "full macro outlook + portfolio impact"                 | T4   | lead-analyst → macro + fundamental + technical  |
 
-See [`references/orchestration-protocol.md`](../../references/orchestration-protocol.md) for full tier definitions.
+See [`references/orchestration-protocol.md`](./references/orchestration-protocol.md) for full tier definitions.
 
 ## Market Valuation
 
-> **Code patterns:** See [`references/api-market-macro-fund.md`](../../references/api-market-macro-fund.md) for `Market`, `Macro`, `Fund`, `Commodity` APIs.
-> **Error handling & caching:** See [`references/common-patterns.md`](../../references/common-patterns.md).
+> **Code patterns:** See [`references/api-market-macro-fund.md`](./references/api-market-macro-fund.md) for `Market`, `Macro`, `Fund`, `Commodity` APIs.
+> **Error handling & caching:** See [`references/common-patterns.md`](./references/common-patterns.md).
 
 ### VNINDEX P/E Zones
 
@@ -66,7 +66,7 @@ Use `Commodity()` for gold, oil, steel, gas, fertilizer, agricultural prices.
 ## Report Structure
 
 > **IMPORTANT:** Always write the report in the user's language (Vietnamese if user writes in Vietnamese, English if user writes in English).
-> **HTML reports:** Follow styles and layout in [`references/html-report-styles.md`](../../references/html-report-styles.md).
+> **HTML reports:** Follow styles and layout in [`references/html-report-styles.md`](./references/html-report-styles.md).
 
 Dàn ý báo cáo thị trường đạt yêu cầu (5 sections):
 
@@ -89,11 +89,11 @@ Dàn ý báo cáo thị trường đạt yêu cầu (5 sections):
 
 ⚠️ **READ THESE WHEN:** You need detailed API documentation, valuation zones, or macro thresholds beyond what SKILL.md provides.
 
-| File                                                                                       | Content                                                                    |
-| ------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------- |
-| [`references/finance-kit-install-guide.md`](../../references/finance-kit-install-guide.md) | Installation instructions, requirements, environment variables             |
-| [`references/common-patterns.md`](../../references/common-patterns.md)                     | Common coding patterns for data fetching, error handling, batch processing |
-| [`references/api-market-macro-fund.md`](../../references/api-market-macro-fund.md)         | Market, Macro, Fund, Commodity APIs                                        |
-| [`references/analysis-methodology.md`](../../references/analysis-methodology.md)           | Valuation zones, macro thresholds                                          |
-| [`references/orchestration-protocol.md`](../../references/orchestration-protocol.md)       | Complexity routing, agent communication                                    |
-| [`references/html-report-styles.md`](../../references/html-report-styles.md)               | HTML report design system: Tailwind config, components, placeholders       |
+| File                                                                                   | Content                                                                    |
+| -------------------------------------------------------------------------------------- | -------------------------------------------------------------------------- |
+| [`references/finance-kit-install-guide.md`](./references/finance-kit-install-guide.md) | Installation instructions, requirements, environment variables             |
+| [`references/common-patterns.md`](./references/common-patterns.md)                     | Common coding patterns for data fetching, error handling, batch processing |
+| [`references/api-market-macro-fund.md`](./references/api-market-macro-fund.md)         | Market, Macro, Fund, Commodity APIs                                        |
+| [`references/analysis-methodology.md`](./references/analysis-methodology.md)           | Valuation zones, macro thresholds                                          |
+| [`references/orchestration-protocol.md`](./references/orchestration-protocol.md)       | Complexity routing, agent communication                                    |
+| [`references/html-report-styles.md`](./references/html-report-styles.md)               | HTML report design system: Tailwind config, components, placeholders       |

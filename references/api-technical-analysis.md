@@ -73,28 +73,28 @@ ind.volume.emv(length=14)    # Series — Ease of Movement (smoothed)
 
 ## Column Name Patterns
 
-| Indicator | Output column names |
-|-----------|---------------------|
-| SMA(20) | `SMA_20` |
-| EMA(20) | `EMA_20` |
-| RSI(14) | `RSI_14` |
-| MACD(12,26,9) | `MACD_12_26_9`, `MACDs_12_26_9`, `MACDh_12_26_9` |
-| ADX(14) | `ADX_14`, `DMP_14`, `DMN_14` |
+| Indicator          | Output column names                                                   |
+| ------------------ | --------------------------------------------------------------------- |
+| SMA(20)            | `SMA_20`                                                              |
+| EMA(20)            | `EMA_20`                                                              |
+| RSI(14)            | `RSI_14`                                                              |
+| MACD(12,26,9)      | `MACD_12_26_9`, `MACDs_12_26_9`, `MACDh_12_26_9`                      |
+| ADX(14)            | `ADX_14`, `DMP_14`, `DMN_14`                                          |
 | Supertrend(10,3.0) | `SUPERT_10_3.0`, `SUPERTd_10_3.0`, `SUPERTl_10_3.0`, `SUPERTs_10_3.0` |
-| BBands(20,2.0) | `BBL_20_2.0`, `BBM_20_2.0`, `BBU_20_2.0`, `BBB_20_2.0`, `BBP_20_2.0` |
-| DEMA(14) | `DEMA_14` |
-| TEMA(14) | `TEMA_14` |
-| Donchian(20) | `DCL_20`, `DCM_20`, `DCU_20` |
-| CCI(20) | `CCI_20` |
-| TSI(25,13) | `TSI_25_13` |
-| UO(7,14,28) | `UO_7_14_28` |
-| AO(5,34) | `AO_5_34` |
-| HV(20) | `HV_20` |
-| Ulcer(14) | `UI_14` |
-| ADL | `ADL` |
-| CMF(20) | `CMF_20` |
-| PVT | `PVT` |
-| EMV(14) | `EMV_14` |
+| BBands(20,2.0)     | `BBL_20_2.0`, `BBM_20_2.0`, `BBU_20_2.0`, `BBB_20_2.0`, `BBP_20_2.0`  |
+| DEMA(14)           | `DEMA_14`                                                             |
+| TEMA(14)           | `TEMA_14`                                                             |
+| Donchian(20)       | `DCL_20`, `DCM_20`, `DCU_20`                                          |
+| CCI(20)            | `CCI_20`                                                              |
+| TSI(25,13)         | `TSI_25_13`                                                           |
+| UO(7,14,28)        | `UO_7_14_28`                                                          |
+| AO(5,34)           | `AO_5_34`                                                             |
+| HV(20)             | `HV_20`                                                               |
+| Ulcer(14)          | `UI_14`                                                               |
+| ADL                | `ADL`                                                                 |
+| CMF(20)            | `CMF_20`                                                              |
+| PVT                | `PVT`                                                                 |
+| EMV(14)            | `EMV_14`                                                              |
 
 ## Notes
 

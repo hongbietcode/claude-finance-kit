@@ -1,0 +1,1 @@
+../../../../references/common-patterns.md
