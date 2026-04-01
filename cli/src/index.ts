@@ -16,7 +16,7 @@ const pkg = JSON.parse(readFileSync(join(__dirname, '..', 'package.json'), 'utf-
 const program = new Command();
 
 program
-  .name('cfkit')
+  .name('claude-finance-kit')
   .description('CLI to install claude-finance-kit plugin for AI coding assistants')
   .version(pkg.version);
 

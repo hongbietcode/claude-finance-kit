@@ -11,9 +11,9 @@ pip install claude-finance-kit
 
 **Plugin (multi-platform):**
 ```bash
-npx cfkit init --ai claude    # Claude Code
-npx cfkit init --ai cursor    # Cursor
-npx cfkit init --ai copilot   # GitHub Copilot
+npx claude-finance-kit init --ai claude    # Claude Code
+npx claude-finance-kit init --ai cursor    # Cursor
+npx claude-finance-kit init --ai copilot   # GitHub Copilot
 ```
 
 ## What's Included
@@ -50,7 +50,7 @@ plugin/                    # Plugin source of truth
 ├── references/            # API docs, methodology, patterns
 └── templates/             # Platform configs (claude, cursor, copilot)
 
-cli/                       # npm CLI installer (cfkit)
+cli/                       # npm CLI installer (claude-finance-kit-cli)
 .claude/                   # Symlinks → plugin/
 .claude-plugin/            # Claude Marketplace manifest
 ```
