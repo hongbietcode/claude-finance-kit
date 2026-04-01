@@ -1,6 +1,6 @@
 {
     "name": "cfk",
-    "version": "0.1.13",
+    "version": "0.1.14",
     "description": "CLI to install claude-finance-kit plugin for AI coding assistants",
     "type": "module",
     "bin": {

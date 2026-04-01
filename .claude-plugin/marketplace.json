@@ -6,14 +6,14 @@
     },
     "metadata": {
         "description": "Vietnamese stock market analysis toolkit for Claude Code. Covers stock analysis, market research, technical analysis, fundamental analysis, macro research, news crawling, and batch data collection.",
-        "version": "0.1.13"
+        "version": "0.1.14"
     },
     "plugins": [
         {
             "name": "claude-finance-kit",
             "source": "./.claude",
             "description": "Vietnamese stock market analysis toolkit for Claude Code. Skills: stock-analysis, market-research, news-sentiment. Agents: marcus-vance (senior analyst), fundamental-analyst, technical-analyst, macro-researcher, lead-analyst. Supports VCI, KBS, MAS, VND, FMP data sources.",
-            "version": "0.1.13",
+            "version": "0.1.14",
             "author": {
                 "name": "hongbietcode"
             },

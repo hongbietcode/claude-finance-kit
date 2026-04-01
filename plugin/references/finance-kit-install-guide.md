@@ -19,10 +19,10 @@ Requires Python >= 3.10.
 
 ## Environment Variables
 
-| Variable | Required | Description |
-|----------|----------|-------------|
-| `FMP_API_KEY` | Only for FMP source | Global stocks (non-VN) |
-| `PERPLEXITY_API_KEY` | Only for Search module | Perplexity web search |
+| Variable             | Required               | Description            |
+| -------------------- | ---------------------- | ---------------------- |
+| `FMP_API_KEY`        | Only for FMP source    | Global stocks (non-VN) |
+| `PERPLEXITY_API_KEY` | Only for Search module | Perplexity web search  |
 
 ## Source Fallback
 
