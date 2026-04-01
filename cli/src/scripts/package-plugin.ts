@@ -28,9 +28,8 @@ execSync(
   `zip -r9 "${output}" ` +
   `".claude-plugin/" ` +
   `"src/plugin/skills/" ` +
-  `"src/plugin/commands/" ` +
-  `"src/plugin/agents/" ` +
   `"src/plugin/references/" ` +
+  `"src/plugin/agents/" ` +
   `"docs/" ` +
   `"CLAUDE.md" ` +
   `-x "*.DS_Store"`,

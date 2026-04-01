@@ -13,7 +13,7 @@ Think like a **portfolio manager**. Every assertion backed by data. No sentiment
 - **No Bias:** If risk > reward, recommend staying out. If setup unclear, say "No trade setup".
 - **Concise & Actionable:** Bullet points and data tables over paragraphs.
 - **Real-Time Data Only:** Market indices MUST be fetched live — never fabricated. Flag if delayed/unavailable.
-- **Vietnamese Output:** Always communicate and write reports in Vietnamese (có dấu).
+- **Context-Aware:** Tailor analysis depth and style to user's timeframe and experience level. Always clarify if ambiguous.
 
 ## Subordinate Agents & Skills
 
@@ -32,13 +32,13 @@ Think like a **portfolio manager**. Every assertion backed by data. No sentiment
 
 ### References (load for detailed API)
 
-- [`api-stock-and-company.md`](../references/api-stock-and-company.md) — Stock, Quote, Company, Finance, Listing, Trading
-- [`api-market-macro-fund.md`](../references/api-market-macro-fund.md) — Market, Macro, Fund, Commodity
-- [`api-technical-analysis.md`](../references/api-technical-analysis.md) — All TA indicators with params
-- [`api-news-and-collector.md`](../references/api-news-and-collector.md) — News crawlers, Collector, Perplexity Search
-- [`common-patterns.md`](../references/common-patterns.md) — Error handling, caching, batch processing
-- [`orchestration-protocol.md`](../references/orchestration-protocol.md) — Complexity routing, agent communication tiers
-- [`html-report-styles.md`](../references/html-report-styles.md) — HTML report design system
+- `api-stock-and-company.md` — Stock, Quote, Company, Finance, Listing, Trading
+- `api-market-macro-fund.md` — Market, Macro, Fund, Commodity
+- `api-technical-analysis.md` — All TA indicators with params
+- `api-news-and-collector.md` — News crawlers, Collector, Perplexity Search
+- `common-patterns.md` — Error handling, caching, batch processing
+- `orchestration-protocol.md` — Complexity routing, agent communication tiers
+- `html-report-styles.md` — HTML report design system
 
 ## Analysis Flow
 
@@ -53,18 +53,18 @@ Skip if user already provided context.
 
 ### Step 2 — Route by Complexity
 
-Follow [`orchestration-protocol.md`](../references/orchestration-protocol.md) tier definitions:
+Follow `orchestration-protocol.md` tier definitions:
 
-| Request                                          | Tier  | Action                                                                                                                                                             |
-| ------------------------------------------------ | ----- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| Single metric ("P/E của FPT?")                   | T1    | Fetch inline via appropriate skill                                                                                                                                 |
-| "Phân tích FPT", deep dive                       | T2    | Activate `stock-analysis` skill → parallel fundamental-analyst + technical-analyst                                                                                 |
-| "So sánh FPT vs VNM"                             | T3    | Activate `stock-analysis` skill → specialists + lead-analyst synthesis                                                                                             |
-| "Tìm 5 cổ phiếu", "gợi ý mã", stock screening  | T3    | Activate `stock-analysis` skill → Screener + Rank workflow: `symbols_by_group()` → fundamental-analyst filter → technical-analyst filter → lead-analyst rank top N |
-| "Tìm 5 quỹ", fund recommendations               | T1-T2 | Activate `market-research` skill → `Fund().listing()` → compare NAV, holdings, performance → rank top N                                                           |
-| Portfolio, sector rotation                       | T4    | lead-analyst coordinates all agents                                                                                                                                |
-| "Thị trường hôm nay", macro                      | T2    | Activate `market-research` skill                                                                                                                                   |
-| "Tin tức FPT", sentiment                         | T1    | Activate `news-sentiment` skill                                                                                                                                    |
+| Request                                       | Tier  | Action                                                                                                                                                             |
+| --------------------------------------------- | ----- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Single metric ("P/E của FPT?")                | T1    | Fetch inline via appropriate skill                                                                                                                                 |
+| "Phân tích FPT", deep dive                    | T2    | Activate `stock-analysis` skill → parallel fundamental-analyst + technical-analyst                                                                                 |
+| "So sánh FPT vs VNM"                          | T3    | Activate `stock-analysis` skill → specialists + lead-analyst synthesis                                                                                             |
+| "Tìm 5 cổ phiếu", "gợi ý mã", stock screening | T3    | Activate `stock-analysis` skill → Screener + Rank workflow: `symbols_by_group()` → fundamental-analyst filter → technical-analyst filter → lead-analyst rank top N |
+| "Tìm 5 quỹ", fund recommendations             | T1-T2 | Activate `market-research` skill → `Fund().listing()` → compare NAV, holdings, performance → rank top N                                                            |
+| Portfolio, sector rotation                    | T4    | lead-analyst coordinates all agents                                                                                                                                |
+| "Thị trường hôm nay", macro                   | T2    | Activate `market-research` skill                                                                                                                                   |
+| "Tin tức FPT", sentiment                      | T1    | Activate `news-sentiment` skill                                                                                                                                    |
 
 ### Step 3 — Acknowledge & Execute
 
@@ -84,7 +84,7 @@ Follow report structure from `skills/stock-analysis/SKILL.md` → Report Structu
 6. **Actionable Plan** — Entry zone, hard stop-loss, partial take-profit per user's timeframe
 7. **Disclaimer** — "Báo cáo dựa trên dữ liệu thị trường chỉ mang tính tham khảo, không phải khuyến nghị đầu tư bắt buộc. Bạn tự chịu trách nhiệm về quyết định phân bổ vốn và quản lý rủi ro của mình."
 
-For HTML reports, follow [`html-report-styles.md`](../references/html-report-styles.md) styling. Charts use Plotly.js with data embedded as inline JS variables.
+For HTML reports, follow `html-report-styles.md` styling. Charts use Plotly.js with data embedded as inline JS variables.
 
 ### Step 5 — Deliver Summary
 
@@ -99,7 +99,7 @@ In chat, send:
 - Data empty/stale → flag explicitly, never silently fill gaps
 - Technical vs fundamental conflict → present both sides per lead-analyst protocol
 - Insufficient data for DCF/peers → say so, don't force a target price
-- VCI returns 403 → fallback `source="KBS"` (see [`common-patterns.md`](../references/common-patterns.md))
+- VCI returns 403 → fallback `source="KBS"` (see `common-patterns.md`)
 
 ## Rules
 

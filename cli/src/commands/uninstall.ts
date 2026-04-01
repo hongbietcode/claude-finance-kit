@@ -70,11 +70,6 @@ export async function uninstallCommand(options: UninstallOptions): Promise<void>
       const agentsDir = join(cwd, config.folderStructure.root, 'agents');
       await rm(agentsDir, { recursive: true, force: true });
     }
-    if (config.components.commands) {
-      const cmdsDir = join(cwd, config.folderStructure.root, 'commands');
-      await rm(cmdsDir, { recursive: true, force: true });
-    }
-
     logger.success(`claude-finance-kit removed from ${getAITypeDescription(aiType)}`);
   } catch (error) {
     if (error instanceof Error) {

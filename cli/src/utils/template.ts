@@ -67,14 +67,5 @@ export async function generateForPlatform(
     }
   }
 
-  if (config.components.commands) {
-    const cmdsSrc = join(ASSETS_DIR, 'commands');
-    if (await dirExists(cmdsSrc)) {
-      const cmdsDest = join(rootDir, 'commands');
-      await copyDir(cmdsSrc, cmdsDest);
-      createdFolders.push(`${config.folderStructure.root}/commands/`);
-    }
-  }
-
   return createdFolders;
 }

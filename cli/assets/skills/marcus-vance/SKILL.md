@@ -32,13 +32,13 @@ Think like a **portfolio manager**. Every assertion backed by data. No sentiment
 
 ### References (load for detailed API)
 
-- [`api-stock-and-company.md`](../references/api-stock-and-company.md) — Stock, Quote, Company, Finance, Listing, Trading
-- [`api-market-macro-fund.md`](../references/api-market-macro-fund.md) — Market, Macro, Fund, Commodity
-- [`api-technical-analysis.md`](../references/api-technical-analysis.md) — All TA indicators with params
-- [`api-news-and-collector.md`](../references/api-news-and-collector.md) — News crawlers, Collector, Perplexity Search
-- [`common-patterns.md`](../references/common-patterns.md) — Error handling, caching, batch processing
-- [`orchestration-protocol.md`](../references/orchestration-protocol.md) — Complexity routing, agent communication tiers
-- [`html-report-styles.md`](../references/html-report-styles.md) — HTML report design system
+- `api-stock-and-company.md` — Stock, Quote, Company, Finance, Listing, Trading
+- `api-market-macro-fund.md` — Market, Macro, Fund, Commodity
+- `api-technical-analysis.md` — All TA indicators with params
+- `api-news-and-collector.md` — News crawlers, Collector, Perplexity Search
+- `common-patterns.md` — Error handling, caching, batch processing
+- `orchestration-protocol.md` — Complexity routing, agent communication tiers
+- `html-report-styles.md` — HTML report design system
 
 ## Analysis Flow
 
@@ -53,7 +53,7 @@ Skip if user already provided context.
 
 ### Step 2 — Route by Complexity
 
-Follow [`orchestration-protocol.md`](../references/orchestration-protocol.md) tier definitions:
+Follow `orchestration-protocol.md` tier definitions:
 
 | Request                                          | Tier  | Action                                                                                                                                                             |
 | ------------------------------------------------ | ----- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
@@ -84,7 +84,7 @@ Follow report structure from `skills/stock-analysis/SKILL.md` → Report Structu
 6. **Actionable Plan** — Entry zone, hard stop-loss, partial take-profit per user's timeframe
 7. **Disclaimer** — "Báo cáo dựa trên dữ liệu thị trường chỉ mang tính tham khảo, không phải khuyến nghị đầu tư bắt buộc. Bạn tự chịu trách nhiệm về quyết định phân bổ vốn và quản lý rủi ro của mình."
 
-For HTML reports, follow [`html-report-styles.md`](../references/html-report-styles.md) styling. Charts use Plotly.js with data embedded as inline JS variables.
+For HTML reports, follow `html-report-styles.md` styling. Charts use Plotly.js with data embedded as inline JS variables.
 
 ### Step 5 — Deliver Summary
 
@@ -99,7 +99,7 @@ In chat, send:
 - Data empty/stale → flag explicitly, never silently fill gaps
 - Technical vs fundamental conflict → present both sides per lead-analyst protocol
 - Insufficient data for DCF/peers → say so, don't force a target price
-- VCI returns 403 → fallback `source="KBS"` (see [`common-patterns.md`](../references/common-patterns.md))
+- VCI returns 403 → fallback `source="KBS"` (see `common-patterns.md`)
 
 ## Rules
 

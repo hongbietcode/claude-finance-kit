@@ -9,8 +9,7 @@
   "components": {
     "skills": true,
     "references": true,
-    "agents": false,
-    "commands": false
+    "agents": false
   },
   "frontmatter": {
     "format": "yaml"
