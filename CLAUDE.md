@@ -1,4 +1,4 @@
-# Claude Finance Kit
+# Claude Finance Kit Assistant
 
 Analysis-first coding assistant powered by the claude-finance-kit Python library.
 
@@ -13,6 +13,40 @@ Does NOT handle: portfolio management, trading bots, brokerage integrations, non
 - **No Bias:** If risk > reward, recommend staying out. If setup unclear, say "No trade setup".
 - **Concise & Actionable:** Bullet points and data tables over paragraphs.
 - **Real-Time Data Only:** Market indices MUST be fetched live — never fabricated. Flag if delayed/unavailable.
+
+## Skills (auto-invoked by context)
+
+| Name | Description |
+| ---- | ----------- |
+| `stock-analysis` | Individual stock deep dive — valuation, financial health, technical analysis, screening, sentiment, sector analysis |
+| `market-research` | Market valuation, macro indicators, sector comparison, fund analysis, commodities |
+| `news-sentiment` | News crawling + sentiment classification across Vietnamese financial news sites |
+
+## Agents (specialized)
+
+| Name | Role |
+| ---- | ---- |
+| `marcus-vance` | Senior analyst persona — orchestrates all workflows, routes by complexity |
+| `lead-analyst` | Synthesis + decision for comparative/portfolio analysis (T3-T4) |
+| `fundamental-analyst` | Financials, valuation, earnings quality |
+| `technical-analyst` | Price trends, momentum, S/R levels |
+| `macro-researcher` | GDP, CPI, rates, FX, commodities |
+
+## References (load when needed)
+
+| File | Content |
+| ---- | ------- |
+| `references/api-stock-and-company.md` | Stock, Quote, Company, Finance, Listing, Trading |
+| `references/api-market-macro-fund.md` | Market, Macro, Fund, Commodity |
+| `references/api-technical-analysis.md` | All TA indicators with params |
+| `references/api-news-and-collector.md` | News crawlers, Collector tasks, Perplexity Search |
+| `references/analysis-methodology.md` | Valuation, financial health, TA signals |
+| `references/common-patterns.md` | Error handling, caching, batch processing |
+| `references/orchestration-protocol.md` | Complexity routing, agent communication tiers |
+
+## Disclaimer
+
+Reports are for reference only, not investment advice. You are responsible for your own capital allocation and risk management.
 
 ## Installation
 
@@ -80,35 +114,7 @@ Queries route to different agent structures based on complexity. See `references
 - Real-time data: trading hours 9:00-15:00 Vietnam time only
 - Perplexity Search requires API key: set `PERPLEXITY_API_KEY` env var; install `perplexityai` package
 
-## Document Index
-
-### Skills (auto-invoked by context)
-
-- `skills/stock-analysis/SKILL.md` — individual stock deep dive
-- `skills/market-research/SKILL.md` — market valuation, macro, sectors, funds
-- `skills/news-sentiment/SKILL.md` — news crawling + sentiment
-
-### Agents (specialized)
-
-- `agents/marcus-vance.md` — Senior analyst persona, orchestrates all workflows, routes by complexity
-- `agents/lead-analyst.md` — synthesis + decision for comparative/portfolio analysis (T3-T4)
-- `agents/fundamental-analyst.md` — financials, valuation, earnings quality
-- `agents/technical-analyst.md` — price trends, momentum, S/R levels
-- `agents/macro-researcher.md` — GDP, CPI, rates, FX, commodities
-
-### References (load when skills insufficient)
-
-| File                                   | Content                                           |
-| -------------------------------------- | ------------------------------------------------- |
-| `references/api-stock-and-company.md`  | Stock, Quote, Company, Finance, Listing, Trading  |
-| `references/api-market-macro-fund.md`  | Market, Macro, Fund, Commodity                    |
-| `references/api-technical-analysis.md` | All TA indicators with params                     |
-| `references/api-news-and-collector.md` | News crawlers, Collector tasks, Perplexity Search |
-| `references/analysis-methodology.md`   | Valuation, financial health, TA signals           |
-| `references/common-patterns.md`        | Error handling, caching, batch processing         |
-| `references/orchestration-protocol.md` | Complexity routing, agent communication tiers     |
-
-### Docs
+## Docs
 
 | File                            | Content                                |
 | ------------------------------- | -------------------------------------- |

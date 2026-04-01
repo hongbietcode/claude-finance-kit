@@ -112,11 +112,21 @@ if [ "$MODE" = "project" ]; then
     mkdir -p "$INSTALL_PATH"
     unzip -qo "$TMP_DIR/$ZIP_NAME" -d "$TMP_DIR/extracted"
 
-    for dir in skills agents references docs .claude-plugin; do
+    for dir in skills agents references hooks docs .claude-plugin; do
         [ -d "$TMP_DIR/extracted/$dir" ] && cp -r "$TMP_DIR/extracted/$dir" "$INSTALL_PATH/"
     done
 
-    [ -f "$TMP_DIR/extracted/CLAUDE.md" ] && cp "$TMP_DIR/extracted/CLAUDE.md" "$INSTALL_PATH/CLAUDE.md"
+    if [ -f "$TMP_DIR/extracted/CLAUDE.md" ]; then
+        TARGET_CLAUDE_MD="$PROJECT_DIR/CLAUDE.md"
+        if [ -f "$TARGET_CLAUDE_MD" ]; then
+            printf "\n\n" >> "$TARGET_CLAUDE_MD"
+            cat "$TMP_DIR/extracted/CLAUDE.md" >> "$TARGET_CLAUDE_MD"
+            echo "  Appended plugin CLAUDE.md to existing $TARGET_CLAUDE_MD"
+        else
+            cp "$TMP_DIR/extracted/CLAUDE.md" "$TARGET_CLAUDE_MD"
+            echo "  Created $TARGET_CLAUDE_MD"
+        fi
+    fi
 
 else
     rm -rf "$CACHE_DIR"
@@ -147,7 +157,7 @@ else
 MKJSON
 
     cp -r "$CACHE_DIR/$VERSION/.claude-plugin" "$MARKETPLACE_DIR/plugins/$PLUGIN_NAME/"
-    for dir in skills agents references docs; do
+    for dir in skills agents references hooks docs; do
         [ -d "$CACHE_DIR/$VERSION/$dir" ] && cp -r "$CACHE_DIR/$VERSION/$dir" "$MARKETPLACE_DIR/plugins/$PLUGIN_NAME/"
     done
 

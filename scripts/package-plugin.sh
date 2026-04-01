@@ -21,11 +21,10 @@ zip -r9 "$OUTPUT" \
     "commands/" \
     "agents/" \
     "references/" \
+    "hooks/" \
     "docs/" \
-    "SKILL.md" \
+    "CLAUDE.md" \
     -x "*.DS_Store"
-
-rm -f SKILL.md
 
 FILE_COUNT=$(unzip -l "$OUTPUT" | tail -1 | awk '{print $2}')
 FILE_SIZE=$(du -h "$OUTPUT" | cut -f1)
