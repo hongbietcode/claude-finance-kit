@@ -1,6 +1,6 @@
 {
     "name": "claude-finance-kit-cli",
-    "version": "0.1.21",
+    "version": "0.1.22",
     "description": "CLI to install claude-finance-kit plugin for AI coding assistants",
     "type": "module",
     "bin": {
@@ -14,6 +14,8 @@
     "scripts": {
         "build": "tsc",
         "dev": "tsc --watch",
+        "prepack": "node dist/scripts/resolve-symlinks.js resolve",
+        "postpack": "node dist/scripts/resolve-symlinks.js restore",
         "bump": "node dist/scripts/bump-version.js",
         "package": "node dist/scripts/package-plugin.js"
     },
