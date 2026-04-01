@@ -16,3 +16,6 @@ htmlcov/
 .DS_Store
 uv.lock
 .env
+cli/node_modules/
+cli/dist/
+.claude/

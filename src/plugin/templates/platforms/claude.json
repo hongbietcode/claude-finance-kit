@@ -1,0 +1,20 @@
+{
+  "platform": "claude",
+  "displayName": "Claude Code",
+  "folderStructure": {
+    "root": ".claude",
+    "skillPath": "skills",
+    "filename": "SKILL.md"
+  },
+  "components": {
+    "skills": true,
+    "references": true,
+    "agents": true,
+    "hooks": true,
+    "commands": true
+  },
+  "frontmatter": {
+    "format": "yaml"
+  },
+  "description": "Full claude-finance-kit plugin with skills, agents, hooks, commands, and references."
+}

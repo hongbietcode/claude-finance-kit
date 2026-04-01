@@ -17,11 +17,11 @@ echo "Packaging $SKILL_NAME plugin v${VERSION}..."
 
 zip -r9 "$OUTPUT" \
     ".claude-plugin/" \
-    "skills/" \
-    "commands/" \
-    "agents/" \
-    "references/" \
-    "hooks/" \
+    "src/plugin/skills/" \
+    "src/plugin/commands/" \
+    "src/plugin/agents/" \
+    "src/plugin/references/" \
+    "src/plugin/hooks/" \
     "docs/" \
     "CLAUDE.md" \
     -x "*.DS_Store"
