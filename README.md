@@ -65,6 +65,20 @@ npm run sync               # Sync plugin/ → cli/assets/
 npm run bump -- patch      # Bump version (patch|minor|major)
 ```
 
+## Documentation
+
+- [Getting Started](docs/01-getting-started.md)
+- [Stock Module](docs/02-stock-module.md)
+- [Market Module](docs/03-market-module.md)
+- [Macro Module](docs/04-macro-module.md)
+- [Fund Module](docs/05-fund-module.md)
+- [Commodity Module](docs/06-commodity-module.md)
+- [Technical Analysis](docs/07-technical-analysis.md)
+- [Collector Module](docs/09-collector-module.md)
+- [News Module](docs/10-news-module.md)
+- [Advanced Topics](docs/11-advanced-topics.md)
+- [Search Module](docs/12-search-module.md)
+
 ## License
 
 MIT
