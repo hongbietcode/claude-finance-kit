@@ -50,22 +50,32 @@ Aggregate per-ticker: net score = bullish_count - bearish_count
 ## Report Structure
 
 > **IMPORTANT:** Always write the report in the user's language (Vietnamese if user writes in Vietnamese, English if user writes in English).
-> **HTML reports:** Follow styles and layout in [`references/html-report-styles.md`](./references/html-report-styles.md).
+> **MANDATORY:** Every analysis MUST produce a self-contained HTML report file. Follow styles and layout in [`references/html-report-styles.md`](./references/html-report-styles.md).
 
-Dàn ý báo cáo tin tức & cảm xúc đạt yêu cầu (5 sections):
+Strictly follow 7 sections:
 
-1. **Cảm xúc tổng quan** — Số bài tích cực / trung lập / tiêu cực (con số + %), pill cảm xúc thị trường tổng thể; biểu đồ cột net score theo mã (tích cực = xanh, tiêu cực = đỏ)
-2. **Tin tiêu điểm** — 5–10 bài nổi bật, mỗi bài: tiêu đề, nguồn, thời gian, mã liên quan, màu border trái theo cảm xúc (xanh = tích cực, đỏ = tiêu cực, xám = trung lập)
-3. **Cảm xúc theo mã CP** — Bảng: mã | số bài tích cực | số bài tiêu cực | điểm net | nhãn (Tích cực / Trung lập / Tiêu cực); sắp xếp theo điểm net giảm dần
-4. **Chủ đề nổi bật** — 3 chủ đề chính: loại sự kiện, số bài, tóm tắt 1 câu, danh sách mã liên quan
-5. **Sự kiện đáng chú ý** — Corporate actions, chính sách, kết quả kinh doanh; mỗi sự kiện: nhãn loại (KQKD / M&A / CSTT / VĨ MÔ / ...) + tiêu đề + mô tả tác động ngắn
+1. **Bối cảnh thị trường** — VNINDEX (điểm, % ngày), P/E zone, macro headline (lãi suất, tỷ giá) — bối cảnh ngắn gọn để đặt tin tức vào context
+2. **Cảm xúc tổng quan** — Số bài tích cực / trung lập / tiêu cực (con số + %), pill cảm xúc thị trường tổng thể; Plotly bar chart net score theo mã (xanh = tích cực, đỏ = tiêu cực)
+3. **Tin tiêu điểm** — 5–10 bài nổi bật, mỗi bài: tiêu đề, nguồn, thời gian, mã liên quan, màu border trái theo cảm xúc (xanh = tích cực, đỏ = tiêu cực, xám = trung lập)
+4. **Cảm xúc theo mã CP** — Bảng: mã | số bài tích cực | số bài tiêu cực | điểm net | nhãn (Tích cực / Trung lập / Tiêu cực); sắp xếp theo điểm net giảm dần
+5. **Chủ đề nổi bật** — 3 chủ đề chính: loại sự kiện, số bài, tóm tắt 1 câu, danh sách mã liên quan
+6. **Sự kiện đáng chú ý** — Corporate actions, chính sách, kết quả kinh doanh; mỗi sự kiện: nhãn loại (KQKD / M&A / CSTT / VĨ MÔ / ...) + tiêu đề + mô tả tác động ngắn
+7. **Disclaimer** — "Báo cáo chỉ mang tính tham khảo, không phải khuyến nghị đầu tư. Nhà đầu tư tự chịu trách nhiệm về quyết định của mình."
 
 **Required data per section:**
 
-- S1–S5: crawl 10–50 bài từ cafef/vietstock/vnexpress → classify sentiment per article → aggregate
+- S1: `Market("VNINDEX").pe()`, `Macro().interest_rate()`, `Macro().exchange_rate()` — brief snapshot
+- S2–S6: crawl 10–50 bài từ cafef/vietstock/vnexpress → classify sentiment per article → aggregate
 - Classify each article: sentiment (bullish/bearish/neutral), confidence (0–1), event_type, tickers_mentioned
 - Aggregate: net_score[ticker] = bullish_count - bearish_count
-- **Disclaimer** (footer): "Báo cáo chỉ mang tính tham khảo, không phải khuyến nghị đầu tư. Nhà đầu tư tự chịu trách nhiệm về quyết định của mình."
+
+### HTML Output Rules
+
+1. **Format:** Self-contained HTML file — Tailwind CDN + Plotly.js CDN, no external dependencies
+2. **Save path:** `{CWD}/plans/reports/{slug}-report.html` (e.g., `news-sentiment-fpt-2026-04-01-report.html`, `news-sentiment-market-2026-04-01-report.html`)
+3. **Open:** After writing the file, run `open {file_path}` to auto-open in browser
+4. **Charts:** Plotly.js with data embedded as inline JS variables
+5. **Deliver in chat:** summary + file path link
 
 ## Reference Index
 
