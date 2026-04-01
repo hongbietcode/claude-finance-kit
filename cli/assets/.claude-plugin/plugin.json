@@ -19,15 +19,15 @@
         "market-research"
     ],
     "agents": [
-        "../cli/assets/agents/lead-analyst.md",
-        "../cli/assets/agents/fundamental-analyst.md",
-        "../cli/assets/agents/technical-analyst.md",
-        "../cli/assets/agents/macro-researcher.md"
+        "../agents/lead-analyst.md",
+        "../agents/fundamental-analyst.md",
+        "../agents/technical-analyst.md",
+        "../agents/macro-researcher.md"
     ],
     "skills": [
-        "../cli/assets/skills/marcus-vance",
-        "../cli/assets/skills/stock-analysis",
-        "../cli/assets/skills/market-research",
-        "../cli/assets/skills/news-sentiment"
+        "../skills/marcus-vance",
+        "../skills/stock-analysis",
+        "../skills/market-research",
+        "../skills/news-sentiment"
     ]
 }

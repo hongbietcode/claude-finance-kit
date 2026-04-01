@@ -6,6 +6,7 @@ import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import { initCommand } from './commands/init.js';
 import { uninstallCommand } from './commands/uninstall.js';
+import { packageDxtCommand } from './commands/package-dxt.js';
 import type { AIType } from './types/index.js';
 import { AI_TYPES } from './types/index.js';
 
@@ -49,6 +50,16 @@ program
     }
     await uninstallCommand({
       ai: options.ai as AIType | undefined,
+    });
+  });
+
+program
+  .command('package-dxt')
+  .description('Package plugin as .dxt extension for Claude Desktop')
+  .option('-o, --output <path>', 'Output file path')
+  .action(async (options) => {
+    await packageDxtCommand({
+      output: options.output,
     });
   });
 
