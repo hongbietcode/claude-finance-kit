@@ -1,1 +1,0 @@
-../../../references/api-news-and-collector.md

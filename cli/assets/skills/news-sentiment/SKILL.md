@@ -5,7 +5,7 @@ description: Vietnamese financial news crawling + sentiment analysis. Activate f
 
 # News & Sentiment Research
 
-> **Install:** `claude-finance-kit` must be installed — see [`references/finance-kit-install-guide.md`](./references/finance-kit-install-guide.md) for setup command.
+> **Install:** `claude-finance-kit` must be installed — see [`references/finance-kit-install-guide.md`](../../references/finance-kit-install-guide.md) for setup command.
 
 Default: single agent (T1). Research shows sentiment analysis quality drops from 3.93 → 3.77 with multi-agent debate.
 
@@ -27,8 +27,8 @@ Default: single agent (T1). Research shows sentiment analysis quality drops from
 
 ## Data Collection
 
-> **Code patterns:** See [`references/api-news-and-collector.md`](./references/api-news-and-collector.md) for Crawler & BatchCrawler APIs.
-> **Error handling:** See [`references/common-patterns.md`](./references/common-patterns.md).
+> **Code patterns:** See [`references/api-news-and-collector.md`](../../references/api-news-and-collector.md) for Crawler & BatchCrawler APIs.
+> **Error handling:** See [`references/common-patterns.md`](../../references/common-patterns.md).
 
 Use `Crawler(site_name)` for single-site crawling, `BatchCrawler(site_name, request_delay)` for large batches.
 
@@ -50,7 +50,7 @@ Aggregate per-ticker: net score = bullish_count - bearish_count
 ## Report Structure
 
 > **IMPORTANT:** Always write the report in the user's language (Vietnamese if user writes in Vietnamese, English if user writes in English).
-> **MANDATORY:** Every analysis MUST produce a self-contained HTML report file. Follow styles and layout in [`references/html-report-styles.md`](./references/html-report-styles.md).
+> **MANDATORY:** Every analysis MUST produce a self-contained HTML report file. Follow styles and layout in [`references/html-report-styles.md`](../../references/html-report-styles.md).
 
 Strictly follow 7 sections:
 
@@ -83,8 +83,8 @@ Strictly follow 7 sections:
 
 | File                                                                                   | Content                                                              |
 | -------------------------------------------------------------------------------------- | -------------------------------------------------------------------- |
-| [`references/finance-kit-install-guide.md`](./references/finance-kit-install-guide.md) | Installation instructions, requirements, environment variables       |
-| [`references/common-patterns.md`](./references/common-patterns.md)                     | Common coding patterns for news crawling, error handling             |
-| [`references/api-news-and-collector.md`](./references/api-news-and-collector.md)       | Detailed crawler API reference                                       |
-| [`references/orchestration-protocol.md`](./references/orchestration-protocol.md)       | Complexity routing rules                                             |
-| [`references/html-report-styles.md`](./references/html-report-styles.md)               | HTML report design system: Tailwind config, components, placeholders |
+| [`references/finance-kit-install-guide.md`](../../references/finance-kit-install-guide.md) | Installation instructions, requirements, environment variables       |
+| [`references/common-patterns.md`](../../references/common-patterns.md)                     | Common coding patterns for news crawling, error handling             |
+| [`references/api-news-and-collector.md`](../../references/api-news-and-collector.md)       | Detailed crawler API reference                                       |
+| [`references/orchestration-protocol.md`](../../references/orchestration-protocol.md)       | Complexity routing rules                                             |
+| [`references/html-report-styles.md`](../../references/html-report-styles.md)               | HTML report design system: Tailwind config, components, placeholders |
