@@ -8,7 +8,7 @@ const projectRoot = join(__dirname, '..', '..', '..');
 const pluginSrc = join(projectRoot, 'src', 'plugin');
 const assetsDir = join(projectRoot, 'cli', 'assets');
 
-const dirs = ['skills', 'references', 'agents', 'hooks', 'commands'];
+const dirs = ['skills', 'references', 'agents', 'commands'];
 
 for (const dir of dirs) {
   const dest = join(assetsDir, dir);

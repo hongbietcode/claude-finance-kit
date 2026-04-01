@@ -31,7 +31,6 @@ execSync(
   `"src/plugin/commands/" ` +
   `"src/plugin/agents/" ` +
   `"src/plugin/references/" ` +
-  `"src/plugin/hooks/" ` +
   `"docs/" ` +
   `"CLAUDE.md" ` +
   `-x "*.DS_Store"`,

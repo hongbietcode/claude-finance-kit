@@ -70,10 +70,6 @@ export async function uninstallCommand(options: UninstallOptions): Promise<void>
       const agentsDir = join(cwd, config.folderStructure.root, 'agents');
       await rm(agentsDir, { recursive: true, force: true });
     }
-    if (config.components.hooks) {
-      const hooksDir = join(cwd, config.folderStructure.root, 'hooks');
-      await rm(hooksDir, { recursive: true, force: true });
-    }
     if (config.components.commands) {
       const cmdsDir = join(cwd, config.folderStructure.root, 'commands');
       await rm(cmdsDir, { recursive: true, force: true });

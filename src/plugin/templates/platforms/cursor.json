@@ -10,7 +10,6 @@
     "skills": true,
     "references": true,
     "agents": false,
-    "hooks": false,
     "commands": false
   },
   "frontmatter": {

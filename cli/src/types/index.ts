@@ -14,7 +14,6 @@ export interface PlatformConfig {
     skills: boolean;
     references: boolean;
     agents: boolean;
-    hooks: boolean;
     commands: boolean;
   };
   frontmatter: {

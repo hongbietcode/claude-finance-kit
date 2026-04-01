@@ -67,15 +67,6 @@ export async function generateForPlatform(
     }
   }
 
-  if (config.components.hooks) {
-    const hooksSrc = join(ASSETS_DIR, 'hooks');
-    if (await dirExists(hooksSrc)) {
-      const hooksDest = join(rootDir, 'hooks');
-      await copyDir(hooksSrc, hooksDest);
-      createdFolders.push(`${config.folderStructure.root}/hooks/`);
-    }
-  }
-
   if (config.components.commands) {
     const cmdsSrc = join(ASSETS_DIR, 'commands');
     if (await dirExists(cmdsSrc)) {
