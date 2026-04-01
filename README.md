@@ -57,6 +57,36 @@ cli/                       # npm CLI installer (claude-finance-kit-cli)
 .claude-plugin/            # Claude Marketplace manifest
 ```
 
+## Claude Marketplace
+
+Published as a Claude Marketplace plugin. The manifest lives in `.claude-plugin/`:
+
+- **`marketplace.json`** — listing metadata, `source` points to `./cli/assets`
+- **`plugin.json`** — plugin identity, version, keywords
+
+When users install via Marketplace, Claude Code reads `cli/assets/` and copies skills, agents, and references into the project.
+
+## Plugin Content (`cli/assets/`)
+
+Single source of truth for all plugin content:
+
+```
+cli/assets/
+├── skills/               # marcus-vance, stock-analysis, market-research, news-sentiment
+├── agents/               # lead-analyst, fundamental-analyst, technical-analyst, macro-researcher
+├── references/           # Shared API docs, methodology, patterns
+└── templates/platforms/  # Platform configs (claude.json, cursor.json, copilot.json)
+```
+
+Skill-specific references use **relative symlinks** to shared `references/`:
+
+```
+skills/stock-analysis/references/
+├── analysis-methodology.md -> ../../../references/analysis-methodology.md
+├── fundamental-analysis-workflows.md   # Skill-specific (real file)
+└── ...
+```
+
 ## Development
 
 ```bash
@@ -64,6 +94,27 @@ cd cli
 npm install
 npm run build              # Build CLI TypeScript
 npm run bump -- patch      # Bump version (patch|minor|major)
+```
+
+### Version Sync
+
+`npm run bump` updates version across all files:
+
+| File | Field |
+|------|-------|
+| `pyproject.toml` | `version` |
+| `src/claude_finance_kit/__init__.py` | `__version__` |
+| `cli/package.json` | `version` |
+| `.claude-plugin/plugin.json` | `version` |
+| `.claude-plugin/marketplace.json` | `metadata.version` + `plugins[0].version` |
+
+### Publishing
+
+```bash
+npm run bump -- patch
+git commit -am "chore: bump version to X.Y.Z"
+git tag vX.Y.Z
+git push origin main --tags    # Triggers CI: PyPI + npm publish
 ```
 
 ## Documentation
