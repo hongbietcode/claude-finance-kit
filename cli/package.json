@@ -14,7 +14,8 @@
     "scripts": {
         "build": "tsc",
         "dev": "tsc --watch",
-        "bump": "node dist/scripts/bump-version.js"
+        "bump": "node dist/scripts/bump-version.js",
+        "package": "node dist/scripts/package-plugin.js"
     },
     "keywords": [
         "claude",

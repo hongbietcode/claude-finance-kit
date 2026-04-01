@@ -3,5 +3,5 @@ import { join, relative } from 'node:path';
 import { execSync } from 'node:child_process';
 
 export async function createZipArchive(sourceDir: string, outputPath: string): Promise<void> {
-  execSync(`cd "${sourceDir}" && zip -r "${outputPath}" .`, { stdio: 'ignore' });
+  execSync(`cd "${sourceDir}" && zip -r "${outputPath}" . -x '*.DS_Store'`, { stdio: 'ignore' });
 }
