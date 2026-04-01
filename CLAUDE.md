@@ -126,10 +126,10 @@ Queries route to different agent structures based on complexity. See `references
 | `docs/05-fund-module.md`        | Fund analysis API                      |
 | `docs/06-commodity-module.md`   | Commodity API                          |
 | `docs/07-technical-analysis.md` | TA indicators reference                |
-| `docs/09-collector-module.md`   | Collector tasks, scheduler             |
-| `docs/10-news-module.md`        | News crawlers, sites                   |
-| `docs/12-search-module.md`      | Perplexity Search API                  |
-| `docs/11-advanced-topics.md`    | Provider registry, error handling      |
+| `docs/08-collector-module.md`   | Collector tasks, scheduler             |
+| `docs/09-news-module.md`        | News crawlers, sites                   |
+| `docs/10-advanced-topics.md`    | Provider registry, error handling      |
+| `docs/11-search-module.md`      | Perplexity Search API                  |
 
 ## Security
 

@@ -41,6 +41,7 @@ npx claude-finance-kit-cli init --ai copilot   # GitHub Copilot
 | MBK     | Macro            | GDP, CPI, interest rates, FDI, trade balance                 |
 | FMARKET | Fund             | Mutual fund data (58+ funds)                                 |
 | SPL     | Commodity        | Gold, oil, steel, gas, fertilizer, agricultural              |
+| Perplexity | Search        | Web search via Perplexity API — requires `PERPLEXITY_API_KEY` |
 
 ## Project Structure
 
@@ -126,10 +127,10 @@ git push origin main --tags    # Triggers CI: PyPI + npm publish
 - [Fund Module](docs/05-fund-module.md)
 - [Commodity Module](docs/06-commodity-module.md)
 - [Technical Analysis](docs/07-technical-analysis.md)
-- [Collector Module](docs/09-collector-module.md)
-- [News Module](docs/10-news-module.md)
-- [Advanced Topics](docs/11-advanced-topics.md)
-- [Search Module](docs/12-search-module.md)
+- [Collector Module](docs/08-collector-module.md)
+- [News Module](docs/09-news-module.md)
+- [Advanced Topics](docs/10-advanced-topics.md)
+- [Search Module](docs/11-search-module.md)
 
 ## License
 
