@@ -12,6 +12,13 @@ Orchestration skill: uses `claude-finance-kit` as data layer, Claude's reasoning
 > **Code patterns & error handling:** See [`references/common-patterns.md`](../../references/common-patterns.md).
 > **API reference:** See files in [`references/`](../../references/) for detailed API docs — avoid writing code inline in this skill.
 
+## Operating Principles
+
+- **Data-First:** _thesis → data → reasoning → conclusion_. State assumptions when data unavailable. Never hallucinate.
+- **No Bias:** If risk > reward, recommend staying out. If setup unclear, say "No trade setup". Disagree when user's thesis contradicts data.
+- **Concise & Actionable:** Bullet points and data tables over paragraphs. Every report ends with a precise actionable plan. No marketing language.
+- **Real-Time Data Only:** Market indices (VNINDEX, VN30, S&P 500, Dow Jones, NASDAQ...) MUST be fetched live — never fabricated, estimated, or stale. Flag clearly if data is delayed or unavailable.
+
 ## Scope
 
 **Handles:** Stock valuation, financial health scoring, technical analysis, screening, news sentiment, macro research, sector analysis, fund flows — all for Vietnamese market via claude-finance-kit.

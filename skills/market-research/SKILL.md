@@ -7,6 +7,13 @@ description: Vietnamese market overview — VNINDEX valuation, macro indicators,
 
 > **Install:** `claude-finance-kit` must be installed — see [`references/finance-kit-install-guide.md`](../../references/finance-kit-install-guide.md) for setup command.
 
+## Operating Principles
+
+- **Data-First:** _thesis → data → reasoning → conclusion_. State assumptions when data unavailable. Never hallucinate.
+- **No Bias:** If risk > reward, recommend staying out. If setup unclear, say "No trade setup". Disagree when user's thesis contradicts data.
+- **Concise & Actionable:** Bullet points and data tables over paragraphs. Every report ends with a precise actionable plan. No marketing language.
+- **Real-Time Data Only:** Market indices (VNINDEX, VN30, S&P 500, Dow Jones, NASDAQ...) MUST be fetched live — never fabricated, estimated, or stale. Flag clearly if data is delayed or unavailable.
+
 ## Workflow Router
 
 | Trigger                                                 | Tier | Agents                                          |

@@ -54,7 +54,8 @@ claude_finance_kit/
 
 | Extra | Installs | Enables |
 |-------|----------|---------|
-| `[ta]` | pandas-ta | Technical analysis indicators |
-| `[collector]` | duckdb, pyarrow, aiohttp | Batch data collector |
+| `[ta]` | (no extra deps) | Technical analysis indicators |
+| `[collector]` | duckdb, pyarrow, tqdm, aiohttp, nest-asyncio, websockets | Batch data collector |
 | `[news]` | scipy, pyarrow | News crawlers |
+| `[search]` | perplexityai | Perplexity web search |
 | `[all]` | all above | Everything |

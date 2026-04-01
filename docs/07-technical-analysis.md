@@ -32,6 +32,9 @@ Access via `ind.trend`.
 | `psar(af=0.02, max_af=0.2)` | DataFrame | Parabolic SAR (PSARl, PSARs, PSARaf, PSARr) |
 | `supertrend(period=10, multiplier=3.0)` | DataFrame | Supertrend (SUPERT, SUPERTd, SUPERTl, SUPERTs) |
 | `vwma(period=20)` | Series | Volume Weighted Moving Average |
+| `dema(length=14)` | Series | Double Exponential MA (less lag) |
+| `tema(length=14)` | Series | Triple Exponential MA (least lag) |
+| `donchian(period=20)` | DataFrame | Donchian Channel (DCL, DCM, DCU) |
 
 ## Momentum Indicators
 
@@ -46,6 +49,10 @@ Access via `ind.momentum`.
 | `willr(length=14)` | Series | Williams %R [-100, 0] |
 | `mom(length=10)` | Series | Momentum |
 | `cmo(length=14)` | Series | Chande Momentum Oscillator [-100, 100] |
+| `cci(length=20)` | Series | Commodity Channel Index (unbounded, ±100 thresholds) |
+| `tsi(long=25, short=13)` | Series | True Strength Index [-100, 100] |
+| `uo(fast=7, medium=14, slow=28)` | Series | Ultimate Oscillator [0-100] |
+| `ao(fast=5, slow=34)` | Series | Awesome Oscillator (unbounded) |
 
 ## Volatility Indicators
 
@@ -57,6 +64,8 @@ Access via `ind.volatility`.
 | `keltner(length=20, scalar=2.0, mamode="ema")` | DataFrame | Keltner Channel (KCLe, KCBe, KCUe) |
 | `stdev(period=20)` | Series | Rolling Standard Deviation |
 | `linreg(period=14)` | Series | Linear Regression endpoint |
+| `hv(period=20)` | Series | Historical Volatility (annualized %) |
+| `ulcer(period=14)` | Series | Ulcer Index (downside volatility) |
 
 ## Volume Indicators
 
@@ -67,6 +76,10 @@ Access via `ind.volume`.
 | `obv()` | Series | On-Balance Volume |
 | `vwap()` | Series | Volume Weighted Average Price (cumulative) |
 | `mfi(length=14)` | Series | Money Flow Index [0-100] |
+| `adl()` | Series | Accumulation/Distribution Line (cumulative) |
+| `cmf(length=20)` | Series | Chaikin Money Flow [-1, 1] |
+| `pvt()` | Series | Price Volume Trend (cumulative) |
+| `emv(length=14)` | Series | Ease of Movement (smoothed) |
 
 ## Output Column Reference
 
@@ -101,6 +114,11 @@ Access via `ind.volume`.
 | | `SUPERTl_N_M` | Long signal (value when bullish, NaN otherwise) |
 | | `SUPERTs_N_M` | Short signal (value when bearish, NaN otherwise) |
 | `vwma(N)` | `VWMA_N` | Volume-weighted moving average value |
+| `dema(N)` | `DEMA_N` | Double Exponential MA value |
+| `tema(N)` | `TEMA_N` | Triple Exponential MA value |
+| `donchian(N)` | `DCL_N` | Donchian Channel lower |
+| | `DCM_N` | Donchian Channel midline |
+| | `DCU_N` | Donchian Channel upper |
 
 ### Momentum Output Columns
 
@@ -116,6 +134,10 @@ Access via `ind.volume`.
 | `willr(N)` | `WILLR_N` | Williams %R [-100, 0] |
 | `mom(N)` | `MOM_N` | Price momentum (close - close_N_periods_ago) |
 | `cmo(N)` | `CMO_N` | Chande Momentum Oscillator [-100, 100] |
+| `cci(N)` | `CCI_N` | Commodity Channel Index (unbounded) |
+| `tsi(L, S)` | `TSI_L_S` | True Strength Index [-100, 100] |
+| `uo(F, M, S)` | `UO_F_M_S` | Ultimate Oscillator [0-100] |
+| `ao(F, S)` | `AO_F_S` | Awesome Oscillator (unbounded) |
 
 ### Volatility Output Columns
 
@@ -127,6 +149,8 @@ Access via `ind.volume`.
 | | `KCUe_N_S` | Upper Keltner Channel |
 | `stdev(N)` | `STDEV_N` | Rolling standard deviation of close |
 | `linreg(N)` | `LINREG_N` | Linear regression endpoint value |
+| `hv(N)` | `HV_N` | Historical Volatility (annualized %) |
+| `ulcer(N)` | `UI_N` | Ulcer Index (downside volatility) |
 
 ### Volume Output Columns
 
@@ -135,6 +159,10 @@ Access via `ind.volume`.
 | `obv()` | `OBV` | On-Balance Volume (cumulative) |
 | `vwap()` | `VWAP` | Volume Weighted Average Price (cumulative) |
 | `mfi(N)` | `MFI_N` | Money Flow Index [0-100] |
+| `adl()` | `ADL` | Accumulation/Distribution Line (cumulative) |
+| `cmf(N)` | `CMF_N` | Chaikin Money Flow [-1, 1] |
+| `pvt()` | `PVT` | Price Volume Trend (cumulative) |
+| `emv(N)` | `EMV_N` | Ease of Movement (smoothed) |
 
 ## Examples
 

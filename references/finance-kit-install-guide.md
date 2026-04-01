@@ -9,10 +9,10 @@ PACKGE_URL=@git+https://${GITHUB_TOKEN}@github.com/hongbietcode/claude-finance-k
 pip install "claude-finance-kit             @${PACKGE_URL}@main"  # Latest stable release
 pip install "claude-finance-kit[all]        @${PACKGE_URL}@main"  # Latest stable release with all optional dependencies
 
-pip install "claude-finance-kit[ta]         @${PACKGE_URL}@main"              # + Technical analysis
+pip install "claude-finance-kit[ta]         @${PACKGE_URL}@main"    # + Technical analysis
 pip install "claude-finance-kit[collector]  @${PACKGE_URL}@main"    # + Batch data collector
-pip install "claude-finance-kit[news]       @${PACKGE_URL}@main"        # + News crawlers
-pip install "claude-finance-kit[all]        @${PACKGE_URL}@main"         # Everything
+pip install "claude-finance-kit[news]       @${PACKGE_URL}@main"    # + News crawlers
+pip install "claude-finance-kit[search]     @${PACKGE_URL}@main"    # + Perplexity web search
 ```
 
 Requires Python >= 3.10.
@@ -22,6 +22,7 @@ Requires Python >= 3.10.
 | Variable | Required | Description |
 |----------|----------|-------------|
 | `FMP_API_KEY` | Only for FMP source | Global stocks (non-VN) |
+| `PERPLEXITY_API_KEY` | Only for Search module | Perplexity web search |
 
 ## Source Fallback
 

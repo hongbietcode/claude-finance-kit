@@ -1,4 +1,4 @@
-# claude-finance-kit
+# Claude Finance Kit
 
 Analysis-first coding assistant powered by the claude-finance-kit Python library.
 
@@ -7,9 +7,16 @@ Analysis-first coding assistant powered by the claude-finance-kit Python library
 Handles: stock analysis, market research, technical analysis, fundamental analysis, macro research, news crawling, batch data collection — all for Vietnamese stock market.
 Does NOT handle: portfolio management, trading bots, brokerage integrations, non-Vietnamese markets.
 
+## Operating Principles
+
+- **Data-First:** thesis → data → reasoning → conclusion. State assumptions when data unavailable. Never hallucinate.
+- **No Bias:** If risk > reward, recommend staying out. If setup unclear, say "No trade setup".
+- **Concise & Actionable:** Bullet points and data tables over paragraphs.
+- **Real-Time Data Only:** Market indices MUST be fetched live — never fabricated. Flag if delayed/unavailable.
+
 ## Installation
 
-See `references/finance-kit-install-guide.md` for full setup instructions.
+> **Install:** `claude-finance-kit` must be installed — see [`references/finance-kit-install-guide.md`](references/finance-kit-install-guide.md) for setup command.
 
 ## Quick API Lookup
 
@@ -24,7 +31,7 @@ Price depth    → stock.trading.price_depth()
 Market val.    → Market("VNINDEX").pe(duration="5Y") / pb(duration="5Y")
 Top movers     → Market("VNINDEX").top_gainer(limit=10) / top_loser(10) / top_liquidity(10)
 Macro          → Macro().gdp() / cpi() / interest_rate() / exchange_rate() / fdi() / trade_balance()
-Fund           → Fund().listing("STOCK") / fund_filter("VESAF") / top_holding(id) / nav_report(id) / asset_holding(id)
+Fund           → Fund().listing("STOCK") / fund_filter("VESAF") / top_holding(id) / industry_holding(id) / nav_report(id) / asset_holding(id)
 Commodity      → Commodity().gold() / oil() / steel() / gas() / fertilizer() / agricultural()
 TA indicators  → Indicator(df).trend.sma/ema/dema/tema/donchian / momentum.rsi/macd/cci/tsi/uo/ao / volatility.atr/hv/ulcer / volume.obv/adl/cmf/pvt/emv
 News           → Crawler("cafef").get_latest_articles(10) / get_articles(10) / get_article_details(url)
@@ -34,31 +41,31 @@ Search         → PerplexitySearch().search("query") / search_multi(["q1","q2"]
 
 ## Data Sources
 
-| Source | Coverage |
-|--------|----------|
-| **VCI** | Primary — full VN stock data (may 403 on cloud IPs → fallback KBS) |
-| **KBS** | Alternative — same VN stock coverage as VCI |
-| **MAS** | VN stocks — quote, intraday, financials, price depth (no company/listing) |
-| **TVS** | VN stocks — company overview only |
-| **VDS** | VN stocks — intraday only (auto-cookie) |
-| **BINANCE** | Crypto — history, intraday, depth (no API key) |
-| **FMP** | Global stocks — quote, company, financials (requires `FMP_API_KEY`) |
-| **VND** | Market P/E, P/B, top movers |
-| **MBK** | Macro: GDP, CPI, interest rates, FDI, trade balance |
-| **FMARKET** | Mutual funds (58+ quỹ mở) |
-| **SPL** | Commodities: gold, oil, steel, gas, agricultural |
-| **Perplexity** | Web search via Perplexity API (requires `PERPLEXITY_API_KEY`) |
+| Source         | Coverage                                                                  |
+| -------------- | ------------------------------------------------------------------------- |
+| **VCI**        | Primary — full VN stock data (may 403 on cloud IPs → fallback KBS)        |
+| **KBS**        | Alternative — same VN stock coverage as VCI                               |
+| **MAS**        | VN stocks — quote, intraday, financials, price depth (no company/listing) |
+| **TVS**        | VN stocks — company overview only                                         |
+| **VDS**        | VN stocks — intraday only (auto-cookie)                                   |
+| **BINANCE**    | Crypto — history, intraday, depth (no API key)                            |
+| **FMP**        | Global stocks — quote, company, financials (requires `FMP_API_KEY`)       |
+| **VND**        | Market P/E, P/B, top movers                                               |
+| **MBK**        | Macro: GDP, CPI, interest rates, FDI, trade balance                       |
+| **FMARKET**    | Mutual funds (58+ quỹ mở)                                                 |
+| **SPL**        | Commodities: gold, oil, steel, gas, agricultural                          |
+| **Perplexity** | Web search via Perplexity API (requires `PERPLEXITY_API_KEY`)             |
 
 ## Complexity Routing
 
 Queries route to different agent structures based on complexity. See `references/orchestration-protocol.md` for full spec.
 
-| Tier | Structure | When | Example |
-|------|-----------|------|---------|
-| T1 Simple | Single agent | Single metric, single-domain analysis | "P/E của FPT?", "technical analysis VNM" |
-| T2 Standard | 2-3 agents parallel, no cross-talk | Multi-perspective analysis | "analyze FPT", "market briefing" |
-| T3 Comparative | Peers + lead-analyst synthesis | Ranking, comparison, buy/sell decisions | "compare FPT vs VNM", "screen VN30" |
-| T4 Portfolio/Risk | lead-analyst coordinates subordinates | Cross-domain risk synthesis | "portfolio health check", "sector rotation" |
+| Tier              | Structure                             | When                                    | Example                                     |
+| ----------------- | ------------------------------------- | --------------------------------------- | ------------------------------------------- |
+| T1 Simple         | Single agent                          | Single metric, single-domain analysis   | "P/E của FPT?", "technical analysis VNM"    |
+| T2 Standard       | 2-3 agents parallel, no cross-talk    | Multi-perspective analysis              | "analyze FPT", "market briefing"            |
+| T3 Comparative    | Peers + lead-analyst synthesis        | Ranking, comparison, buy/sell decisions | "compare FPT vs VNM", "screen VN30"         |
+| T4 Portfolio/Risk | lead-analyst coordinates subordinates | Cross-domain risk synthesis             | "portfolio health check", "sector rotation" |
 
 ## Rules
 
@@ -76,41 +83,46 @@ Queries route to different agent structures based on complexity. See `references
 ## Document Index
 
 ### Skills (auto-invoked by context)
+
 - `skills/stock-analysis/SKILL.md` — individual stock deep dive
 - `skills/market-research/SKILL.md` — market valuation, macro, sectors, funds
 - `skills/news-sentiment/SKILL.md` — news crawling + sentiment
 
 ### Agents (specialized)
+
+- `agents/marcus-vance.md` — Senior analyst persona, orchestrates all workflows, routes by complexity
 - `agents/lead-analyst.md` — synthesis + decision for comparative/portfolio analysis (T3-T4)
 - `agents/fundamental-analyst.md` — financials, valuation, earnings quality
 - `agents/technical-analyst.md` — price trends, momentum, S/R levels
 - `agents/macro-researcher.md` — GDP, CPI, rates, FX, commodities
 
 ### References (load when skills insufficient)
-| File | Content |
-|------|---------|
-| `references/api-stock-and-company.md` | Stock, Quote, Company, Finance, Listing, Trading |
-| `references/api-market-macro-fund.md` | Market, Macro, Fund, Commodity |
-| `references/api-technical-analysis.md` | All TA indicators with params |
+
+| File                                   | Content                                           |
+| -------------------------------------- | ------------------------------------------------- |
+| `references/api-stock-and-company.md`  | Stock, Quote, Company, Finance, Listing, Trading  |
+| `references/api-market-macro-fund.md`  | Market, Macro, Fund, Commodity                    |
+| `references/api-technical-analysis.md` | All TA indicators with params                     |
 | `references/api-news-and-collector.md` | News crawlers, Collector tasks, Perplexity Search |
-| `references/analysis-methodology.md` | Valuation, financial health, TA signals |
-| `references/common-patterns.md` | Error handling, caching, batch processing |
-| `references/orchestration-protocol.md` | Complexity routing, agent communication tiers |
+| `references/analysis-methodology.md`   | Valuation, financial health, TA signals           |
+| `references/common-patterns.md`        | Error handling, caching, batch processing         |
+| `references/orchestration-protocol.md` | Complexity routing, agent communication tiers     |
 
 ### Docs
-| File | Content |
-|------|---------|
-| `docs/01-getting-started.md` | Installation, quickstart, architecture |
-| `docs/02-stock-module.md` | Stock API with data models |
-| `docs/03-market-module.md` | Market valuation API |
-| `docs/04-macro-module.md` | Macro indicators API |
-| `docs/05-fund-module.md` | Fund analysis API |
-| `docs/06-commodity-module.md` | Commodity API |
-| `docs/07-technical-analysis.md` | TA indicators reference |
-| `docs/09-collector-module.md` | Collector tasks, scheduler |
-| `docs/10-news-module.md` | News crawlers, sites |
-| `docs/12-search-module.md` | Perplexity Search API |
-| `docs/11-advanced-topics.md` | Provider registry, error handling |
+
+| File                            | Content                                |
+| ------------------------------- | -------------------------------------- |
+| `docs/01-getting-started.md`    | Installation, quickstart, architecture |
+| `docs/02-stock-module.md`       | Stock API with data models             |
+| `docs/03-market-module.md`      | Market valuation API                   |
+| `docs/04-macro-module.md`       | Macro indicators API                   |
+| `docs/05-fund-module.md`        | Fund analysis API                      |
+| `docs/06-commodity-module.md`   | Commodity API                          |
+| `docs/07-technical-analysis.md` | TA indicators reference                |
+| `docs/09-collector-module.md`   | Collector tasks, scheduler             |
+| `docs/10-news-module.md`        | News crawlers, sites                   |
+| `docs/12-search-module.md`      | Perplexity Search API                  |
+| `docs/11-advanced-topics.md`    | Provider registry, error handling      |
 
 ## Security
 

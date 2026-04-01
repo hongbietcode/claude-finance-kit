@@ -15,9 +15,10 @@ Core dependencies installed automatically: `pandas`, `requests`, `pydantic`, `te
 Install additional modules as needed:
 
 ```bash
-pip install claude-finance-kit[ta]        # Technical analysis (pandas-ta)
-pip install claude-finance-kit[collector]  # Batch data collector (duckdb, pyarrow, aiohttp, websockets)
+pip install claude-finance-kit[ta]        # Technical analysis (no extra deps)
+pip install claude-finance-kit[collector]  # Batch data collector (duckdb, pyarrow, tqdm, aiohttp, websockets)
 pip install claude-finance-kit[news]      # News crawlers (scipy, pyarrow)
+pip install claude-finance-kit[search]    # Perplexity web search (perplexityai)
 pip install claude-finance-kit[all]       # Everything above
 ```
 
@@ -190,7 +191,7 @@ Each module uses a default data provider. You can switch providers via the `sour
 
 | Module    | Default Provider | Alternatives |
 |-----------|-----------------|--------------|
-| Stock     | VCI             | KBS          |
+| Stock     | VCI             | KBS, MAS, TVS, VDS, BINANCE, FMP |
 | Market    | VND             | --           |
 | Macro     | MBK             | --           |
 | Fund      | FMARKET         | --           |
