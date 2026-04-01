@@ -75,7 +75,7 @@ if [ "$MODE" = "project" ]; then
         PROJECT_DIR="$(pwd)"
     fi
     CLAUDE_DIR="$PROJECT_DIR/.claude"
-    INSTALL_PATH="$CLAUDE_DIR/$PLUGIN_NAME"
+    INSTALL_PATH="$CLAUDE_DIR"
 else
     CLAUDE_DIR="$HOME/.claude"
     MARKETPLACE_DIR="$CLAUDE_DIR/plugins/marketplaces/$MARKETPLACE"
