@@ -1,0 +1,2115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>claude-finance-kit — AI-Powered Vietnamese Stock Market Analysis</title>
+  <meta name="description" content="Turn your AI coding assistant into a senior financial analyst. Real-time Vietnamese market data from 12+ sources.">
+  <meta property="og:title" content="claude-finance-kit">
+  <meta property="og:description" content="AI-powered Vietnamese stock market analysis for Claude Code, Cursor, and GitHub Copilot">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="theme-color" content="#0a0e17">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #0a0e17;
+      --bg-secondary: #111827;
+      --bg-tertiary: #1f2937;
+      --accent-primary: #3b82f6;
+      --accent-glow: #60a5fa;
+      --accent-green: #10b981;
+      --accent-amber: #f59e0b;
+      --accent-purple: #8b5cf6;
+      --text-primary: #f1f5f9;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
+      --border: #1e293b;
+      --code-bg: #0d1117;
+      --font-heading: 'Inter', system-ui, -apple-system, sans-serif;
+      --font-body: 'Inter', system-ui, -apple-system, sans-serif;
+      --font-mono: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+    }
+
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      -webkit-text-size-adjust: 100%;
+    }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.6;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    h1, h2, h3, h4 {
+      font-family: var(--font-heading);
+      line-height: 1.2;
+    }
+
+    a {
+      color: var(--accent-primary);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    a:hover {
+      color: var(--accent-glow);
+    }
+
+    .section-label {
+      font-family: var(--font-mono);
+      font-size: 0.8125rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--accent-primary);
+      margin-bottom: 12px;
+    }
+
+    .section-title {
+      font-size: clamp(1.75rem, 4vw, 2.5rem);
+      font-weight: 800;
+      margin-bottom: 16px;
+    }
+
+    .section-desc {
+      color: var(--text-secondary);
+      font-size: 1.0625rem;
+      max-width: 640px;
+      line-height: 1.7;
+    }
+
+    section {
+      padding: 80px 0;
+    }
+
+    .animate-on-scroll {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+    }
+
+    .animate-on-scroll.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ===== 1. NAVIGATION ===== */
+
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      padding: 16px 0;
+      transition: background 0.3s, backdrop-filter 0.3s, padding 0.3s;
+    }
+
+    .nav.scrolled {
+      background: rgba(10, 14, 23, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-logo {
+      font-family: var(--font-mono);
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .nav-logo-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+      background: linear-gradient(135deg, var(--accent-primary), var(--accent-purple));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover {
+      color: var(--text-primary);
+    }
+
+    .nav-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 20px;
+      background: var(--accent-primary);
+      color: #fff !important;
+      border-radius: 8px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      transition: background 0.2s, box-shadow 0.2s;
+    }
+
+    .nav-cta:hover {
+      background: #2563eb;
+      box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+    }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+    }
+
+    .hamburger span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: var(--text-primary);
+      border-radius: 2px;
+      transition: transform 0.3s, opacity 0.3s;
+    }
+
+    .hamburger.active span:nth-child(1) {
+      transform: rotate(45deg) translate(5px, 5px);
+    }
+
+    .hamburger.active span:nth-child(2) {
+      opacity: 0;
+    }
+
+    .hamburger.active span:nth-child(3) {
+      transform: rotate(-45deg) translate(5px, -5px);
+    }
+
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(10, 14, 23, 0.97);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      z-index: 999;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 32px;
+    }
+
+    .mobile-menu.open {
+      display: flex;
+    }
+
+    .mobile-menu a {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    /* ===== 2. HERO ===== */
+
+    .hero {
+      padding: 160px 0 80px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -200px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 800px;
+      height: 800px;
+      background: radial-gradient(circle, rgba(59,130,246,0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 16px;
+      background: rgba(59, 130, 246, 0.1);
+      border: 1px solid rgba(59, 130, 246, 0.2);
+      border-radius: 100px;
+      font-size: 0.8125rem;
+      font-weight: 500;
+      color: var(--accent-glow);
+      margin-bottom: 24px;
+    }
+
+    .hero-badge-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent-green);
+      animation: pulse-dot 2s infinite;
+    }
+
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+
+    .hero h1 {
+      font-size: clamp(2.25rem, 6vw, 3.75rem);
+      font-weight: 800;
+      line-height: 1.1;
+      margin-bottom: 20px;
+      letter-spacing: -0.02em;
+    }
+
+    .hero h1 .gradient-text {
+      background: linear-gradient(135deg, var(--accent-primary), var(--accent-purple), var(--accent-glow));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-sub {
+      font-size: clamp(1rem, 2vw, 1.1875rem);
+      color: var(--text-secondary);
+      max-width: 640px;
+      margin: 0 auto 36px;
+      line-height: 1.7;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 48px;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 32px;
+      background: var(--accent-primary);
+      color: #fff;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      transition: background 0.2s, box-shadow 0.2s, transform 0.2s;
+    }
+
+    .btn-primary:hover {
+      background: #2563eb;
+      box-shadow: 0 0 30px rgba(59, 130, 246, 0.3);
+      transform: translateY(-1px);
+      color: #fff;
+    }
+
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 32px;
+      background: transparent;
+      color: var(--text-primary);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s, transform 0.2s;
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--text-muted);
+      background: rgba(255,255,255,0.03);
+      transform: translateY(-1px);
+      color: var(--text-primary);
+    }
+
+    .hero-terminal {
+      max-width: 700px;
+      margin: 0 auto 48px;
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      text-align: left;
+    }
+
+    .terminal-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 16px;
+      background: rgba(255,255,255,0.03);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .terminal-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+
+    .terminal-dot.red { background: #ff5f57; }
+    .terminal-dot.yellow { background: #febc2e; }
+    .terminal-dot.green { background: #28c840; }
+
+    .terminal-title {
+      margin-left: 8px;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .terminal-body {
+      padding: 20px 24px;
+      font-family: var(--font-mono);
+      font-size: 0.875rem;
+      line-height: 1.8;
+      min-height: 140px;
+    }
+
+    .terminal-prompt {
+      color: var(--accent-green);
+    }
+
+    .terminal-text {
+      color: var(--text-primary);
+    }
+
+    .terminal-muted {
+      color: var(--text-muted);
+    }
+
+    .terminal-accent {
+      color: var(--accent-purple);
+    }
+
+    .terminal-cursor {
+      display: inline-block;
+      width: 8px;
+      height: 16px;
+      background: var(--accent-primary);
+      animation: blink 1s step-end infinite;
+      vertical-align: text-bottom;
+      margin-left: 2px;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+
+    .stats-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .stat-item {
+      text-align: center;
+    }
+
+    .stat-value {
+      font-size: 1.75rem;
+      font-weight: 800;
+      color: var(--text-primary);
+      margin-bottom: 4px;
+    }
+
+    .stat-value .accent {
+      color: var(--accent-primary);
+    }
+
+    .stat-label {
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    /* ===== 3. HOW IT WORKS ===== */
+
+    .how-it-works {
+      background: var(--bg-secondary);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px;
+      margin-top: 48px;
+    }
+
+    .step-card {
+      text-align: center;
+      padding: 32px 24px;
+      position: relative;
+    }
+
+    .step-icon {
+      width: 64px;
+      height: 64px;
+      border-radius: 16px;
+      background: rgba(59, 130, 246, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+    }
+
+    .step-icon svg {
+      width: 28px;
+      height: 28px;
+      stroke: var(--accent-primary);
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .step-number {
+      position: absolute;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: var(--font-mono);
+      font-size: 0.6875rem;
+      font-weight: 500;
+      color: var(--text-muted);
+    }
+
+    .step-card h3 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .step-card p {
+      font-size: 0.9375rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    .step-card code {
+      font-family: var(--font-mono);
+      font-size: 0.8125rem;
+      color: var(--accent-glow);
+      background: rgba(59, 130, 246, 0.08);
+      padding: 2px 8px;
+      border-radius: 4px;
+    }
+
+    .step-connector {
+      display: none;
+    }
+
+    /* ===== 4. PLATFORMS ===== */
+
+    .tabs {
+      display: flex;
+      gap: 4px;
+      background: var(--bg-secondary);
+      padding: 4px;
+      border-radius: 10px;
+      margin-bottom: 32px;
+      width: fit-content;
+    }
+
+    .tab-btn {
+      padding: 10px 24px;
+      background: transparent;
+      color: var(--text-secondary);
+      border: none;
+      border-radius: 8px;
+      font-family: var(--font-body);
+      font-size: 0.875rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .tab-btn:hover {
+      color: var(--text-primary);
+    }
+
+    .tab-btn.active {
+      background: var(--bg-tertiary);
+      color: var(--text-primary);
+    }
+
+    .tab-panel {
+      display: none;
+    }
+
+    .tab-panel.active {
+      display: block;
+    }
+
+    .platform-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 32px;
+    }
+
+    .platform-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .platform-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .platform-icon svg {
+      width: 28px;
+      height: 28px;
+    }
+
+    .platform-header h3 {
+      font-size: 1.375rem;
+      font-weight: 700;
+    }
+
+    .platform-header .platform-tag {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .install-block {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+      gap: 12px;
+    }
+
+    .install-block code {
+      font-family: var(--font-mono);
+      font-size: 0.875rem;
+      color: var(--accent-glow);
+      white-space: nowrap;
+      overflow-x: auto;
+    }
+
+    .copy-btn {
+      background: var(--bg-tertiary);
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      padding: 6px 14px;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+      white-space: nowrap;
+      font-family: var(--font-body);
+    }
+
+    .copy-btn:hover {
+      background: var(--accent-primary);
+      color: #fff;
+      border-color: var(--accent-primary);
+    }
+
+    .copy-btn.copied {
+      background: var(--accent-green);
+      color: #fff;
+      border-color: var(--accent-green);
+    }
+
+    .platform-features {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+
+    .platform-feature {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .platform-feature-icon {
+      width: 20px;
+      height: 20px;
+      flex-shrink: 0;
+      margin-top: 2px;
+      color: var(--accent-green);
+    }
+
+    .platform-feature-icon svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    .platform-feature span {
+      font-size: 0.9375rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    .platform-feature strong {
+      color: var(--text-primary);
+      font-weight: 600;
+    }
+
+    /* ===== 5. FEATURES ===== */
+
+    .features {
+      background: var(--bg-secondary);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-top: 48px;
+    }
+
+    .feature-card {
+      background: var(--bg-primary);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 28px;
+      transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(59, 130, 246, 0.3);
+      box-shadow: 0 8px 32px rgba(59, 130, 246, 0.08);
+    }
+
+    .feature-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 16px;
+    }
+
+    .feature-icon svg {
+      width: 22px;
+      height: 22px;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      fill: none;
+    }
+
+    .feature-card h3 {
+      font-size: 1.0625rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .feature-card p {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    /* ===== 6. USE CASES ===== */
+
+    .use-cases .tabs {
+      flex-wrap: wrap;
+    }
+
+    .code-block-wrapper {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .code-block-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 20px;
+      background: rgba(255,255,255,0.02);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .code-block-title {
+      font-family: var(--font-mono);
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+    }
+
+    .code-block-body {
+      padding: 20px 0;
+      overflow-x: auto;
+    }
+
+    .code-line {
+      display: flex;
+      padding: 2px 20px;
+      line-height: 1.8;
+      font-family: var(--font-mono);
+      font-size: 0.8125rem;
+    }
+
+    .code-line:hover {
+      background: rgba(255,255,255,0.02);
+    }
+
+    .line-number {
+      color: var(--text-muted);
+      min-width: 36px;
+      text-align: right;
+      margin-right: 20px;
+      user-select: none;
+      opacity: 0.5;
+    }
+
+    .line-content {
+      flex: 1;
+      white-space: pre;
+    }
+
+    .token-prompt { color: #10b981; font-weight: 500; }
+    .token-keyword { color: #ff7b72; }
+    .token-string { color: #a5d6ff; }
+    .token-function { color: #d2a8ff; }
+    .token-method { color: #79c0ff; }
+    .token-comment { color: #8b949e; font-style: italic; }
+    .token-number { color: #f59e0b; }
+    .token-operator { color: #ff7b72; }
+    .token-paren { color: #e6edf3; }
+    .token-text { color: #e6edf3; }
+
+    /* ===== 7. DATA SOURCES ===== */
+
+    .sources-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-top: 48px;
+    }
+
+    .source-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 20px;
+      transition: border-color 0.2s;
+    }
+
+    .source-card:hover {
+      border-color: rgba(255,255,255,0.1);
+    }
+
+    .source-card-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+
+    .source-name {
+      font-family: var(--font-mono);
+      font-size: 0.9375rem;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .source-badge {
+      font-size: 0.6875rem;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    .badge-stock { background: rgba(59,130,246,0.15); color: var(--accent-primary); }
+    .badge-macro { background: rgba(245,158,11,0.15); color: var(--accent-amber); }
+    .badge-fund { background: rgba(139,92,246,0.15); color: var(--accent-purple); }
+    .badge-commodity { background: rgba(16,185,129,0.15); color: var(--accent-green); }
+    .badge-crypto { background: rgba(251,191,36,0.15); color: #fbbf24; }
+    .badge-search { background: rgba(236,72,153,0.15); color: #ec4899; }
+    .badge-market { background: rgba(96,165,250,0.15); color: var(--accent-glow); }
+
+    .source-desc {
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    /* ===== 8. PYTHON LIBRARY ===== */
+
+    .python-section {
+      background: var(--bg-secondary);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .python-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      align-items: start;
+      margin-top: 48px;
+    }
+
+    .python-info .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid rgba(16, 185, 129, 0.2);
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--accent-green);
+      margin-bottom: 24px;
+    }
+
+    .python-info h3 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    .python-info p {
+      color: var(--text-secondary);
+      margin-bottom: 24px;
+      line-height: 1.7;
+    }
+
+    .python-links {
+      display: flex;
+      gap: 16px;
+    }
+
+    .python-links a {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--accent-primary);
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* ===== 9. CTA ===== */
+
+    .cta-section {
+      padding: 80px 0;
+      background: linear-gradient(135deg, rgba(59,130,246,0.1), rgba(139,92,246,0.1));
+      border-top: 1px solid rgba(59,130,246,0.15);
+      border-bottom: 1px solid rgba(139,92,246,0.15);
+      text-align: center;
+    }
+
+    .cta-section h2 {
+      font-size: clamp(1.5rem, 3.5vw, 2.25rem);
+      font-weight: 800;
+      margin-bottom: 32px;
+    }
+
+    .cta-buttons {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 24px;
+    }
+
+    .cta-copy-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 28px;
+      background: var(--bg-primary);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--text-primary);
+      font-family: var(--font-body);
+      font-size: 0.875rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s, transform 0.2s;
+    }
+
+    .cta-copy-btn:hover {
+      border-color: var(--accent-primary);
+      background: rgba(59,130,246,0.05);
+      transform: translateY(-1px);
+    }
+
+    .cta-copy-btn.copied {
+      border-color: var(--accent-green);
+    }
+
+    .cta-copy-btn .cta-platform {
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      font-weight: 500;
+    }
+
+    .cta-copy-btn .cta-icon {
+      width: 20px;
+      height: 20px;
+      flex-shrink: 0;
+    }
+
+    .cta-docs-link {
+      font-size: 0.9375rem;
+      font-weight: 600;
+      color: var(--accent-primary);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .cta-docs-link:hover {
+      color: var(--accent-glow);
+    }
+
+    /* ===== 10. FOOTER ===== */
+
+    .footer {
+      padding: 48px 0 32px;
+      border-top: 1px solid var(--border);
+    }
+
+    .footer-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 32px;
+      flex-wrap: wrap;
+      gap: 32px;
+    }
+
+    .footer-brand {
+      font-family: var(--font-mono);
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .footer-tagline {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      max-width: 320px;
+      line-height: 1.6;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 32px;
+    }
+
+    .footer-link-group h4 {
+      font-size: 0.8125rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .footer-link-group ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .footer-link-group a {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      transition: color 0.2s;
+    }
+
+    .footer-link-group a:hover {
+      color: var(--text-primary);
+    }
+
+    .footer-bottom {
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .footer-bottom p {
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+    }
+
+    .footer-disclaimer {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      opacity: 0.7;
+    }
+
+    /* ===== TOAST ===== */
+
+    .toast {
+      position: fixed;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background: var(--accent-green);
+      color: #fff;
+      padding: 10px 24px;
+      border-radius: 8px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      z-index: 10000;
+      opacity: 0;
+      transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+      pointer-events: none;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* ===== RESPONSIVE ===== */
+
+    @media (max-width: 1023px) {
+      .features-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .sources-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .stats-bar {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+      }
+    }
+
+    @media (max-width: 767px) {
+      .nav-links {
+        display: none;
+      }
+
+      .hamburger {
+        display: flex;
+      }
+
+      section {
+        padding: 48px 0;
+      }
+
+      .hero {
+        padding: 120px 0 48px;
+      }
+
+      .steps-grid {
+        grid-template-columns: 1fr;
+        gap: 24px;
+      }
+
+      .features-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .sources-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .python-grid {
+        grid-template-columns: 1fr;
+        gap: 32px;
+      }
+
+      .platform-features {
+        grid-template-columns: 1fr;
+      }
+
+      .tabs {
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      .tab-btn {
+        padding: 10px 16px;
+        font-size: 0.8125rem;
+        white-space: nowrap;
+      }
+
+      .footer-top {
+        flex-direction: column;
+      }
+
+      .footer-links {
+        flex-direction: column;
+        gap: 24px;
+      }
+
+      .footer-bottom {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .cta-buttons {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .hero-buttons {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .install-block {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .install-block code {
+        font-size: 0.75rem;
+      }
+    }
+
+    @media (max-width: 479px) {
+      .stats-bar {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+      }
+
+      .stat-value {
+        font-size: 1.375rem;
+      }
+
+      .container {
+        padding: 0 16px;
+      }
+
+      .hero h1 {
+        font-size: 1.875rem;
+      }
+
+      .terminal-body {
+        padding: 16px;
+        font-size: 0.75rem;
+      }
+
+      .code-line {
+        font-size: 0.75rem;
+        padding: 2px 12px;
+      }
+
+      .line-number {
+        min-width: 24px;
+        margin-right: 12px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .animate-on-scroll {
+        opacity: 1;
+        transform: none;
+        transition: none;
+      }
+
+      .terminal-cursor {
+        animation: none;
+      }
+
+      .hero-badge-dot {
+        animation: none;
+      }
+
+      html {
+        scroll-behavior: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="nav" id="nav">
+    <div class="container nav-inner">
+      <a href="#" class="nav-logo">
+        <div class="nav-logo-icon">C</div>
+        claude-finance-kit
+      </a>
+      <ul class="nav-links">
+        <li><a href="#features">Features</a></li>
+        <li><a href="#platforms">Platforms</a></li>
+        <li><a href="#install">Install</a></li>
+        <li><a href="#use-cases">Use Cases</a></li>
+        <li><a href="#data-sources">Data</a></li>
+        <li><a href="#get-started" class="nav-cta">Get Started</a></li>
+      </ul>
+      <button class="hamburger" id="hamburger" aria-label="Toggle navigation menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Mobile Menu -->
+  <div class="mobile-menu" id="mobile-menu">
+    <a href="#features" class="mobile-link">Features</a>
+    <a href="#platforms" class="mobile-link">Platforms</a>
+    <a href="#install" class="mobile-link">Install</a>
+    <a href="#use-cases" class="mobile-link">Use Cases</a>
+    <a href="#data-sources" class="mobile-link">Data Sources</a>
+    <a href="#get-started" class="mobile-link nav-cta" style="margin-top: 8px;">Get Started</a>
+  </div>
+
+  <!-- Hero -->
+  <section class="hero" id="hero">
+    <div class="container">
+      <div class="animate-on-scroll">
+        <div class="hero-badge">
+          <span class="hero-badge-dot"></span>
+          Open Source &middot; MIT License
+        </div>
+        <h1>
+          <span class="gradient-text">AI-Powered</span> Vietnamese<br>
+          Stock Market Analysis
+        </h1>
+        <p class="hero-sub">
+          Turn your AI coding assistant into a senior financial analyst. Real-time data from 12+ sources &mdash; fundamentals, technicals, macro, news, and fund analysis.
+        </p>
+      </div>
+      <div class="hero-buttons animate-on-scroll">
+        <a href="#get-started" class="btn-primary">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 17 10 11 4 5"></polyline><line x1="12" y1="19" x2="20" y2="19"></line></svg>
+          Get Started
+        </a>
+        <a href="https://github.com/hongbietcode/claude-finance-kit" target="_blank" rel="noopener" class="btn-secondary">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+          View on GitHub
+        </a>
+      </div>
+
+      <!-- Terminal -->
+      <div class="hero-terminal animate-on-scroll">
+        <div class="terminal-header">
+          <div class="terminal-dot red"></div>
+          <div class="terminal-dot yellow"></div>
+          <div class="terminal-dot green"></div>
+          <span class="terminal-title">claude-finance-kit</span>
+        </div>
+        <div class="terminal-body">
+          <div><span class="terminal-prompt">&gt;</span> <span class="terminal-text">Analyze FPT &mdash; fundamentals, technicals, and recent news</span></div>
+          <div style="margin-top: 12px;"><span class="terminal-muted">[marcus-vance]</span> <span class="terminal-text">Routing to agents...</span></div>
+          <div><span class="terminal-muted">&ensp; &rarr;</span> <span class="terminal-accent">fundamental-analyst</span> <span class="terminal-muted">analyzing financials</span></div>
+          <div><span class="terminal-muted">&ensp; &rarr;</span> <span class="terminal-accent">technical-analyst</span> <span class="terminal-muted">running RSI, MACD, EMA</span></div>
+          <div><span class="terminal-muted">&ensp; &rarr;</span> <span class="terminal-accent">news-sentiment</span> <span class="terminal-muted">crawling CafeF, VnExpress</span></div>
+          <div style="margin-top: 12px;"><span class="terminal-prompt">&check;</span> <span class="terminal-text">Analysis complete &mdash; report ready</span><span class="terminal-cursor"></span></div>
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div class="stats-bar animate-on-scroll">
+        <div class="stat-item">
+          <div class="stat-value">12<span class="accent">+</span></div>
+          <div class="stat-label">Data Sources</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value">4</div>
+          <div class="stat-label">AI Skills</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value">9</div>
+          <div class="stat-label">API Modules</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value">3</div>
+          <div class="stat-label">AI Platforms</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works -->
+  <section class="how-it-works" id="install">
+    <div class="container">
+      <div class="animate-on-scroll" style="text-align: center;">
+        <div class="section-label">How It Works</div>
+        <h2 class="section-title">Up and running in 60 seconds</h2>
+        <p class="section-desc" style="margin: 0 auto;">One command installs skills, agents, and references. Then just ask questions in natural language.</p>
+      </div>
+      <div class="steps-grid">
+        <div class="step-card animate-on-scroll">
+          <div class="step-number">01</div>
+          <div class="step-icon">
+            <svg viewBox="0 0 24 24"><polyline points="4 17 10 11 4 5"></polyline><line x1="12" y1="19" x2="20" y2="19"></line></svg>
+          </div>
+          <h3>Install</h3>
+          <p><code>npx claude-finance-kit-cli init</code><br>One command. Auto-detects your AI platform.</p>
+        </div>
+        <div class="step-card animate-on-scroll" style="transition-delay: 0.1s;">
+          <div class="step-number">02</div>
+          <div class="step-icon" style="background: rgba(139, 92, 246, 0.1);">
+            <svg viewBox="0 0 24 24" style="stroke: var(--accent-purple);"><path d="M12 2a7 7 0 0 1 7 7c0 2.38-1.19 4.47-3 5.74V17a1 1 0 0 1-1 1H9a1 1 0 0 1-1-1v-2.26C6.19 13.47 5 11.38 5 9a7 7 0 0 1 7-7z"></path><line x1="9" y1="21" x2="15" y2="21"></line><line x1="10" y1="24" x2="14" y2="24"></line></svg>
+          </div>
+          <h3>Ask</h3>
+          <p>Natural language queries: <code>"analyze FPT"</code> or <code>"market briefing today"</code></p>
+        </div>
+        <div class="step-card animate-on-scroll" style="transition-delay: 0.2s;">
+          <div class="step-number">03</div>
+          <div class="step-icon" style="background: rgba(16, 185, 129, 0.1);">
+            <svg viewBox="0 0 24 24" style="stroke: var(--accent-green);"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+          </div>
+          <h3>Get Insights</h3>
+          <p>Structured analysis with real data &mdash; not hallucinated numbers.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Platforms -->
+  <section class="platforms" id="platforms">
+    <div class="container">
+      <div class="animate-on-scroll">
+        <div class="section-label">AI Platforms</div>
+        <h2 class="section-title">Works with your favorite AI assistant</h2>
+        <p class="section-desc">One CLI. Three platforms. Same powerful skills and references.</p>
+      </div>
+      <div class="animate-on-scroll" style="margin-top: 32px;">
+        <div class="tabs" role="tablist" data-tab-group="platforms">
+          <button class="tab-btn active" role="tab" data-tab="claude" aria-selected="true" aria-controls="panel-claude">Claude Code</button>
+          <button class="tab-btn" role="tab" data-tab="cursor" aria-selected="false" aria-controls="panel-cursor">Cursor</button>
+          <button class="tab-btn" role="tab" data-tab="copilot" aria-selected="false" aria-controls="panel-copilot">GitHub Copilot</button>
+        </div>
+
+        <!-- Claude Code Tab -->
+        <div class="tab-panel active" role="tabpanel" id="panel-claude" data-panel="claude">
+          <div class="platform-card">
+            <div class="platform-header">
+              <div class="platform-icon" style="background: rgba(59,130,246,0.1);">
+                <svg viewBox="0 0 24 24" fill="none" stroke="var(--accent-primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 17 10 11 4 5"></polyline><line x1="12" y1="19" x2="20" y2="19"></line></svg>
+              </div>
+              <div>
+                <h3>Claude Code</h3>
+                <div class="platform-tag">Full agent support</div>
+              </div>
+            </div>
+            <div class="install-block">
+              <code>npx claude-finance-kit-cli init --ai claude</code>
+              <button class="copy-btn" data-copy="npx claude-finance-kit-cli init --ai claude">Copy</button>
+            </div>
+            <div class="platform-features">
+              <div class="platform-feature">
+                <div class="platform-feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+                <span><strong>4 Skills</strong> &mdash; marcus-vance, stock-analysis, market-research, news-sentiment</span>
+              </div>
+              <div class="platform-feature">
+                <div class="platform-feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+                <span><strong>4 Agents</strong> &mdash; lead-analyst, fundamental, technical, macro</span>
+              </div>
+              <div class="platform-feature">
+                <div class="platform-feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+                <span><strong>9 References</strong> &mdash; API docs, methodology, patterns</span>
+              </div>
+              <div class="platform-feature">
+                <div class="platform-feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+                <span><strong>CLAUDE.md</strong> auto-configured with full system prompt</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Cursor Tab -->
+        <div class="tab-panel" role="tabpanel" id="panel-cursor" data-panel="cursor">
+          <div class="platform-card">
+            <div class="platform-header">
+              <div class="platform-icon" style="background: rgba(139,92,246,0.1);">
+                <svg viewBox="0 0 24 24" fill="none" stroke="var(--accent-purple)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+              </div>
+              <div>
+                <h3>Cursor</h3>
+                <div class="platform-tag">Rules-based configuration</div>
+              </div>
+            </div>
+            <div class="install-block">
+              <code>npx claude-finance-kit-cli init --ai cursor</code>
+              <button class="copy-btn" data-copy="npx claude-finance-kit-cli init --ai cursor">Copy</button>
+            </div>
+            <div class="platform-features">
+              <div class="platform-feature">
+                <div class="platform-feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+                <span><strong>4 Skills</strong> &mdash; marcus-vance, stock-analysis, market-research, news-sentiment</span>
+              </div>
+              <div class="platform-feature">
+                <div class="platform-feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+                <span><strong>9 References</strong> &mdash; API docs, methodology, patterns</span>
+              </div>
+              <div class="platform-feature">
+                <div class="platform-feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+                <span><strong>.cursor/rules/</strong> auto-configured for Cursor AI</span>
+              </div>
+              <div class="platform-feature">
+                <div class="platform-feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+                <span><strong>No agents</strong> &mdash; skills run directly in Cursor</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Copilot Tab -->
+        <div class="tab-panel" role="tabpanel" id="panel-copilot" data-panel="copilot">
+          <div class="platform-card">
+            <div class="platform-header">
+              <div class="platform-icon" style="background: rgba(16,185,129,0.1);">
+                <svg viewBox="0 0 24 24" fill="none" stroke="var(--accent-green)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+              </div>
+              <div>
+                <h3>GitHub Copilot</h3>
+                <div class="platform-tag">Copilot instructions</div>
+              </div>
+            </div>
+            <div class="install-block">
+              <code>npx claude-finance-kit-cli init --ai copilot</code>
+              <button class="copy-btn" data-copy="npx claude-finance-kit-cli init --ai copilot">Copy</button>
+            </div>
+            <div class="platform-features">
+              <div class="platform-feature">
+                <div class="platform-feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+                <span><strong>4 Skills</strong> &mdash; marcus-vance, stock-analysis, market-research, news-sentiment</span>
+              </div>
+              <div class="platform-feature">
+                <div class="platform-feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+                <span><strong>9 References</strong> &mdash; API docs, methodology, patterns</span>
+              </div>
+              <div class="platform-feature">
+                <div class="platform-feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+                <span><strong>.github/copilot/</strong> auto-configured for GitHub Copilot</span>
+              </div>
+              <div class="platform-feature">
+                <div class="platform-feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+                <span><strong>No agents</strong> &mdash; skills run directly in Copilot</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section class="features" id="features">
+    <div class="container">
+      <div class="animate-on-scroll" style="text-align: center;">
+        <div class="section-label">Features</div>
+        <h2 class="section-title">Everything you need for Vietnamese market analysis</h2>
+        <p class="section-desc" style="margin: 0 auto;">From individual stock deep dives to macro economics, all powered by real-time data.</p>
+      </div>
+      <div class="features-grid">
+        <div class="feature-card animate-on-scroll">
+          <div class="feature-icon" style="background: rgba(59,130,246,0.1);">
+            <svg viewBox="0 0 24 24" stroke="var(--accent-primary)"><path d="M18 20V10"></path><path d="M12 20V4"></path><path d="M6 20v-6"></path></svg>
+          </div>
+          <h3>Stock Analysis</h3>
+          <p>Deep dive — valuation, financial health, screening, sentiment, and sector analysis for any Vietnamese stock.</p>
+        </div>
+        <div class="feature-card animate-on-scroll" style="transition-delay: 0.1s;">
+          <div class="feature-icon" style="background: rgba(245,158,11,0.1);">
+            <svg viewBox="0 0 24 24" stroke="var(--accent-amber)"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+          </div>
+          <h3>Technical Analysis</h3>
+          <p>20+ indicators: SMA, EMA, RSI, MACD, Bollinger Bands, ATR, OBV, and more with automatic signals.</p>
+        </div>
+        <div class="feature-card animate-on-scroll" style="transition-delay: 0.2s;">
+          <div class="feature-icon" style="background: rgba(16,185,129,0.1);">
+            <svg viewBox="0 0 24 24" stroke="var(--accent-green)"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+          </div>
+          <h3>Market Research</h3>
+          <p>VNINDEX/VN30 valuation, sector comparison, top movers, foreign flows, and fund analysis.</p>
+        </div>
+        <div class="feature-card animate-on-scroll" style="transition-delay: 0.1s;">
+          <div class="feature-icon" style="background: rgba(139,92,246,0.1);">
+            <svg viewBox="0 0 24 24" stroke="var(--accent-purple)"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
+          </div>
+          <h3>Macro Economics</h3>
+          <p>GDP, CPI, interest rates, exchange rates, FDI, and trade balance data for Vietnam.</p>
+        </div>
+        <div class="feature-card animate-on-scroll" style="transition-delay: 0.2s;">
+          <div class="feature-icon" style="background: rgba(236,72,153,0.1);">
+            <svg viewBox="0 0 24 24" stroke="#ec4899"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"></path><path d="M18 14h-8"></path><path d="M15 18h-5"></path><path d="M10 6h8v4h-8V6Z"></path></svg>
+          </div>
+          <h3>News Sentiment</h3>
+          <p>Real-time crawling from CafeF, VnExpress, and Vietnamese financial sites with sentiment classification.</p>
+        </div>
+        <div class="feature-card animate-on-scroll" style="transition-delay: 0.3s;">
+          <div class="feature-icon" style="background: rgba(251,191,36,0.1);">
+            <svg viewBox="0 0 24 24" stroke="#fbbf24"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+          </div>
+          <h3>Fund Analysis</h3>
+          <p>58+ mutual funds — NAV tracking, top holdings, industry allocation, and performance comparison.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Use Cases -->
+  <section class="use-cases" id="use-cases">
+    <div class="container">
+      <div class="animate-on-scroll">
+        <div class="section-label">Use Cases</div>
+        <h2 class="section-title">See it in action</h2>
+        <p class="section-desc">Real prompts, real API calls. Just type what you need.</p>
+      </div>
+      <div class="animate-on-scroll" style="margin-top: 32px;">
+        <div class="tabs" role="tablist" data-tab-group="usecases">
+          <button class="tab-btn active" role="tab" data-tab="uc-stock" aria-selected="true" aria-controls="panel-uc-stock">Analyze a Stock</button>
+          <button class="tab-btn" role="tab" data-tab="uc-market" aria-selected="false" aria-controls="panel-uc-market">Market Briefing</button>
+          <button class="tab-btn" role="tab" data-tab="uc-compare" aria-selected="false" aria-controls="panel-uc-compare">Compare Stocks</button>
+          <button class="tab-btn" role="tab" data-tab="uc-screen" aria-selected="false" aria-controls="panel-uc-screen">Screen VN30</button>
+        </div>
+
+        <!-- Analyze a Stock -->
+        <div class="tab-panel active" role="tabpanel" id="panel-uc-stock" data-panel="uc-stock">
+          <div class="code-block-wrapper">
+            <div class="code-block-header">
+              <span class="code-block-title">analyze-stock.py</span>
+              <button class="copy-btn" data-copy='> Analyze FPT — full report
+
+Stock("FPT").quote.history("2025-01-01", "2026-04-01")
+Stock("FPT").finance.income_statement(period="quarter")
+Stock("FPT").finance.ratio(period="quarter")
+Indicator(df).momentum.rsi() / .trend.ema(20) / .trend.sma(50)
+Crawler("cafef").get_latest_articles(10)'>Copy</button>
+            </div>
+            <div class="code-block-body">
+              <div class="code-line"><span class="line-number">1</span><span class="line-content"><span class="token-prompt">&gt;</span> <span class="token-text">Analyze FPT — full report</span></span></div>
+              <div class="code-line"><span class="line-number">2</span><span class="line-content"></span></div>
+              <div class="code-line"><span class="line-number">3</span><span class="line-content"><span class="token-function">Stock</span><span class="token-paren">(</span><span class="token-string">"FPT"</span><span class="token-paren">)</span><span class="token-method">.quote.history</span><span class="token-paren">(</span><span class="token-string">"2025-01-01"</span><span class="token-operator">,</span> <span class="token-string">"2026-04-01"</span><span class="token-paren">)</span></span></div>
+              <div class="code-line"><span class="line-number">4</span><span class="line-content"><span class="token-function">Stock</span><span class="token-paren">(</span><span class="token-string">"FPT"</span><span class="token-paren">)</span><span class="token-method">.finance.income_statement</span><span class="token-paren">(</span><span class="token-text">period</span><span class="token-operator">=</span><span class="token-string">"quarter"</span><span class="token-paren">)</span></span></div>
+              <div class="code-line"><span class="line-number">5</span><span class="line-content"><span class="token-function">Stock</span><span class="token-paren">(</span><span class="token-string">"FPT"</span><span class="token-paren">)</span><span class="token-method">.finance.ratio</span><span class="token-paren">(</span><span class="token-text">period</span><span class="token-operator">=</span><span class="token-string">"quarter"</span><span class="token-paren">)</span></span></div>
+              <div class="code-line"><span class="line-number">6</span><span class="line-content"><span class="token-function">Indicator</span><span class="token-paren">(</span><span class="token-text">df</span><span class="token-paren">)</span><span class="token-method">.momentum.rsi</span><span class="token-paren">()</span> <span class="token-operator">/</span> <span class="token-method">.trend.ema</span><span class="token-paren">(</span><span class="token-number">20</span><span class="token-paren">)</span> <span class="token-operator">/</span> <span class="token-method">.trend.sma</span><span class="token-paren">(</span><span class="token-number">50</span><span class="token-paren">)</span></span></div>
+              <div class="code-line"><span class="line-number">7</span><span class="line-content"><span class="token-function">Crawler</span><span class="token-paren">(</span><span class="token-string">"cafef"</span><span class="token-paren">)</span><span class="token-method">.get_latest_articles</span><span class="token-paren">(</span><span class="token-number">10</span><span class="token-paren">)</span></span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Market Briefing -->
+        <div class="tab-panel" role="tabpanel" id="panel-uc-market" data-panel="uc-market">
+          <div class="code-block-wrapper">
+            <div class="code-block-header">
+              <span class="code-block-title">market-briefing.py</span>
+              <button class="copy-btn" data-copy='> Give me today&apos;s market briefing
+
+Market("VNINDEX").top_gainer(limit=10)
+Market("VNINDEX").top_loser(limit=10)
+Macro().exchange_rate()
+Commodity().gold() / .oil()'>Copy</button>
+            </div>
+            <div class="code-block-body">
+              <div class="code-line"><span class="line-number">1</span><span class="line-content"><span class="token-prompt">&gt;</span> <span class="token-text">Give me today's market briefing</span></span></div>
+              <div class="code-line"><span class="line-number">2</span><span class="line-content"></span></div>
+              <div class="code-line"><span class="line-number">3</span><span class="line-content"><span class="token-function">Market</span><span class="token-paren">(</span><span class="token-string">"VNINDEX"</span><span class="token-paren">)</span><span class="token-method">.top_gainer</span><span class="token-paren">(</span><span class="token-text">limit</span><span class="token-operator">=</span><span class="token-number">10</span><span class="token-paren">)</span></span></div>
+              <div class="code-line"><span class="line-number">4</span><span class="line-content"><span class="token-function">Market</span><span class="token-paren">(</span><span class="token-string">"VNINDEX"</span><span class="token-paren">)</span><span class="token-method">.top_loser</span><span class="token-paren">(</span><span class="token-text">limit</span><span class="token-operator">=</span><span class="token-number">10</span><span class="token-paren">)</span></span></div>
+              <div class="code-line"><span class="line-number">5</span><span class="line-content"><span class="token-function">Macro</span><span class="token-paren">()</span><span class="token-method">.exchange_rate</span><span class="token-paren">()</span></span></div>
+              <div class="code-line"><span class="line-number">6</span><span class="line-content"><span class="token-function">Commodity</span><span class="token-paren">()</span><span class="token-method">.gold</span><span class="token-paren">()</span> <span class="token-operator">/</span> <span class="token-method">.oil</span><span class="token-paren">()</span></span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Compare Stocks -->
+        <div class="tab-panel" role="tabpanel" id="panel-uc-compare" data-panel="uc-compare">
+          <div class="code-block-wrapper">
+            <div class="code-block-header">
+              <span class="code-block-title">compare-stocks.py</span>
+              <button class="copy-btn" data-copy='> Compare FPT vs VNM — which is better value?
+
+# Parallel analysis by fundamental-analyst + technical-analyst
+# lead-analyst synthesizes final recommendation
+Stock("FPT").finance.ratio() vs Stock("VNM").finance.ratio()'>Copy</button>
+            </div>
+            <div class="code-block-body">
+              <div class="code-line"><span class="line-number">1</span><span class="line-content"><span class="token-prompt">&gt;</span> <span class="token-text">Compare FPT vs VNM — which is better value?</span></span></div>
+              <div class="code-line"><span class="line-number">2</span><span class="line-content"></span></div>
+              <div class="code-line"><span class="line-number">3</span><span class="line-content"><span class="token-comment"># Parallel analysis by fundamental-analyst + technical-analyst</span></span></div>
+              <div class="code-line"><span class="line-number">4</span><span class="line-content"><span class="token-comment"># lead-analyst synthesizes final recommendation</span></span></div>
+              <div class="code-line"><span class="line-number">5</span><span class="line-content"><span class="token-function">Stock</span><span class="token-paren">(</span><span class="token-string">"FPT"</span><span class="token-paren">)</span><span class="token-method">.finance.ratio</span><span class="token-paren">()</span> <span class="token-text">vs</span> <span class="token-function">Stock</span><span class="token-paren">(</span><span class="token-string">"VNM"</span><span class="token-paren">)</span><span class="token-method">.finance.ratio</span><span class="token-paren">()</span></span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Screen VN30 -->
+        <div class="tab-panel" role="tabpanel" id="panel-uc-screen" data-panel="uc-screen">
+          <div class="code-block-wrapper">
+            <div class="code-block-header">
+              <span class="code-block-title">screen-vn30.py</span>
+              <button class="copy-btn" data-copy='> Screen VN30 for undervalued stocks with strong momentum
+
+Stock("").listing.symbols_by_group("VN30")
+# Batch fundamental + technical screening
+# Ranked by composite score'>Copy</button>
+            </div>
+            <div class="code-block-body">
+              <div class="code-line"><span class="line-number">1</span><span class="line-content"><span class="token-prompt">&gt;</span> <span class="token-text">Screen VN30 for undervalued stocks with strong momentum</span></span></div>
+              <div class="code-line"><span class="line-number">2</span><span class="line-content"></span></div>
+              <div class="code-line"><span class="line-number">3</span><span class="line-content"><span class="token-function">Stock</span><span class="token-paren">(</span><span class="token-string">""</span><span class="token-paren">)</span><span class="token-method">.listing.symbols_by_group</span><span class="token-paren">(</span><span class="token-string">"VN30"</span><span class="token-paren">)</span></span></div>
+              <div class="code-line"><span class="line-number">4</span><span class="line-content"><span class="token-comment"># Batch fundamental + technical screening</span></span></div>
+              <div class="code-line"><span class="line-number">5</span><span class="line-content"><span class="token-comment"># Ranked by composite score</span></span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Data Sources -->
+  <section class="data-sources" id="data-sources">
+    <div class="container">
+      <div class="animate-on-scroll" style="text-align: center;">
+        <div class="section-label">Data Sources</div>
+        <h2 class="section-title">12+ real-time data providers</h2>
+        <p class="section-desc" style="margin: 0 auto;">Vietnamese stocks, global equities, crypto, macro, mutual funds, commodities, and web search.</p>
+      </div>
+      <div class="sources-grid">
+        <div class="source-card animate-on-scroll">
+          <div class="source-card-top">
+            <span class="source-name">VCI</span>
+            <span class="source-badge badge-stock">Stock</span>
+          </div>
+          <p class="source-desc">Default provider — full VN stock data, financials, company info</p>
+        </div>
+        <div class="source-card animate-on-scroll" style="transition-delay: 0.05s;">
+          <div class="source-card-top">
+            <span class="source-name">KBS</span>
+            <span class="source-badge badge-stock">Stock</span>
+          </div>
+          <p class="source-desc">Fallback provider — same VN coverage as VCI</p>
+        </div>
+        <div class="source-card animate-on-scroll" style="transition-delay: 0.1s;">
+          <div class="source-card-top">
+            <span class="source-name">MAS</span>
+            <span class="source-badge badge-stock">Stock</span>
+          </div>
+          <p class="source-desc">Quote, intraday, financials, price depth</p>
+        </div>
+        <div class="source-card animate-on-scroll" style="transition-delay: 0.15s;">
+          <div class="source-card-top">
+            <span class="source-name">TVS</span>
+            <span class="source-badge badge-stock">Stock</span>
+          </div>
+          <p class="source-desc">Company overview data for VN stocks</p>
+        </div>
+        <div class="source-card animate-on-scroll" style="transition-delay: 0.05s;">
+          <div class="source-card-top">
+            <span class="source-name">VDS</span>
+            <span class="source-badge badge-stock">Stock</span>
+          </div>
+          <p class="source-desc">Intraday trading data with auto-cookie</p>
+        </div>
+        <div class="source-card animate-on-scroll" style="transition-delay: 0.1s;">
+          <div class="source-card-top">
+            <span class="source-name">FMP</span>
+            <span class="source-badge badge-stock">Stock</span>
+          </div>
+          <p class="source-desc">Global stocks — quote, company, financials (API key)</p>
+        </div>
+        <div class="source-card animate-on-scroll" style="transition-delay: 0.15s;">
+          <div class="source-card-top">
+            <span class="source-name">BINANCE</span>
+            <span class="source-badge badge-crypto">Crypto</span>
+          </div>
+          <p class="source-desc">Crypto — history, intraday, depth (no API key)</p>
+        </div>
+        <div class="source-card animate-on-scroll" style="transition-delay: 0.2s;">
+          <div class="source-card-top">
+            <span class="source-name">VND</span>
+            <span class="source-badge badge-market">Market</span>
+          </div>
+          <p class="source-desc">Market P/E, P/B, top movers for VNINDEX</p>
+        </div>
+        <div class="source-card animate-on-scroll" style="transition-delay: 0.1s;">
+          <div class="source-card-top">
+            <span class="source-name">MBK</span>
+            <span class="source-badge badge-macro">Macro</span>
+          </div>
+          <p class="source-desc">GDP, CPI, interest rates, FDI, trade balance</p>
+        </div>
+        <div class="source-card animate-on-scroll" style="transition-delay: 0.15s;">
+          <div class="source-card-top">
+            <span class="source-name">FMARKET</span>
+            <span class="source-badge badge-fund">Fund</span>
+          </div>
+          <p class="source-desc">58+ mutual funds with NAV, holdings, allocation</p>
+        </div>
+        <div class="source-card animate-on-scroll" style="transition-delay: 0.2s;">
+          <div class="source-card-top">
+            <span class="source-name">SPL</span>
+            <span class="source-badge badge-commodity">Commodity</span>
+          </div>
+          <p class="source-desc">Gold, oil, steel, gas, agricultural commodities</p>
+        </div>
+        <div class="source-card animate-on-scroll" style="transition-delay: 0.25s;">
+          <div class="source-card-top">
+            <span class="source-name">Perplexity</span>
+            <span class="source-badge badge-search">Search</span>
+          </div>
+          <p class="source-desc">Web search via Perplexity API (API key)</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Python Library -->
+  <section class="python-section" id="python-library">
+    <div class="container">
+      <div class="python-grid">
+        <div class="python-info animate-on-scroll">
+          <div class="badge">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+            Python 3.10+
+          </div>
+          <h3>Also available as a Python library</h3>
+          <p>Use claude-finance-kit directly in your Python scripts, Jupyter notebooks, or data pipelines. Full API access to all 12+ data sources.</p>
+          <div class="install-block">
+            <code>pip install claude-finance-kit</code>
+            <button class="copy-btn" data-copy="pip install claude-finance-kit">Copy</button>
+          </div>
+          <div class="python-links">
+            <a href="https://pypi.org/project/claude-finance-kit/" target="_blank" rel="noopener">PyPI &rarr;</a>
+            <a href="https://github.com/hongbietcode/claude-finance-kit" target="_blank" rel="noopener">Documentation &rarr;</a>
+          </div>
+        </div>
+        <div class="animate-on-scroll" style="transition-delay: 0.1s;">
+          <div class="code-block-wrapper">
+            <div class="code-block-header">
+              <span class="code-block-title">quick-start.py</span>
+              <button class="copy-btn" data-copy='from claude_finance_kit import Stock, Market, Macro, Indicator
+
+stock = Stock("FPT")
+df = stock.quote.history(start="2024-01-01")
+fs = stock.finance.income_statement(period="quarter")
+
+market = Market("VNINDEX")
+pe = market.pe(duration="5Y")
+top = market.top_gainer(limit=10)
+
+macro = Macro()
+gdp = macro.gdp(period="quarter")'>Copy</button>
+            </div>
+            <div class="code-block-body">
+              <div class="code-line"><span class="line-number">1</span><span class="line-content"><span class="token-keyword">from</span> <span class="token-text">claude_finance_kit</span> <span class="token-keyword">import</span> <span class="token-function">Stock</span><span class="token-operator">,</span> <span class="token-function">Market</span><span class="token-operator">,</span> <span class="token-function">Macro</span><span class="token-operator">,</span> <span class="token-function">Indicator</span></span></div>
+              <div class="code-line"><span class="line-number">2</span><span class="line-content"></span></div>
+              <div class="code-line"><span class="line-number">3</span><span class="line-content"><span class="token-text">stock</span> <span class="token-operator">=</span> <span class="token-function">Stock</span><span class="token-paren">(</span><span class="token-string">"FPT"</span><span class="token-paren">)</span></span></div>
+              <div class="code-line"><span class="line-number">4</span><span class="line-content"><span class="token-text">df</span> <span class="token-operator">=</span> <span class="token-text">stock</span><span class="token-method">.quote.history</span><span class="token-paren">(</span><span class="token-text">start</span><span class="token-operator">=</span><span class="token-string">"2024-01-01"</span><span class="token-paren">)</span></span></div>
+              <div class="code-line"><span class="line-number">5</span><span class="line-content"><span class="token-text">fs</span> <span class="token-operator">=</span> <span class="token-text">stock</span><span class="token-method">.finance.income_statement</span><span class="token-paren">(</span><span class="token-text">period</span><span class="token-operator">=</span><span class="token-string">"quarter"</span><span class="token-paren">)</span></span></div>
+              <div class="code-line"><span class="line-number">6</span><span class="line-content"></span></div>
+              <div class="code-line"><span class="line-number">7</span><span class="line-content"><span class="token-text">market</span> <span class="token-operator">=</span> <span class="token-function">Market</span><span class="token-paren">(</span><span class="token-string">"VNINDEX"</span><span class="token-paren">)</span></span></div>
+              <div class="code-line"><span class="line-number">8</span><span class="line-content"><span class="token-text">pe</span> <span class="token-operator">=</span> <span class="token-text">market</span><span class="token-method">.pe</span><span class="token-paren">(</span><span class="token-text">duration</span><span class="token-operator">=</span><span class="token-string">"5Y"</span><span class="token-paren">)</span></span></div>
+              <div class="code-line"><span class="line-number">9</span><span class="line-content"><span class="token-text">top</span> <span class="token-operator">=</span> <span class="token-text">market</span><span class="token-method">.top_gainer</span><span class="token-paren">(</span><span class="token-text">limit</span><span class="token-operator">=</span><span class="token-number">10</span><span class="token-paren">)</span></span></div>
+              <div class="code-line"><span class="line-number">10</span><span class="line-content"></span></div>
+              <div class="code-line"><span class="line-number">11</span><span class="line-content"><span class="token-text">macro</span> <span class="token-operator">=</span> <span class="token-function">Macro</span><span class="token-paren">()</span></span></div>
+              <div class="code-line"><span class="line-number">12</span><span class="line-content"><span class="token-text">gdp</span> <span class="token-operator">=</span> <span class="token-text">macro</span><span class="token-method">.gdp</span><span class="token-paren">(</span><span class="token-text">period</span><span class="token-operator">=</span><span class="token-string">"quarter"</span><span class="token-paren">)</span></span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section" id="get-started">
+    <div class="container">
+      <div class="animate-on-scroll">
+        <h2>Start analyzing the Vietnamese market<br>in 60 seconds</h2>
+        <div class="cta-buttons">
+          <button class="cta-copy-btn" data-copy="npx claude-finance-kit-cli init --ai claude">
+            <svg class="cta-icon" viewBox="0 0 24 24" fill="none" stroke="var(--accent-primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 17 10 11 4 5"></polyline><line x1="12" y1="19" x2="20" y2="19"></line></svg>
+            <div style="text-align: left;">
+              <div>Claude Code</div>
+              <div class="cta-platform">npx claude-finance-kit-cli init --ai claude</div>
+            </div>
+          </button>
+          <button class="cta-copy-btn" data-copy="npx claude-finance-kit-cli init --ai cursor">
+            <svg class="cta-icon" viewBox="0 0 24 24" fill="none" stroke="var(--accent-purple)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+            <div style="text-align: left;">
+              <div>Cursor</div>
+              <div class="cta-platform">npx claude-finance-kit-cli init --ai cursor</div>
+            </div>
+          </button>
+          <button class="cta-copy-btn" data-copy="npx claude-finance-kit-cli init --ai copilot">
+            <svg class="cta-icon" viewBox="0 0 24 24" fill="none" stroke="var(--accent-green)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+            <div style="text-align: left;">
+              <div>GitHub Copilot</div>
+              <div class="cta-platform">npx claude-finance-kit-cli init --ai copilot</div>
+            </div>
+          </button>
+        </div>
+        <a href="https://github.com/hongbietcode/claude-finance-kit#readme" target="_blank" rel="noopener" class="cta-docs-link">
+          Read the docs
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-top">
+        <div>
+          <div class="footer-brand">
+            <div class="nav-logo-icon" style="width: 24px; height: 24px; font-size: 12px; border-radius: 5px;">C</div>
+            claude-finance-kit
+          </div>
+          <p class="footer-tagline">AI-powered Vietnamese stock market analysis for Claude Code, Cursor, and GitHub Copilot.</p>
+        </div>
+        <div class="footer-links">
+          <div class="footer-link-group">
+            <h4>Resources</h4>
+            <ul>
+              <li><a href="https://github.com/hongbietcode/claude-finance-kit" target="_blank" rel="noopener">GitHub</a></li>
+              <li><a href="https://www.npmjs.com/package/claude-finance-kit-cli" target="_blank" rel="noopener">npm</a></li>
+              <li><a href="https://pypi.org/project/claude-finance-kit/" target="_blank" rel="noopener">PyPI</a></li>
+            </ul>
+          </div>
+          <div class="footer-link-group">
+            <h4>Docs</h4>
+            <ul>
+              <li><a href="https://github.com/hongbietcode/claude-finance-kit#readme" target="_blank" rel="noopener">Documentation</a></li>
+              <li><a href="https://github.com/hongbietcode/claude-finance-kit/blob/main/LICENSE" target="_blank" rel="noopener">License (MIT)</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>Made by <a href="https://github.com/hongbietcode" target="_blank" rel="noopener">hongbietcode</a></p>
+        <p class="footer-disclaimer">For reference only. Not investment advice.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Toast -->
+  <div class="toast" id="toast">Copied!</div>
+
+  <script>
+    (function() {
+      var nav = document.getElementById('nav');
+      var hamburger = document.getElementById('hamburger');
+      var mobileMenu = document.getElementById('mobile-menu');
+      var toast = document.getElementById('toast');
+      var toastTimeout;
+
+      window.addEventListener('scroll', function() {
+        if (window.scrollY > 20) {
+          nav.classList.add('scrolled');
+        } else {
+          nav.classList.remove('scrolled');
+        }
+      }, { passive: true });
+
+      hamburger.addEventListener('click', function() {
+        hamburger.classList.toggle('active');
+        mobileMenu.classList.toggle('open');
+        document.body.style.overflow = mobileMenu.classList.contains('open') ? 'hidden' : '';
+      });
+
+      var mobileLinks = mobileMenu.querySelectorAll('a');
+      mobileLinks.forEach(function(link) {
+        link.addEventListener('click', function() {
+          hamburger.classList.remove('active');
+          mobileMenu.classList.remove('open');
+          document.body.style.overflow = '';
+        });
+      });
+
+      document.querySelectorAll('a[href^="#"]').forEach(function(anchor) {
+        anchor.addEventListener('click', function(e) {
+          var targetId = this.getAttribute('href');
+          if (targetId === '#') return;
+          var target = document.querySelector(targetId);
+          if (target) {
+            e.preventDefault();
+            var offset = nav.offsetHeight + 16;
+            var pos = target.getBoundingClientRect().top + window.pageYOffset - offset;
+            window.scrollTo({ top: pos, behavior: 'smooth' });
+          }
+        });
+      });
+
+      var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          }
+        });
+      }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+      document.querySelectorAll('.animate-on-scroll').forEach(function(el) {
+        observer.observe(el);
+      });
+
+      document.querySelectorAll('[data-tab-group]').forEach(function(tabGroup) {
+        var groupName = tabGroup.getAttribute('data-tab-group');
+        var buttons = tabGroup.querySelectorAll('[data-tab]');
+        var parentSection = tabGroup.closest('section') || tabGroup.parentElement;
+        var panels = parentSection.querySelectorAll('[data-panel]');
+
+        buttons.forEach(function(btn) {
+          btn.addEventListener('click', function() {
+            var tabId = btn.getAttribute('data-tab');
+
+            buttons.forEach(function(b) {
+              b.classList.remove('active');
+              b.setAttribute('aria-selected', 'false');
+            });
+            btn.classList.add('active');
+            btn.setAttribute('aria-selected', 'true');
+
+            panels.forEach(function(panel) {
+              if (panel.getAttribute('data-panel') === tabId) {
+                panel.classList.add('active');
+              } else {
+                panel.classList.remove('active');
+              }
+            });
+          });
+        });
+      });
+
+      function showToast(msg) {
+        toast.textContent = msg || 'Copied!';
+        toast.classList.add('show');
+        clearTimeout(toastTimeout);
+        toastTimeout = setTimeout(function() {
+          toast.classList.remove('show');
+        }, 2000);
+      }
+
+      document.querySelectorAll('[data-copy]').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          if (btn._copying) return;
+          btn._copying = true;
+          var text = btn.getAttribute('data-copy');
+          var label = btn.querySelector('.cta-platform') || btn;
+          var originalText = label.textContent;
+
+          function onCopied() {
+            btn.classList.add('copied');
+            label.textContent = 'Copied!';
+            showToast('Copied to clipboard!');
+            setTimeout(function() {
+              btn.classList.remove('copied');
+              label.textContent = originalText;
+              btn._copying = false;
+            }, 2000);
+          }
+
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(text).then(onCopied).catch(function() {
+              fallbackCopyAction(text, onCopied);
+            });
+          } else {
+            fallbackCopyAction(text, onCopied);
+          }
+        });
+      });
+
+      function fallbackCopyAction(text, callback) {
+        var textarea = document.createElement('textarea');
+        textarea.value = text;
+        textarea.style.position = 'fixed';
+        textarea.style.opacity = '0';
+        document.body.appendChild(textarea);
+        textarea.select();
+        try {
+          document.execCommand('copy');
+          callback();
+        } catch (e) {
+          showToast('Failed to copy');
+        }
+        document.body.removeChild(textarea);
+      }
+    })();
+  </script>
+</body>
+</html>

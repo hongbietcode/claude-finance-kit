@@ -5,15 +5,17 @@ Claude Code plugin for Vietnamese stock market analysis — fundamentals, techni
 ## Install
 
 **Python library:**
+
 ```bash
 pip install claude-finance-kit
 ```
 
 **Plugin (multi-platform):**
+
 ```bash
-npx claude-finance-kit init --ai claude    # Claude Code
-npx claude-finance-kit init --ai cursor    # Cursor
-npx claude-finance-kit init --ai copilot   # GitHub Copilot
+npx claude-finance-kit-cli init --ai claude    # Claude Code
+npx claude-finance-kit-cli init --ai cursor    # Cursor
+npx claude-finance-kit-cli init --ai copilot   # GitHub Copilot
 ```
 
 ## What's Included
@@ -26,19 +28,19 @@ npx claude-finance-kit init --ai copilot   # GitHub Copilot
 
 ## Data Sources
 
-| Source | Type | Coverage |
-|--------|------|----------|
-| VCI | Stock (default) | Quote, company, finance, listing, trading — full VN coverage |
-| KBS | Stock (fallback) | Same as VCI — full VN coverage |
-| MAS | Stock | Quote, intraday, financials, price depth |
-| TVS | Stock | Company overview only |
-| VDS | Stock | Intraday only |
-| FMP | Stock (global) | Quote, company, financials — requires `FMP_API_KEY` |
-| BINANCE | Crypto | History, intraday, depth — no API key |
-| VND | Market | P/E, P/B, top movers |
-| MBK | Macro | GDP, CPI, interest rates, FDI, trade balance |
-| FMARKET | Fund | Mutual fund data (58+ funds) |
-| SPL | Commodity | Gold, oil, steel, gas, fertilizer, agricultural |
+| Source  | Type             | Coverage                                                     |
+| ------- | ---------------- | ------------------------------------------------------------ |
+| VCI     | Stock (default)  | Quote, company, finance, listing, trading — full VN coverage |
+| KBS     | Stock (fallback) | Same as VCI — full VN coverage                               |
+| MAS     | Stock            | Quote, intraday, financials, price depth                     |
+| TVS     | Stock            | Company overview only                                        |
+| VDS     | Stock            | Intraday only                                                |
+| FMP     | Stock (global)   | Quote, company, financials — requires `FMP_API_KEY`          |
+| BINANCE | Crypto           | History, intraday, depth — no API key                        |
+| VND     | Market           | P/E, P/B, top movers                                         |
+| MBK     | Macro            | GDP, CPI, interest rates, FDI, trade balance                 |
+| FMARKET | Fund             | Mutual fund data (58+ funds)                                 |
+| SPL     | Commodity        | Gold, oil, steel, gas, fertilizer, agricultural              |
 
 ## Project Structure
 

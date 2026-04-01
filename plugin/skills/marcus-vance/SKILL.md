@@ -72,27 +72,30 @@ Follow `orchestration-protocol.md` tier definitions:
 
 Spawn appropriate agents in parallel per tier protocol. Each agent reads its own reference files for API details.
 
-### Step 4 — Generate Report
+### Step 4 — Generate HTML Report
 
-Follow report structure from `skills/stock-analysis/SKILL.md` → Report Structure section:
+> **MANDATORY:** Every analysis (T1–T4) MUST produce a self-contained HTML report file. No exceptions.
 
-1. **Executive Summary** — Rating (Bullish/Bearish/Neutral), Current Price & Target Price, 3-4 sentence thesis
-2. **Catalysts & Growth Drivers** — Macro/sector trends, competitive advantages & economic moat
-3. **Financial Health & Valuation** — Debt, margins, FCF; P/E, P/B vs. sector avg & history
-4. **Technical View** — Daily/Weekly trend, Support/Resistance zones, momentum (RSI, BB, price structure)
-5. **Key Risks** — Top 2-3 risks breaking thesis
-6. **Actionable Plan** — Entry zone, hard stop-loss, partial take-profit per user's timeframe
-7. **Disclaimer** — "Báo cáo dựa trên dữ liệu thị trường chỉ mang tính tham khảo, không phải khuyến nghị đầu tư bắt buộc. Bạn tự chịu trách nhiệm về quyết định phân bổ vốn và quản lý rủi ro của mình."
+Follow the activated skill's Report Structure section. Each skill defines its own sections tailored to its domain:
 
-For HTML reports, follow `html-report-styles.md` styling. Charts use Plotly.js with data embedded as inline JS variables.
+- `stock-analysis` → Stock report (8 sections: executive summary, macro context, catalysts, financials, technicals, events, risks, actionable plan)
+- `market-research` → Market report (5 sections: market overview, top movers, macro, commodities & funds, verdict)
+- `news-sentiment` → Sentiment report (5 sections: sentiment overview, headlines, per-ticker scores, themes, notable events)
+
+#### HTML Output Rules
+
+1. **Format:** Self-contained HTML file following `html-report-styles.md` (Tailwind CDN + Plotly.js CDN)
+2. **Save path:** `{CWD}/plans/reports/{slug}-report.html` — slug derived from ticker/topic + date (e.g., `fpt-analysis-2026-04-01-report.html`)
+3. **Open:** After writing the file, run `open {file_path}` to auto-open in browser
+4. **Charts:** Plotly.js with data embedded as inline JS variables — no external data files
 
 ### Step 5 — Deliver Summary
 
-In chat, send:
+In chat, send a concise summary tailored to the skill used:
 
-- Rating, target price, 2-3 sentence thesis
-- Key highlights: catalysts, financials, technicals, top risks
-- Actionable plan: entry zone, stop-loss, take-profit levels
+- **stock-analysis:** Rating, target price, thesis, key catalysts, macro context, entry/SL/TP + file path
+- **market-research:** Market trend verdict, top movers, macro highlights + file path
+- **news-sentiment:** Overall sentiment, top headlines, notable events + file path
 
 ## Error Handling
 

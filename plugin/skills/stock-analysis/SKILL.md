@@ -92,17 +92,37 @@ lead-analyst coordinates:
 ## Report Structure
 
 > **IMPORTANT:** Always write the report in the user's language (Vietnamese if user writes in Vietnamese, English if user writes in English).
-> **HTML reports:** Follow styles and layout in [`references/html-report-styles.md`](./references/html-report-styles.md).
+> **MANDATORY:** Every analysis MUST produce a self-contained HTML report file. Follow styles and layout in [`references/html-report-styles.md`](./references/html-report-styles.md).
 
-Strictly follow with clear headings, bullet points, bold key figures:
+Strictly follow 8 sections with clear headings, bullet points, bold key figures:
 
-1. **Executive Summary** — Rating (Bullish/Bearish/Neutral), current price & target price, 3-4 sentence thesis
-2. **Catalysts & Growth Drivers** — Macro/sector trends, competitive advantages & economic moat
-3. **Financial Health & Valuation** — Debt, margins, FCF; P/E, P/B vs. sector avg & history — over/undervalued?
-4. **Technical View** — Daily/Weekly trend, Support/Resistance zones, momentum (RSI, BB, price structure)
-5. **Key Risks** — Top 2-3 risks breaking thesis (regulatory, management, interest rate...)
-6. **Actionable Plan** — Strategy per user's timeframe: scout entry, hard stop-loss, partial take-profit
-7. **Disclaimer** — "This report is based on market data for informational purposes only and does not constitute mandatory investment advice. You are solely responsible for your own capital allocation and risk management decisions."
+1. **Executive Summary** — Rating (Bullish/Bearish/Neutral), current price & target price, 3-4 sentence thesis, confidence level (0-100)
+2. **Macro & Sector Context** — VNINDEX P/E zone (rẻ/hợp lý/đắt), interest rate trend, USD/VND, sector performance vs market; how macro conditions impact this specific stock
+3. **Catalysts & Growth Drivers** — Company-specific catalysts, competitive advantages & economic moat, upcoming events (earnings, dividends, M&A)
+4. **Financial Health & Valuation** — Debt, margins, FCF; P/E, P/B vs. sector avg & history — over/undervalued? Piotroski F-score, DuPont breakdown
+5. **Technical View** — Daily/Weekly trend, Support/Resistance zones, momentum (RSI, BB, MACD), volume profile; Plotly price chart with S/R levels
+6. **Recent Events & News Impact** — 3-5 recent news/events affecting the stock, sentiment classification (bullish/bearish/neutral), corporate actions, regulatory changes
+7. **Key Risks** — Top 2-3 risks breaking thesis (regulatory, management, interest rate, sector-specific...)
+8. **Actionable Plan** — Strategy per user's timeframe: entry zone, hard stop-loss, partial take-profit levels, position sizing suggestion
+9. **Disclaimer** — "This report is based on market data for informational purposes only and does not constitute mandatory investment advice. You are solely responsible for your own capital allocation and risk management decisions."
+
+**Required data sources per section:**
+
+- S1: synthesis from S2–S8
+- S2: `Market("VNINDEX").pe()`, `Macro().interest_rate()`, `Macro().exchange_rate()`, sector P/E comparison
+- S3: `stock.company.overview()`, `stock.company.events()`, `stock.company.news()`
+- S4: `stock.finance.balance_sheet()`, `.income_statement()`, `.ratio()`, peer comparison
+- S5: `stock.quote.history()` → `Indicator(df)` for RSI, MACD, BB, SMA; Plotly candlestick chart
+- S6: `Crawler("cafef").get_latest_articles()` filtered by ticker, sentiment classification
+- S7–S8: derived from S2–S6
+
+### HTML Output Rules
+
+1. **Format:** Self-contained HTML file — Tailwind CDN + Plotly.js CDN, no external dependencies
+2. **Save path:** `{CWD}/plans/reports/{slug}-report.html` (e.g., `fpt-analysis-2026-04-01-report.html`, `vn30-screening-2026-04-01-report.html`)
+3. **Open:** After writing the file, run `open {file_path}` to auto-open in browser
+4. **Charts:** Plotly.js with data embedded as inline JS variables
+5. **Deliver in chat:** summary + file path link
 
 ## Rules
 

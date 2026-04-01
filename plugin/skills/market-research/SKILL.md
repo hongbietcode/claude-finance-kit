@@ -67,15 +67,17 @@ Use `Commodity()` for gold, oil, steel, gas, fertilizer, agricultural prices.
 ## Report Structure
 
 > **IMPORTANT:** Always write the report in the user's language (Vietnamese if user writes in Vietnamese, English if user writes in English).
-> **HTML reports:** Follow styles and layout in [`references/html-report-styles.md`](./references/html-report-styles.md).
+> **MANDATORY:** Every analysis MUST produce a self-contained HTML report file. Follow styles and layout in [`references/html-report-styles.md`](./references/html-report-styles.md).
 
-Dàn ý báo cáo thị trường đạt yêu cầu (5 sections):
+Strictly follow 7 sections:
 
-1. **Thị trường chứng khoán** — VNINDEX + VN30 (điểm, % ngày), thanh khoản toàn thị trường so với TB 30 phiên, P/E VNINDEX vs TB 5 năm (vùng: rẻ / hợp lý / đắt / quá đắt); biểu đồ P/E lịch sử
+1. **Thị trường chứng khoán** — VNINDEX + VN30 (điểm, % ngày), thanh khoản toàn thị trường so với TB 30 phiên, P/E VNINDEX vs TB 5 năm (vùng: rẻ / hợp lý / đắt / quá đắt); Plotly P/E chart lịch sử
 2. **Cổ phiếu nổi bật** — Top 5 tăng mạnh (mã + % tăng), Top 5 giảm mạnh (mã + % giảm), Top 5 thanh khoản cao (mã + giá trị tỷ đồng)
 3. **Kinh tế vĩ mô** — GDP tăng trưởng, CPI (lạm phát), lãi suất SBV, USD/VND, FDI — mỗi chỉ số: giá trị hiện tại + xu hướng (↑/↓/→) + tác động ngắn hạn lên thị trường
 4. **Hàng hoá & Quỹ** — Vàng (USD/oz), Dầu Brent (USD/bbl), Thép (USD/tấn) + YTD%; 3 quỹ mở nổi bật (NAV/ccq + YTD%)
-5. **Nhận định thị trường** — Xu hướng tổng thể (TÍCH CỰC / TRUNG LẬP / TIÊU CỰC), đoạn nhận định 2–3 câu, ngành hưởng lợi vs ngành chịu áp lực
+5. **Tin tức & Sự kiện nổi bật** — 3-5 headline tin tài chính quan trọng trong ngày/tuần, sentiment classification, tác động lên thị trường
+6. **Nhận định thị trường** — Xu hướng tổng thể (TÍCH CỰC / TRUNG LẬP / TIÊU CỰC), đoạn nhận định 2–3 câu, ngành hưởng lợi vs ngành chịu áp lực
+7. **Disclaimer** — "Báo cáo chỉ mang tính tham khảo, không phải khuyến nghị đầu tư. Nhà đầu tư tự chịu trách nhiệm về quyết định của mình."
 
 **Required data per section:**
 
@@ -83,8 +85,16 @@ Dàn ý báo cáo thị trường đạt yêu cầu (5 sections):
 - S2: `market.top_gainer(10)`, `market.top_loser(10)`, `market.top_liquidity(10)`
 - S3: `Macro().gdp()`, `.cpi()`, `.interest_rate()`, `.exchange_rate()`, `.fdi()`
 - S4: `Commodity().gold()`, `.oil()`, `.steel()`; `Fund().listing(fund_type="STOCK")`
-- S5: derived synthesis from S1–S4
-- **Disclaimer** (footer): "Báo cáo chỉ mang tính tham khảo, không phải khuyến nghị đầu tư. Nhà đầu tư tự chịu trách nhiệm về quyết định của mình."
+- S5: `Crawler("cafef").get_latest_articles(10)`, `Crawler("vnexpress").get_latest_articles(10)` — classify sentiment
+- S6: derived synthesis from S1–S5
+
+### HTML Output Rules
+
+1. **Format:** Self-contained HTML file — Tailwind CDN + Plotly.js CDN, no external dependencies
+2. **Save path:** `{CWD}/plans/reports/{slug}-report.html` (e.g., `market-briefing-2026-04-01-report.html`, `macro-outlook-2026-04-01-report.html`)
+3. **Open:** After writing the file, run `open {file_path}` to auto-open in browser
+4. **Charts:** Plotly.js with data embedded as inline JS variables
+5. **Deliver in chat:** summary + file path link
 
 ## Reference Index
 
