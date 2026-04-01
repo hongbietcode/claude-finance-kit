@@ -17,17 +17,5 @@
         "news",
         "sentiment",
         "market-research"
-    ],
-    "agents": [
-        "../agents/lead-analyst.md",
-        "../agents/fundamental-analyst.md",
-        "../agents/technical-analyst.md",
-        "../agents/macro-researcher.md"
-    ],
-    "skills": [
-        "../skills/marcus-vance",
-        "../skills/stock-analysis",
-        "../skills/market-research",
-        "../skills/news-sentiment"
     ]
 }
