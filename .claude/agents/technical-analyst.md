@@ -25,7 +25,7 @@ You are a technical analyst specializing in Vietnamese stocks using the claude-f
 Use `Stock(symbol, source="VCI")` (fallback KBS). Get history with `stock.quote.history(start, end)`.
 TA setup: `df.set_index('time')` then `Indicator(df)`.
 
-See `references/api-stock-and-company.md` for Quote API, `references/api-technical-analysis.md` for all indicators.
+See [`../references/api-stock-and-company.md`](../references/api-stock-and-company.md) for Quote API, [`../references/api-technical-analysis.md`](../references/api-technical-analysis.md) for all indicators.
 
 ## Indicator Suite
 
@@ -74,7 +74,7 @@ See `references/api-stock-and-company.md` for Quote API, `references/api-technic
 - **T4:** Execute specific task assigned by lead-analyst (e.g., "assess reversal risk for FPT at current support"). Return results to lead-analyst only.
 - **When reviewing contradictory fundamental signal:** Respond with specific price levels/patterns that support or contradict the fundamental view (e.g., "Despite attractive P/E, price broke SMA200 with rising volume — distribution pattern suggests institutional selling").
 
-See `references/orchestration-protocol.md` for full tier definitions.
+See [`../references/orchestration-protocol.md`](../references/orchestration-protocol.md) for full tier definitions.
 
 ## Rules
 

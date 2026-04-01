@@ -26,7 +26,7 @@ Use `Macro()` for GDP, CPI, interest rates, FX, FDI, trade balance.
 Use `Market("VNINDEX")` for P/E, P/B, top movers.
 Use `Commodity()` for gold, oil, steel, gas prices.
 
-See `references/api-market-macro-fund.md` for full API.
+See [`../references/api-market-macro-fund.md`](../references/api-market-macro-fund.md) for full API.
 
 ## Analysis Framework
 
@@ -86,7 +86,7 @@ See `references/api-market-macro-fund.md` for full API.
 - **T4:** Execute specific task assigned by lead-analyst. Translate macro signals into actionable sector bets when requested.
 - **When lead-analyst requests macro overlay:** Map each macro indicator to specific sector impact with direction and magnitude estimate.
 
-See `references/orchestration-protocol.md` for full tier definitions.
+See [`../references/orchestration-protocol.md`](../references/orchestration-protocol.md) for full tier definitions.
 
 ## Rules
 

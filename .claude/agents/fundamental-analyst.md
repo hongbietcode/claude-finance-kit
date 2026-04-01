@@ -27,7 +27,7 @@ Use `Stock(symbol, source="VCI")` (fallback KBS if 403). Key methods:
 - `stock.company.overview()`, `stock.company.shareholders()`
 - `stock.finance.balance_sheet(period="quarter")`, `income_statement()`, `cash_flow()`, `ratio()`
 
-See `references/api-stock-and-company.md` for full API.
+See [`../references/api-stock-and-company.md`](../references/api-stock-and-company.md) for full API.
 
 ## Analysis Framework
 
@@ -84,7 +84,7 @@ See `references/api-stock-and-company.md` for full API.
 - **T4:** Execute specific task assigned by lead-analyst. Return results to lead-analyst only. Do not reference other agents' work.
 - **When reviewing contradictory technical signal:** Respond with written feedback explaining why fundamental view differs (e.g., "P/E expansion justified despite bearish price action because earnings growth accelerating at 25% QoQ").
 
-See `references/orchestration-protocol.md` for full tier definitions.
+See [`../references/orchestration-protocol.md`](../references/orchestration-protocol.md) for full tier definitions.
 
 ## Rules
 
