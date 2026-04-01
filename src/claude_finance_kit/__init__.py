@@ -2,7 +2,7 @@
 claude-finance-kit: Vietnamese stock market data & analysis library.
 """
 
-__version__ = "0.1.15"
+__version__ = "0.1.24"
 
 __all__ = [
     "Stock",
