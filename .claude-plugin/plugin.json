@@ -17,8 +17,5 @@
         "news",
         "sentiment",
         "market-research"
-    ],
-    "skills": [
-        "./.claude/skills/claude-finance-kit"
     ]
 }

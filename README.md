@@ -46,14 +46,14 @@ npx claude-finance-kit-cli init --ai copilot   # GitHub Copilot
 
 ```
 src/claude_finance_kit/    # Python library
-plugin/                    # Plugin source of truth
-├── skills/                # marcus-vance, stock-analysis, market-research, news-sentiment
-├── agents/                # fundamental-analyst, technical-analyst, macro-researcher, lead-analyst
-├── references/            # API docs, methodology, patterns
-└── templates/             # Platform configs (claude, cursor, copilot)
-
 cli/                       # npm CLI installer (claude-finance-kit-cli)
-.claude/                   # Symlinks → plugin/
+├── assets/                # Plugin source of truth
+│   ├── skills/            # marcus-vance, stock-analysis, market-research, news-sentiment
+│   ├── agents/            # fundamental-analyst, technical-analyst, macro-researcher, lead-analyst
+│   ├── references/        # API docs, methodology, patterns
+│   └── templates/         # Platform configs (claude, cursor, copilot)
+├── src/                   # CLI source code
+└── dist/                  # Built CLI
 .claude-plugin/            # Claude Marketplace manifest
 ```
 
@@ -63,7 +63,6 @@ cli/                       # npm CLI installer (claude-finance-kit-cli)
 cd cli
 npm install
 npm run build              # Build CLI TypeScript
-npm run sync               # Sync plugin/ → cli/assets/
 npm run bump -- patch      # Bump version (patch|minor|major)
 ```
 

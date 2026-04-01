@@ -18,6 +18,5 @@ uv.lock
 .env
 cli/node_modules/
 cli/dist/
-cli/assets/
 .claude/
 .vercel/

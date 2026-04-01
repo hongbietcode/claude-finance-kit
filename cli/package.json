@@ -14,7 +14,6 @@
     "scripts": {
         "build": "tsc",
         "dev": "tsc --watch",
-        "sync": "node dist/scripts/sync-assets.js",
         "bump": "node dist/scripts/bump-version.js"
     },
     "keywords": [
