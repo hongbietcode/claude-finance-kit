@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Claude Finance Kit — AI-Powered Vietnamese Stock Market Analysis</title>
-  <meta name="description" content="Turn your AI coding assistant into a senior financial analyst. Real-time Vietnamese market data from 12+ sources.">
+  <title>Claude Finance Kit — Phân Tích Chứng Khoán Việt Nam bằng AI</title>
+  <meta name="description" content="Biến trợ lý AI của bạn thành chuyên gia phân tích tài chính cấp cao. Dữ liệu thị trường Việt Nam theo thời gian thực từ 12+ nguồn.">
   <meta property="og:title" content="Claude Finance Kit">
-  <meta property="og:description" content="AI-powered Vietnamese stock market analysis for Claude Code, Cursor, and GitHub Copilot">
+  <meta property="og:description" content="Phân tích chứng khoán Việt Nam bằng AI cho Claude Code, Cursor và GitHub Copilot">
   <meta property="og:type" content="website">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="theme-color" content="#0068FF">
@@ -108,12 +108,13 @@
         Claude Finance Kit
       </a>
       <ul class="hidden md:flex items-center gap-6 list-none">
-        <li><a href="#features" class="text-sm font-medium text-ink/60 hover:text-brand transition-colors no-underline">Features</a></li>
-        <li><a href="#platforms" class="text-sm font-medium text-ink/60 hover:text-brand transition-colors no-underline">Platforms</a></li>
-        <li><a href="#install" class="text-sm font-medium text-ink/60 hover:text-brand transition-colors no-underline">Install</a></li>
-        <li><a href="#use-cases" class="text-sm font-medium text-ink/60 hover:text-brand transition-colors no-underline">Use Cases</a></li>
-        <li><a href="#data-sources" class="text-sm font-medium text-ink/60 hover:text-brand transition-colors no-underline">Data</a></li>
-        <li><a href="#get-started" class="inline-flex items-center gap-1.5 px-4 py-2 bg-brand text-white text-sm font-semibold rounded-lg hover:bg-brand-dark transition-colors no-underline">Get Started</a></li>
+        <li><a href="#features" class="text-sm font-medium text-ink/60 hover:text-brand transition-colors no-underline">Tính năng</a></li>
+        <li><a href="#platforms" class="text-sm font-medium text-ink/60 hover:text-brand transition-colors no-underline">Nền tảng</a></li>
+        <li><a href="#install" class="text-sm font-medium text-ink/60 hover:text-brand transition-colors no-underline">Cài đặt</a></li>
+        <li><a href="#use-cases" class="text-sm font-medium text-ink/60 hover:text-brand transition-colors no-underline">Ví dụ</a></li>
+        <li><a href="#prompt-suggestions" class="text-sm font-medium text-ink/60 hover:text-brand transition-colors no-underline">Gợi ý</a></li>
+        <li><a href="#data-sources" class="text-sm font-medium text-ink/60 hover:text-brand transition-colors no-underline">Dữ liệu</a></li>
+        <li><a href="#get-started" class="inline-flex items-center gap-1.5 px-4 py-2 bg-brand text-white text-sm font-semibold rounded-lg hover:bg-brand-dark transition-colors no-underline">Bắt đầu</a></li>
       </ul>
       <button id="hamburger" class="hamburger md:hidden flex flex-col gap-[5px] p-1 bg-transparent border-none cursor-pointer" aria-label="Toggle navigation menu">
         <span class="bg-ink"></span>
@@ -125,12 +126,13 @@
 
   <!-- Mobile Menu -->
   <div id="mobile-menu" class="hidden fixed inset-0 bg-surface/98 backdrop-blur-xl z-40 flex-col items-center justify-center gap-6">
-    <a href="#features" class="mobile-link text-lg font-semibold text-ink no-underline">Features</a>
-    <a href="#platforms" class="mobile-link text-lg font-semibold text-ink no-underline">Platforms</a>
-    <a href="#install" class="mobile-link text-lg font-semibold text-ink no-underline">Install</a>
-    <a href="#use-cases" class="mobile-link text-lg font-semibold text-ink no-underline">Use Cases</a>
-    <a href="#data-sources" class="mobile-link text-lg font-semibold text-ink no-underline">Data Sources</a>
-    <a href="#get-started" class="mobile-link inline-flex items-center gap-1.5 px-6 py-3 bg-brand text-white text-base font-semibold rounded-lg no-underline mt-2">Get Started</a>
+    <a href="#features" class="mobile-link text-lg font-semibold text-ink no-underline">Tính năng</a>
+    <a href="#platforms" class="mobile-link text-lg font-semibold text-ink no-underline">Nền tảng</a>
+    <a href="#install" class="mobile-link text-lg font-semibold text-ink no-underline">Cài đặt</a>
+    <a href="#use-cases" class="mobile-link text-lg font-semibold text-ink no-underline">Ví dụ</a>
+    <a href="#prompt-suggestions" class="mobile-link text-lg font-semibold text-ink no-underline">Gợi ý câu hỏi</a>
+    <a href="#data-sources" class="mobile-link text-lg font-semibold text-ink no-underline">Nguồn dữ liệu</a>
+    <a href="#get-started" class="mobile-link inline-flex items-center gap-1.5 px-6 py-3 bg-brand text-white text-base font-semibold rounded-lg no-underline mt-2">Bắt đầu</a>
   </div>
 
   <!-- ===== 2. HERO ===== -->
@@ -140,25 +142,25 @@
       <div class="animate-on-scroll">
         <div class="inline-flex items-center gap-2 px-4 py-1.5 bg-brand/5 border border-brand/15 rounded-full text-sm font-medium text-brand mb-6">
           <span class="w-1.5 h-1.5 rounded-full bg-up pulse-dot"></span>
-          Open Source &middot; MIT License
+          Mã nguồn mở &middot; Giấy phép MIT
         </div>
         <h1 class="text-4xl md:text-5xl lg:text-[3.5rem] font-extrabold leading-[1.1] tracking-tight mb-5">
-          <span class="bg-gradient-to-r from-brand to-brand-dark bg-clip-text text-transparent">AI-Powered</span> Vietnamese<br>
-          Stock Market Analysis
+          <span class="bg-gradient-to-r from-brand to-brand-dark bg-clip-text text-transparent">Phân tích chứng khoán</span><br>
+          Việt Nam bằng AI
         </h1>
         <p class="text-base md:text-lg text-ink/60 max-w-xl mx-auto mb-8 leading-relaxed">
-          Turn your AI coding assistant into a senior financial analyst. Real-time data from 12+ sources &mdash; fundamentals, technicals, macro, news, and fund analysis.
+          Biến trợ lý AI của bạn thành chuyên gia phân tích tài chính cấp cao. Dữ liệu theo thời gian thực từ 12+ nguồn &mdash; cơ bản, kỹ thuật, vĩ mô, tin tức và quỹ đầu tư.
         </p>
       </div>
 
       <div class="flex gap-3 justify-center flex-wrap mb-10 animate-on-scroll">
         <a href="#get-started" class="inline-flex items-center gap-2 px-7 py-3.5 bg-brand text-white rounded-xl text-base font-semibold hover:bg-brand-dark hover:shadow-lg transition-all no-underline">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 17 10 11 4 5"></polyline><line x1="12" y1="19" x2="20" y2="19"></line></svg>
-          Get Started
+          Bắt đầu ngay
         </a>
         <a href="https://github.com/hongbietcode/claude-finance-kit" target="_blank" rel="noopener" class="inline-flex items-center gap-2 px-7 py-3.5 bg-surface text-ink border border-ink/10 rounded-xl text-base font-semibold hover:border-brand/30 hover:shadow-card transition-all no-underline">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
-          View on GitHub
+          Xem trên GitHub
         </a>
       </div>
 
@@ -171,12 +173,12 @@
           <span class="ml-2 font-mono text-xs text-gray-500">claude code</span>
         </div>
         <div class="px-5 py-5 font-mono text-sm leading-[1.8] min-h-[140px]">
-          <div><span class="text-emerald-400">&gt;</span> <span class="text-gray-200">/marcus-vance "Analyze FPT &mdash; fundamentals, technicals, and recent news"</span></div>
-          <div class="mt-3"><span class="text-gray-500">[marcus-vance]</span> <span class="text-gray-200">Routing to agents...</span></div>
-          <div><span class="text-gray-500">&ensp; &rarr;</span> <span class="text-purple-300">fundamental-analyst</span> <span class="text-gray-500">analyzing financials</span></div>
-          <div><span class="text-gray-500">&ensp; &rarr;</span> <span class="text-purple-300">technical-analyst</span> <span class="text-gray-500">running RSI, MACD, EMA</span></div>
-          <div><span class="text-gray-500">&ensp; &rarr;</span> <span class="text-purple-300">news-sentiment</span> <span class="text-gray-500">crawling CafeF, VnExpress</span></div>
-          <div class="mt-3"><span class="text-emerald-400">&check;</span> <span class="text-gray-200">Analysis complete &mdash; report ready</span><span class="inline-block w-2 h-4 bg-brand cursor-blink align-text-bottom ml-0.5"></span></div>
+          <div><span class="text-emerald-400">&gt;</span> <span class="text-gray-200">/marcus-vance "Phân tích FPT &mdash; cơ bản, kỹ thuật và tin tức gần đây"</span></div>
+          <div class="mt-3"><span class="text-gray-500">[marcus-vance]</span> <span class="text-gray-200">Đang phân tích...</span></div>
+          <div><span class="text-gray-500">&ensp; &rarr;</span> <span class="text-purple-300">fundamental-analyst</span> <span class="text-gray-500">phân tích tài chính</span></div>
+          <div><span class="text-gray-500">&ensp; &rarr;</span> <span class="text-purple-300">technical-analyst</span> <span class="text-gray-500">tính RSI, MACD, EMA</span></div>
+          <div><span class="text-gray-500">&ensp; &rarr;</span> <span class="text-purple-300">news-sentiment</span> <span class="text-gray-500">thu thập tin CafeF, VnExpress</span></div>
+          <div class="mt-3"><span class="text-emerald-400">&check;</span> <span class="text-gray-200">Hoàn tất phân tích &mdash; báo cáo đã sẵn sàng</span><span class="inline-block w-2 h-4 bg-brand cursor-blink align-text-bottom ml-0.5"></span></div>
         </div>
       </div>
 
@@ -184,19 +186,19 @@
       <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-2xl mx-auto animate-on-scroll">
         <div class="bg-th/50 rounded-lg p-3 text-center">
           <div class="text-2xl font-extrabold text-ink">12<span class="text-brand">+</span></div>
-          <div class="text-xs font-medium text-ink/50 mt-0.5">Data Sources</div>
+          <div class="text-xs font-medium text-ink/50 mt-0.5">Nguồn dữ liệu</div>
         </div>
         <div class="bg-th/50 rounded-lg p-3 text-center">
           <div class="text-2xl font-extrabold text-ink">4</div>
-          <div class="text-xs font-medium text-ink/50 mt-0.5">AI Skills</div>
+          <div class="text-xs font-medium text-ink/50 mt-0.5">Kỹ năng AI</div>
         </div>
         <div class="bg-th/50 rounded-lg p-3 text-center">
           <div class="text-2xl font-extrabold text-ink">9</div>
-          <div class="text-xs font-medium text-ink/50 mt-0.5">API Modules</div>
+          <div class="text-xs font-medium text-ink/50 mt-0.5">Module API</div>
         </div>
         <div class="bg-th/50 rounded-lg p-3 text-center">
           <div class="text-2xl font-extrabold text-ink">3</div>
-          <div class="text-xs font-medium text-ink/50 mt-0.5">AI Platforms</div>
+          <div class="text-xs font-medium text-ink/50 mt-0.5">Nền tảng AI</div>
         </div>
       </div>
     </div>
@@ -206,31 +208,31 @@
   <section id="install" class="py-16 md:py-20">
     <div class="max-w-5xl mx-auto px-4">
       <div class="text-center animate-on-scroll">
-        <div class="font-mono text-xs font-medium uppercase tracking-widest text-brand mb-3">How It Works</div>
-        <h2 class="text-2xl md:text-3xl font-extrabold mb-3">Up and running in 60 seconds</h2>
-        <p class="text-ink/60 text-base max-w-xl mx-auto">One command installs skills, agents, and references. Then just ask questions in natural language.</p>
+        <div class="font-mono text-xs font-medium uppercase tracking-widest text-brand mb-3">Cách sử dụng</div>
+        <h2 class="text-2xl md:text-3xl font-extrabold mb-3">Sẵn sàng trong 60 giây</h2>
+        <p class="text-ink/60 text-base max-w-xl mx-auto">Một lệnh duy nhất cài đặt skills, agents và references. Sau đó chỉ cần hỏi bằng ngôn ngữ tự nhiên.</p>
       </div>
       <div class="grid md:grid-cols-3 gap-6 mt-10">
         <div class="bg-surface rounded-xl shadow-card p-6 text-center relative animate-on-scroll">
           <div class="w-14 h-14 rounded-2xl bg-brand/10 flex items-center justify-center mx-auto mb-4">
             <svg class="w-6 h-6 text-brand" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 17 10 11 4 5"></polyline><line x1="12" y1="19" x2="20" y2="19"></line></svg>
           </div>
-          <h3 class="text-lg font-bold mb-2">Install</h3>
-          <p class="text-sm text-ink/60 leading-relaxed"><code class="font-mono text-xs text-brand bg-brand/5 px-2 py-0.5 rounded">npx claude-finance-kit-cli init</code><br>One command. Auto-detects your AI platform.</p>
+          <h3 class="text-lg font-bold mb-2">Cài đặt</h3>
+          <p class="text-sm text-ink/60 leading-relaxed"><code class="font-mono text-xs text-brand bg-brand/5 px-2 py-0.5 rounded">npx claude-finance-kit-cli init</code><br>Một lệnh duy nhất. Tự động nhận diện nền tảng AI.</p>
         </div>
         <div class="bg-surface rounded-xl shadow-card p-6 text-center relative animate-on-scroll" style="transition-delay: 0.1s;">
           <div class="w-14 h-14 rounded-2xl bg-purple-500/10 flex items-center justify-center mx-auto mb-4">
             <svg class="w-6 h-6 text-purple-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a7 7 0 0 1 7 7c0 2.38-1.19 4.47-3 5.74V17a1 1 0 0 1-1 1H9a1 1 0 0 1-1-1v-2.26C6.19 13.47 5 11.38 5 9a7 7 0 0 1 7-7z"></path><line x1="9" y1="21" x2="15" y2="21"></line><line x1="10" y1="24" x2="14" y2="24"></line></svg>
           </div>
-          <h3 class="text-lg font-bold mb-2">Ask</h3>
-          <p class="text-sm text-ink/60 leading-relaxed">Natural language queries: <code class="font-mono text-xs text-brand bg-brand/5 px-2 py-0.5 rounded">/marcus-vance "analyze FPT"</code> or <code class="font-mono text-xs text-brand bg-brand/5 px-2 py-0.5 rounded">"market briefing today"</code></p>
+          <h3 class="text-lg font-bold mb-2">Hỏi</h3>
+          <p class="text-sm text-ink/60 leading-relaxed">Đặt câu hỏi tự nhiên: <code class="font-mono text-xs text-brand bg-brand/5 px-2 py-0.5 rounded">/marcus-vance "phân tích FPT"</code> hoặc <code class="font-mono text-xs text-brand bg-brand/5 px-2 py-0.5 rounded">"thị trường hôm nay"</code></p>
         </div>
         <div class="bg-surface rounded-xl shadow-card p-6 text-center relative animate-on-scroll" style="transition-delay: 0.2s;">
           <div class="w-14 h-14 rounded-2xl bg-up/10 flex items-center justify-center mx-auto mb-4">
             <svg class="w-6 h-6 text-up" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
           </div>
-          <h3 class="text-lg font-bold mb-2">Get Insights</h3>
-          <p class="text-sm text-ink/60 leading-relaxed">Structured analysis with real data &mdash; not hallucinated numbers.</p>
+          <h3 class="text-lg font-bold mb-2">Nhận kết quả</h3>
+          <p class="text-sm text-ink/60 leading-relaxed">Phân tích có cấu trúc với dữ liệu thực &mdash; không bịa đặt số liệu.</p>
         </div>
       </div>
     </div>
@@ -240,15 +242,16 @@
   <section id="platforms" class="py-16 md:py-20">
     <div class="max-w-5xl mx-auto px-4">
       <div class="animate-on-scroll">
-        <div class="font-mono text-xs font-medium uppercase tracking-widest text-brand mb-3">AI Platforms</div>
-        <h2 class="text-2xl md:text-3xl font-extrabold mb-3">Works with your favorite AI assistant</h2>
-        <p class="text-ink/60 text-base max-w-xl">One CLI. Three platforms. Same powerful skills and references.</p>
+        <div class="font-mono text-xs font-medium uppercase tracking-widest text-brand mb-3">Nền tảng AI</div>
+        <h2 class="text-2xl md:text-3xl font-extrabold mb-3">Tương thích với trợ lý AI yêu thích của bạn</h2>
+        <p class="text-ink/60 text-base max-w-xl">Một CLI duy nhất. Ba nền tảng. Cùng một bộ skills và references mạnh mẽ.</p>
       </div>
       <div class="animate-on-scroll mt-8">
         <div class="flex gap-1 bg-th p-1 rounded-lg w-fit mb-6 overflow-x-auto" role="tablist" data-tab-group="platforms">
           <button class="tab-btn active px-5 py-2.5 rounded-md text-sm font-semibold border-none cursor-pointer transition-all whitespace-nowrap" role="tab" data-tab="claude" aria-selected="true" aria-controls="panel-claude">Claude Code</button>
           <button class="tab-btn px-5 py-2.5 rounded-md text-sm font-semibold text-ink/50 bg-transparent border-none cursor-pointer transition-all hover:text-ink whitespace-nowrap" role="tab" data-tab="cursor" aria-selected="false" aria-controls="panel-cursor">Cursor</button>
           <button class="tab-btn px-5 py-2.5 rounded-md text-sm font-semibold text-ink/50 bg-transparent border-none cursor-pointer transition-all hover:text-ink whitespace-nowrap" role="tab" data-tab="copilot" aria-selected="false" aria-controls="panel-copilot">GitHub Copilot</button>
+
         </div>
 
         <!-- Claude Code Tab -->
@@ -260,7 +263,7 @@
               </div>
               <div>
                 <h3 class="text-lg font-bold">Claude Code</h3>
-                <div class="font-mono text-xs text-ink/40">Full agent support</div>
+                <div class="font-mono text-xs text-ink/40">Hỗ trợ đầy đủ agents</div>
               </div>
             </div>
             <div class="flex items-center justify-between gap-3 bg-[#0d1117] rounded-lg px-4 py-3 mb-5 overflow-x-auto">
@@ -270,8 +273,8 @@
             <div class="grid md:grid-cols-2 gap-3">
               <div class="flex items-start gap-2.5"><svg class="w-5 h-5 text-up shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg><span class="text-sm text-ink/70 leading-snug"><strong class="text-ink font-semibold">4 Skills</strong> &mdash; marcus-vance, stock-analysis, market-research, news-sentiment</span></div>
               <div class="flex items-start gap-2.5"><svg class="w-5 h-5 text-up shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg><span class="text-sm text-ink/70 leading-snug"><strong class="text-ink font-semibold">4 Agents</strong> &mdash; lead-analyst, fundamental, technical, macro</span></div>
-              <div class="flex items-start gap-2.5"><svg class="w-5 h-5 text-up shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg><span class="text-sm text-ink/70 leading-snug"><strong class="text-ink font-semibold">9 References</strong> &mdash; API docs, methodology, patterns</span></div>
-              <div class="flex items-start gap-2.5"><svg class="w-5 h-5 text-up shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg><span class="text-sm text-ink/70 leading-snug"><strong class="text-ink font-semibold">CLAUDE.md</strong> auto-configured with full system prompt</span></div>
+              <div class="flex items-start gap-2.5"><svg class="w-5 h-5 text-up shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg><span class="text-sm text-ink/70 leading-snug"><strong class="text-ink font-semibold">9 References</strong> &mdash; tài liệu API, phương pháp luận, mẫu code</span></div>
+              <div class="flex items-start gap-2.5"><svg class="w-5 h-5 text-up shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg><span class="text-sm text-ink/70 leading-snug"><strong class="text-ink font-semibold">CLAUDE.md</strong> tự động cấu hình với system prompt đầy đủ</span></div>
             </div>
           </div>
         </div>
@@ -285,7 +288,7 @@
               </div>
               <div>
                 <h3 class="text-lg font-bold">Cursor</h3>
-                <div class="font-mono text-xs text-ink/40">Rules-based configuration</div>
+                <div class="font-mono text-xs text-ink/40">Cấu hình dựa trên rules</div>
               </div>
             </div>
             <div class="flex items-center justify-between gap-3 bg-[#0d1117] rounded-lg px-4 py-3 mb-5 overflow-x-auto">
@@ -294,9 +297,9 @@
             </div>
             <div class="grid md:grid-cols-2 gap-3">
               <div class="flex items-start gap-2.5"><svg class="w-5 h-5 text-up shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg><span class="text-sm text-ink/70 leading-snug"><strong class="text-ink font-semibold">4 Skills</strong> &mdash; marcus-vance, stock-analysis, market-research, news-sentiment</span></div>
-              <div class="flex items-start gap-2.5"><svg class="w-5 h-5 text-up shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg><span class="text-sm text-ink/70 leading-snug"><strong class="text-ink font-semibold">9 References</strong> &mdash; API docs, methodology, patterns</span></div>
-              <div class="flex items-start gap-2.5"><svg class="w-5 h-5 text-up shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg><span class="text-sm text-ink/70 leading-snug"><strong class="text-ink font-semibold">.cursor/rules/</strong> auto-configured for Cursor AI</span></div>
-              <div class="flex items-start gap-2.5"><svg class="w-5 h-5 text-up shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg><span class="text-sm text-ink/70 leading-snug"><strong class="text-ink font-semibold">No agents</strong> &mdash; skills run directly in Cursor</span></div>
+              <div class="flex items-start gap-2.5"><svg class="w-5 h-5 text-up shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg><span class="text-sm text-ink/70 leading-snug"><strong class="text-ink font-semibold">9 References</strong> &mdash; tài liệu API, phương pháp luận, mẫu code</span></div>
+              <div class="flex items-start gap-2.5"><svg class="w-5 h-5 text-up shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg><span class="text-sm text-ink/70 leading-snug"><strong class="text-ink font-semibold">.cursor/rules/</strong> tự động cấu hình cho Cursor AI</span></div>
+              <div class="flex items-start gap-2.5"><svg class="w-5 h-5 text-up shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg><span class="text-sm text-ink/70 leading-snug"><strong class="text-ink font-semibold">Không có agents</strong> &mdash; skills chạy trực tiếp trong Cursor</span></div>
             </div>
           </div>
         </div>
@@ -310,7 +313,7 @@
               </div>
               <div>
                 <h3 class="text-lg font-bold">GitHub Copilot</h3>
-                <div class="font-mono text-xs text-ink/40">Copilot instructions</div>
+                <div class="font-mono text-xs text-ink/40">Cấu hình Copilot instructions</div>
               </div>
             </div>
             <div class="flex items-center justify-between gap-3 bg-[#0d1117] rounded-lg px-4 py-3 mb-5 overflow-x-auto">
@@ -319,9 +322,9 @@
             </div>
             <div class="grid md:grid-cols-2 gap-3">
               <div class="flex items-start gap-2.5"><svg class="w-5 h-5 text-up shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg><span class="text-sm text-ink/70 leading-snug"><strong class="text-ink font-semibold">4 Skills</strong> &mdash; marcus-vance, stock-analysis, market-research, news-sentiment</span></div>
-              <div class="flex items-start gap-2.5"><svg class="w-5 h-5 text-up shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg><span class="text-sm text-ink/70 leading-snug"><strong class="text-ink font-semibold">9 References</strong> &mdash; API docs, methodology, patterns</span></div>
-              <div class="flex items-start gap-2.5"><svg class="w-5 h-5 text-up shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg><span class="text-sm text-ink/70 leading-snug"><strong class="text-ink font-semibold">.github/copilot/</strong> auto-configured for GitHub Copilot</span></div>
-              <div class="flex items-start gap-2.5"><svg class="w-5 h-5 text-up shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg><span class="text-sm text-ink/70 leading-snug"><strong class="text-ink font-semibold">No agents</strong> &mdash; skills run directly in Copilot</span></div>
+              <div class="flex items-start gap-2.5"><svg class="w-5 h-5 text-up shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg><span class="text-sm text-ink/70 leading-snug"><strong class="text-ink font-semibold">9 References</strong> &mdash; tài liệu API, phương pháp luận, mẫu code</span></div>
+              <div class="flex items-start gap-2.5"><svg class="w-5 h-5 text-up shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg><span class="text-sm text-ink/70 leading-snug"><strong class="text-ink font-semibold">.github/copilot/</strong> tự động cấu hình cho GitHub Copilot</span></div>
+              <div class="flex items-start gap-2.5"><svg class="w-5 h-5 text-up shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg><span class="text-sm text-ink/70 leading-snug"><strong class="text-ink font-semibold">Không có agents</strong> &mdash; skills chạy trực tiếp trong Copilot</span></div>
             </div>
           </div>
         </div>
@@ -333,52 +336,52 @@
   <section id="features" class="py-16 md:py-20">
     <div class="max-w-5xl mx-auto px-4">
       <div class="text-center animate-on-scroll">
-        <div class="font-mono text-xs font-medium uppercase tracking-widest text-brand mb-3">Features</div>
-        <h2 class="text-2xl md:text-3xl font-extrabold mb-3">Everything you need for Vietnamese market analysis</h2>
-        <p class="text-ink/60 text-base max-w-xl mx-auto">From individual stock deep dives to macro economics, all powered by real-time data.</p>
+        <div class="font-mono text-xs font-medium uppercase tracking-widest text-brand mb-3">Tính năng</div>
+        <h2 class="text-2xl md:text-3xl font-extrabold mb-3">Tất cả những gì bạn cần để phân tích thị trường Việt Nam</h2>
+        <p class="text-ink/60 text-base max-w-xl mx-auto">Từ phân tích cổ phiếu đơn lẻ đến kinh tế vĩ mô, tất cả được hỗ trợ bởi dữ liệu theo thời gian thực.</p>
       </div>
       <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-5 mt-10">
         <div class="bg-surface rounded-xl shadow-card p-6 hover:shadow-card-hover hover:-translate-y-1 transition-all animate-on-scroll">
           <div class="w-10 h-10 rounded-lg bg-brand/10 flex items-center justify-center mb-4">
             <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="#0068FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 20V10"></path><path d="M12 20V4"></path><path d="M6 20v-6"></path></svg>
           </div>
-          <h3 class="text-base font-bold mb-2">Stock Analysis</h3>
-          <p class="text-sm text-ink/60 leading-relaxed">Deep dive — valuation, financial health, screening, sentiment, and sector analysis for any Vietnamese stock.</p>
+          <h3 class="text-base font-bold mb-2">Phân tích cổ phiếu</h3>
+          <p class="text-sm text-ink/60 leading-relaxed">Phân tích sâu — định giá, sức khỏe tài chính, sàng lọc, tâm lý và phân tích ngành cho bất kỳ cổ phiếu Việt Nam nào.</p>
         </div>
         <div class="bg-surface rounded-xl shadow-card p-6 hover:shadow-card-hover hover:-translate-y-1 transition-all animate-on-scroll" style="transition-delay: 0.1s;">
           <div class="w-10 h-10 rounded-lg bg-amber-500/10 flex items-center justify-center mb-4">
             <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
           </div>
-          <h3 class="text-base font-bold mb-2">Technical Analysis</h3>
-          <p class="text-sm text-ink/60 leading-relaxed">20+ indicators: SMA, EMA, RSI, MACD, Bollinger Bands, ATR, OBV, and more with automatic signals.</p>
+          <h3 class="text-base font-bold mb-2">Phân tích kỹ thuật</h3>
+          <p class="text-sm text-ink/60 leading-relaxed">20+ chỉ báo: SMA, EMA, RSI, MACD, Bollinger Bands, ATR, OBV và nhiều hơn với tín hiệu tự động.</p>
         </div>
         <div class="bg-surface rounded-xl shadow-card p-6 hover:shadow-card-hover hover:-translate-y-1 transition-all animate-on-scroll" style="transition-delay: 0.2s;">
           <div class="w-10 h-10 rounded-lg bg-up/10 flex items-center justify-center mb-4">
             <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="#01CD6B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
           </div>
-          <h3 class="text-base font-bold mb-2">Market Research</h3>
-          <p class="text-sm text-ink/60 leading-relaxed">VNINDEX/VN30 valuation, sector comparison, top movers, foreign flows, and fund analysis.</p>
+          <h3 class="text-base font-bold mb-2">Nghiên cứu thị trường</h3>
+          <p class="text-sm text-ink/60 leading-relaxed">Định giá VNINDEX/VN30, so sánh ngành, cổ phiếu tăng/giảm mạnh, dòng tiền ngoại và phân tích quỹ.</p>
         </div>
         <div class="bg-surface rounded-xl shadow-card p-6 hover:shadow-card-hover hover:-translate-y-1 transition-all animate-on-scroll" style="transition-delay: 0.1s;">
           <div class="w-10 h-10 rounded-lg bg-purple-500/10 flex items-center justify-center mb-4">
             <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
           </div>
-          <h3 class="text-base font-bold mb-2">Macro Economics</h3>
-          <p class="text-sm text-ink/60 leading-relaxed">GDP, CPI, interest rates, exchange rates, FDI, and trade balance data for Vietnam.</p>
+          <h3 class="text-base font-bold mb-2">Kinh tế vĩ mô</h3>
+          <p class="text-sm text-ink/60 leading-relaxed">Dữ liệu GDP, CPI, lãi suất, tỷ giá, FDI và cán cân thương mại của Việt Nam.</p>
         </div>
         <div class="bg-surface rounded-xl shadow-card p-6 hover:shadow-card-hover hover:-translate-y-1 transition-all animate-on-scroll" style="transition-delay: 0.2s;">
           <div class="w-10 h-10 rounded-lg bg-pink-500/10 flex items-center justify-center mb-4">
             <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="#ec4899" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"></path><path d="M18 14h-8"></path><path d="M15 18h-5"></path><path d="M10 6h8v4h-8V6Z"></path></svg>
           </div>
-          <h3 class="text-base font-bold mb-2">News Sentiment</h3>
-          <p class="text-sm text-ink/60 leading-relaxed">Real-time crawling from CafeF, VnExpress, and Vietnamese financial sites with sentiment classification.</p>
+          <h3 class="text-base font-bold mb-2">Tâm lý tin tức</h3>
+          <p class="text-sm text-ink/60 leading-relaxed">Thu thập tin tức theo thời gian thực từ CafeF, VnExpress và các trang tài chính Việt Nam với phân loại cảm xúc.</p>
         </div>
         <div class="bg-surface rounded-xl shadow-card p-6 hover:shadow-card-hover hover:-translate-y-1 transition-all animate-on-scroll" style="transition-delay: 0.3s;">
           <div class="w-10 h-10 rounded-lg bg-yellow-400/10 flex items-center justify-center mb-4">
             <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
           </div>
-          <h3 class="text-base font-bold mb-2">Fund Analysis</h3>
-          <p class="text-sm text-ink/60 leading-relaxed">58+ mutual funds — NAV tracking, top holdings, industry allocation, and performance comparison.</p>
+          <h3 class="text-base font-bold mb-2">Phân tích quỹ đầu tư</h3>
+          <p class="text-sm text-ink/60 leading-relaxed">58+ quỹ mở — theo dõi NAV, danh mục top, phân bổ ngành và so sánh hiệu suất.</p>
         </div>
       </div>
     </div>
@@ -388,15 +391,17 @@
   <section id="use-cases" class="py-16 md:py-20">
     <div class="max-w-5xl mx-auto px-4">
       <div class="animate-on-scroll">
-        <div class="font-mono text-xs font-medium uppercase tracking-widest text-brand mb-3">Use Cases</div>
-        <h2 class="text-2xl md:text-3xl font-extrabold mb-3">See it in action</h2>
-        <p class="text-ink/60 text-base max-w-xl">Real outputs generated by Claude Code with Claude Finance Kit.</p>
+        <div class="font-mono text-xs font-medium uppercase tracking-widest text-brand mb-3">Ví dụ thực tế</div>
+        <h2 class="text-2xl md:text-3xl font-extrabold mb-3">Xem kết quả thực tế</h2>
+        <p class="text-ink/60 text-base max-w-xl">Kết quả thực tế được tạo bởi Claude Code với Claude Finance Kit.</p>
       </div>
       <div class="animate-on-scroll mt-8">
         <div class="flex gap-1 bg-th p-1 rounded-lg w-fit mb-6 overflow-x-auto" role="tablist" data-tab-group="usecases">
-          <button class="tab-btn active px-4 py-2.5 rounded-md text-sm font-semibold border-none cursor-pointer transition-all whitespace-nowrap" role="tab" data-tab="uc-stock" aria-selected="true" aria-controls="panel-uc-stock">Stock Analysis</button>
-          <button class="tab-btn px-4 py-2.5 rounded-md text-sm font-semibold text-ink/50 bg-transparent border-none cursor-pointer transition-all hover:text-ink whitespace-nowrap" role="tab" data-tab="uc-market" aria-selected="false" aria-controls="panel-uc-market">Market Briefing</button>
-          <button class="tab-btn px-4 py-2.5 rounded-md text-sm font-semibold text-ink/50 bg-transparent border-none cursor-pointer transition-all hover:text-ink whitespace-nowrap" role="tab" data-tab="uc-screen" aria-selected="false" aria-controls="panel-uc-screen">Stock Screening</button>
+          <button class="tab-btn active px-4 py-2.5 rounded-md text-sm font-semibold border-none cursor-pointer transition-all whitespace-nowrap" role="tab" data-tab="uc-stock" aria-selected="true" aria-controls="panel-uc-stock">Nên bán HPG không?</button>
+          <button class="tab-btn px-4 py-2.5 rounded-md text-sm font-semibold text-ink/50 bg-transparent border-none cursor-pointer transition-all hover:text-ink whitespace-nowrap" role="tab" data-tab="uc-market" aria-selected="false" aria-controls="panel-uc-market">Tin tức hôm nay</button>
+          <button class="tab-btn px-4 py-2.5 rounded-md text-sm font-semibold text-ink/50 bg-transparent border-none cursor-pointer transition-all hover:text-ink whitespace-nowrap" role="tab" data-tab="uc-screen" aria-selected="false" aria-controls="panel-uc-screen">3 cổ phiếu 5 năm tới</button>
+          <button class="tab-btn px-4 py-2.5 rounded-md text-sm font-semibold text-ink/50 bg-transparent border-none cursor-pointer transition-all hover:text-ink whitespace-nowrap" role="tab" data-tab="uc-compare" aria-selected="false" aria-controls="panel-uc-compare">FPT hay MWG?</button>
+          <button class="tab-btn px-4 py-2.5 rounded-md text-sm font-semibold text-ink/50 bg-transparent border-none cursor-pointer transition-all hover:text-ink whitespace-nowrap" role="tab" data-tab="uc-fund" aria-selected="false" aria-controls="panel-uc-fund">3 chứng chỉ quỹ tốt</button>
         </div>
 
         <!-- Stock Analysis -->
@@ -406,8 +411,8 @@
             <div class="flex items-center gap-3 px-5 py-4 border-t border-ink/5">
               <span class="inline-block px-2.5 py-1 rounded-full text-[11px] font-bold uppercase tracking-wide bg-up/15 text-up">Output</span>
               <div>
-                <div class="text-sm font-semibold text-ink">Fundamental Analysis — HPG (Hoa Phat Group)</div>
-                <div class="text-xs text-ink/50 mt-0.5">Revenue, earnings, margins, valuation ratios, financial health scoring, and growth catalysts</div>
+                <div class="text-sm font-semibold text-ink">"Tôi mua HPG 26,600đ, bây giờ có nên bán không?"</div>
+                <div class="text-xs text-ink/50 mt-0.5">Phân tích cơ bản HPG: doanh thu, LNST, biên lợi nhuận, P/E, P/B, ROE — kèm khuyến nghị giữ hay bán</div>
               </div>
             </div>
           </div>
@@ -420,8 +425,8 @@
             <div class="flex items-center gap-3 px-5 py-4 border-t border-ink/5">
               <span class="inline-block px-2.5 py-1 rounded-full text-[11px] font-bold uppercase tracking-wide bg-brand/15 text-brand">Output</span>
               <div>
-                <div class="text-sm font-semibold text-ink">Daily Market Briefing — April 1, 2026</div>
-                <div class="text-xs text-ink/50 mt-0.5">VN-Index, global macro context, Fed policy, oil &amp; FX, international indices</div>
+                <div class="text-sm font-semibold text-ink">"Tin tức thị trường hôm nay"</div>
+                <div class="text-xs text-ink/50 mt-0.5">VN-Index vượt 1,700 điểm, Fed giữ lãi suất, dầu thô giảm, USD/VND ổn định — tóm tắt vĩ mô và chứng khoán quốc tế</div>
               </div>
             </div>
           </div>
@@ -430,12 +435,40 @@
         <!-- Stock Screening -->
         <div class="tab-panel hidden" role="tabpanel" id="panel-uc-screen" data-panel="uc-screen">
           <div class="rounded-xl overflow-hidden shadow-card bg-surface border border-ink/5 hover:-translate-y-1 hover:shadow-card-hover transition-all">
-            <img src="images/market-research.png" alt="Top 3 long-term stock screening — CAGR, composite scores, buy ratings, 5-year price performance chart" loading="lazy" class="w-full h-auto block">
+            <img src="images/market-research.png" alt="Sàng lọc top 3 cổ phiếu dài hạn — CAGR, điểm tổng hợp, khuyến nghị mua, biểu đồ hiệu suất giá 5 năm" loading="lazy" class="w-full h-auto block">
             <div class="flex items-center gap-3 px-5 py-4 border-t border-ink/5">
               <span class="inline-block px-2.5 py-1 rounded-full text-[11px] font-bold uppercase tracking-wide bg-up/15 text-up">Output</span>
               <div>
-                <div class="text-sm font-semibold text-ink">Stock Screening — Top 3 Long-term Investment Picks</div>
-                <div class="text-xs text-ink/50 mt-0.5">CAGR ranking, composite scoring, buy/hold ratings, 5-year price performance comparison</div>
+                <div class="text-sm font-semibold text-ink">"Tìm cho tôi 3 cổ phiếu để đầu tư 5 năm tới"</div>
+                <div class="text-xs text-ink/50 mt-0.5">Sàng lọc đầu tư dài hạn: FPT, ACB, MBB — CAGR lịch sử 21–23%/năm, điểm tổng hợp 8.5–8.6/10, target 5 năm</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Compare Stock -->
+        <div class="tab-panel hidden" role="tabpanel" id="panel-uc-compare" data-panel="uc-compare">
+          <div class="rounded-xl overflow-hidden shadow-card bg-surface border border-ink/5 hover:-translate-y-1 hover:shadow-card-hover transition-all">
+            <img src="images/compare-stock.png" alt="So sánh cổ phiếu HOSE và MWG — định giá, tăng trưởng, sức khỏe tài chính, khuyến nghị đầu tư" loading="lazy" class="w-full h-auto block">
+            <div class="flex items-center gap-3 px-5 py-4 border-t border-ink/5">
+              <span class="inline-block px-2.5 py-1 rounded-full text-[11px] font-bold uppercase tracking-wide bg-purple-500/15 text-purple-500">Output</span>
+              <div>
+                <div class="text-sm font-semibold text-ink">"Nên đầu tư FPT hay MWG?"</div>
+                <div class="text-xs text-ink/50 mt-0.5">So sánh song song hai cổ phiếu: định giá, tăng trưởng, sức khỏe tài chính — kèm khuyến nghị chọn cổ phiếu nào</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Fund Analysis -->
+        <div class="tab-panel hidden" role="tabpanel" id="panel-uc-fund" data-panel="uc-fund">
+          <div class="rounded-xl overflow-hidden shadow-card bg-surface border border-ink/5 hover:-translate-y-1 hover:shadow-card-hover transition-all">
+            <img src="images/fund-analytic.png" alt="Phân tích quỹ DCDS — tổng tài sản, hiệu suất NAV, top danh mục, phân bổ ngành" loading="lazy" class="w-full h-auto block">
+            <div class="flex items-center gap-3 px-5 py-4 border-t border-ink/5">
+              <span class="inline-block px-2.5 py-1 rounded-full text-[11px] font-bold uppercase tracking-wide bg-amber-500/15 text-amber-500">Output</span>
+              <div>
+                <div class="text-sm font-semibold text-ink">"Tìm cho tôi 3 chứng chỉ quỹ tốt nhất để đầu tư"</div>
+                <div class="text-xs text-ink/50 mt-0.5">Phân tích quỹ DCDS (Dragon Capital): NAV +89.49%, tổng tài sản 191,894 tỷ, top danh mục và phân bổ ngành</div>
               </div>
             </div>
           </div>
@@ -444,13 +477,105 @@
     </div>
   </section>
 
+  <!-- ===== 7. PROMPT SUGGESTIONS ===== -->
+  <section id="prompt-suggestions" class="py-16 md:py-20 bg-th/30">
+    <div class="max-w-5xl mx-auto px-4">
+      <div class="text-center animate-on-scroll">
+        <div class="font-mono text-xs font-medium uppercase tracking-widest text-brand mb-3">Gợi ý câu hỏi</div>
+        <h2 class="text-2xl md:text-3xl font-extrabold mb-3">Hỏi gì cũng được — bằng tiếng Việt</h2>
+        <p class="text-ink/60 text-base max-w-xl mx-auto">Sao chép và dán vào Claude Code, Cursor hoặc GitHub Copilot để bắt đầu ngay.</p>
+      </div>
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-3 mt-10">
+
+        <button class="prompt-copy w-full text-left bg-surface rounded-xl px-5 py-4 hover:shadow-card border border-ink/5 hover:border-brand/20 transition-all cursor-pointer group animate-on-scroll" data-copy='/marcus-vance "Nên đầu tư FPT hay MWG? So sánh và cho tôi khuyến nghị"'>
+          <div class="flex items-start gap-3">
+            <div class="w-8 h-8 rounded-lg bg-purple-500/10 flex items-center justify-center shrink-0 mt-0.5">
+              <svg class="w-4 h-4 text-purple-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 20V10"></path><path d="M12 20V4"></path><path d="M6 20v-6"></path></svg>
+            </div>
+            <div>
+              <div class="text-sm font-semibold text-ink group-hover:text-brand transition-colors">"Nên đầu tư FPT hay MWG?"</div>
+              <div class="text-xs text-ink/50 mt-1 leading-relaxed">So sánh và cho tôi khuyến nghị</div>
+              <div class="mt-2"><span class="font-mono text-[11px] text-brand bg-brand/5 px-2 py-0.5 rounded">/marcus-vance</span></div>
+            </div>
+          </div>
+        </button>
+
+        <button class="prompt-copy w-full text-left bg-surface rounded-xl px-5 py-4 hover:shadow-card border border-ink/5 hover:border-brand/20 transition-all cursor-pointer group animate-on-scroll" style="transition-delay:0.05s" data-copy='/marcus-vance "Tìm cho tôi 3 chứng chỉ quỹ tốt nhất để đầu tư"'>
+          <div class="flex items-start gap-3">
+            <div class="w-8 h-8 rounded-lg bg-amber-500/10 flex items-center justify-center shrink-0 mt-0.5">
+              <svg class="w-4 h-4 text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+            </div>
+            <div>
+              <div class="text-sm font-semibold text-ink group-hover:text-brand transition-colors">"Tìm cho tôi 3 chứng chỉ quỹ tốt nhất"</div>
+              <div class="text-xs text-ink/50 mt-1 leading-relaxed">để đầu tư</div>
+              <div class="mt-2"><span class="font-mono text-[11px] text-brand bg-brand/5 px-2 py-0.5 rounded">/marcus-vance</span></div>
+            </div>
+          </div>
+        </button>
+
+        <button class="prompt-copy w-full text-left bg-surface rounded-xl px-5 py-4 hover:shadow-card border border-ink/5 hover:border-brand/20 transition-all cursor-pointer group animate-on-scroll" style="transition-delay:0.1s" data-copy='/marcus-vance "Tin tức thị trường hôm nay"'>
+          <div class="flex items-start gap-3">
+            <div class="w-8 h-8 rounded-lg bg-brand/10 flex items-center justify-center shrink-0 mt-0.5">
+              <svg class="w-4 h-4 text-brand" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+            </div>
+            <div>
+              <div class="text-sm font-semibold text-ink group-hover:text-brand transition-colors">"Tin tức thị trường hôm nay"</div>
+              <div class="text-xs text-ink/50 mt-1 leading-relaxed">VN-Index, vĩ mô, chứng khoán quốc tế</div>
+              <div class="mt-2"><span class="font-mono text-[11px] text-brand bg-brand/5 px-2 py-0.5 rounded">/marcus-vance</span></div>
+            </div>
+          </div>
+        </button>
+
+        <button class="prompt-copy w-full text-left bg-surface rounded-xl px-5 py-4 hover:shadow-card border border-ink/5 hover:border-brand/20 transition-all cursor-pointer group animate-on-scroll" style="transition-delay:0.15s" data-copy='/marcus-vance "Tìm cho tôi 3 cổ phiếu để đầu tư 5 năm tới"'>
+          <div class="flex items-start gap-3">
+            <div class="w-8 h-8 rounded-lg bg-up/10 flex items-center justify-center shrink-0 mt-0.5">
+              <svg class="w-4 h-4 text-up" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+            </div>
+            <div>
+              <div class="text-sm font-semibold text-ink group-hover:text-brand transition-colors">"Tìm cho tôi 3 cổ phiếu để đầu tư 5 năm tới"</div>
+              <div class="text-xs text-ink/50 mt-1 leading-relaxed">Sàng lọc dài hạn với CAGR, điểm tổng hợp</div>
+              <div class="mt-2"><span class="font-mono text-[11px] text-brand bg-brand/5 px-2 py-0.5 rounded">/marcus-vance</span></div>
+            </div>
+          </div>
+        </button>
+
+        <button class="prompt-copy w-full text-left bg-surface rounded-xl px-5 py-4 hover:shadow-card border border-ink/5 hover:border-brand/20 transition-all cursor-pointer group animate-on-scroll" style="transition-delay:0.2s" data-copy='/marcus-vance "Tôi mua HPG 26,600đ, bây giờ có nên bán không?"'>
+          <div class="flex items-start gap-3">
+            <div class="w-8 h-8 rounded-lg bg-down/10 flex items-center justify-center shrink-0 mt-0.5">
+              <svg class="w-4 h-4 text-down" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+            </div>
+            <div>
+              <div class="text-sm font-semibold text-ink group-hover:text-brand transition-colors">"Tôi mua HPG 26,600đ, bây giờ có nên bán không?"</div>
+              <div class="text-xs text-ink/50 mt-1 leading-relaxed">Phân tích định giá, kỹ thuật và khuyến nghị</div>
+              <div class="mt-2"><span class="font-mono text-[11px] text-brand bg-brand/5 px-2 py-0.5 rounded">/marcus-vance</span></div>
+            </div>
+          </div>
+        </button>
+
+        <button class="prompt-copy w-full text-left bg-surface rounded-xl px-5 py-4 hover:shadow-card border border-ink/5 hover:border-brand/20 transition-all cursor-pointer group animate-on-scroll" style="transition-delay:0.25s" data-copy='/marcus-vance "Ngành ngân hàng Việt Nam có đang hấp dẫn để đầu tư không?"'>
+          <div class="flex items-start gap-3">
+            <div class="w-8 h-8 rounded-lg bg-pink-500/10 flex items-center justify-center shrink-0 mt-0.5">
+              <svg class="w-4 h-4 text-pink-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
+            </div>
+            <div>
+              <div class="text-sm font-semibold text-ink group-hover:text-brand transition-colors">"Ngành ngân hàng VN có hấp dẫn để đầu tư không?"</div>
+              <div class="text-xs text-ink/50 mt-1 leading-relaxed">Phân tích định giá ngành, so sánh các cổ phiếu ngân hàng</div>
+              <div class="mt-2"><span class="font-mono text-[11px] text-brand bg-brand/5 px-2 py-0.5 rounded">/marcus-vance</span></div>
+            </div>
+          </div>
+        </button>
+
+      </div>
+    </div>
+  </section>
+
   <!-- ===== 7. DATA SOURCES ===== -->
   <section id="data-sources" class="py-16 md:py-20">
     <div class="max-w-5xl mx-auto px-4">
       <div class="text-center animate-on-scroll">
-        <div class="font-mono text-xs font-medium uppercase tracking-widest text-brand mb-3">Data Sources</div>
-        <h2 class="text-2xl md:text-3xl font-extrabold mb-3">12+ real-time data providers</h2>
-        <p class="text-ink/60 text-base max-w-xl mx-auto">Vietnamese stocks, global equities, crypto, macro, mutual funds, commodities, and web search.</p>
+        <div class="font-mono text-xs font-medium uppercase tracking-widest text-brand mb-3">Nguồn dữ liệu</div>
+        <h2 class="text-2xl md:text-3xl font-extrabold mb-3">12+ nhà cung cấp dữ liệu thời gian thực</h2>
+        <p class="text-ink/60 text-base max-w-xl mx-auto">Cổ phiếu Việt Nam, chứng khoán quốc tế, tiền mã hóa, vĩ mô, quỹ mở, hàng hóa và tìm kiếm web.</p>
       </div>
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-10">
         <div class="bg-surface rounded-xl shadow-card p-5 hover:shadow-card-hover transition-shadow animate-on-scroll">
@@ -458,84 +583,84 @@
             <span class="font-mono text-sm font-semibold">VCI</span>
             <span class="text-[11px] font-semibold px-2 py-0.5 rounded bg-brand/10 text-brand uppercase tracking-wide">Stock</span>
           </div>
-          <p class="text-xs text-ink/50 leading-relaxed">Default provider — full VN stock data, financials, company info</p>
+          <p class="text-xs text-ink/50 leading-relaxed">Nguồn mặc định — đầy đủ dữ liệu cổ phiếu VN, tài chính, thông tin công ty</p>
         </div>
         <div class="bg-surface rounded-xl shadow-card p-5 hover:shadow-card-hover transition-shadow animate-on-scroll" style="transition-delay: 0.05s;">
           <div class="flex items-center justify-between mb-2">
             <span class="font-mono text-sm font-semibold">KBS</span>
             <span class="text-[11px] font-semibold px-2 py-0.5 rounded bg-brand/10 text-brand uppercase tracking-wide">Stock</span>
           </div>
-          <p class="text-xs text-ink/50 leading-relaxed">Fallback provider — same VN coverage as VCI</p>
+          <p class="text-xs text-ink/50 leading-relaxed">Nguồn dự phòng — cùng phạm vi dữ liệu VN như VCI</p>
         </div>
         <div class="bg-surface rounded-xl shadow-card p-5 hover:shadow-card-hover transition-shadow animate-on-scroll" style="transition-delay: 0.1s;">
           <div class="flex items-center justify-between mb-2">
             <span class="font-mono text-sm font-semibold">MAS</span>
             <span class="text-[11px] font-semibold px-2 py-0.5 rounded bg-brand/10 text-brand uppercase tracking-wide">Stock</span>
           </div>
-          <p class="text-xs text-ink/50 leading-relaxed">Quote, intraday, financials, price depth</p>
+          <p class="text-xs text-ink/50 leading-relaxed">Báo giá, intraday, tài chính, độ sâu thị trường</p>
         </div>
         <div class="bg-surface rounded-xl shadow-card p-5 hover:shadow-card-hover transition-shadow animate-on-scroll" style="transition-delay: 0.15s;">
           <div class="flex items-center justify-between mb-2">
             <span class="font-mono text-sm font-semibold">TVS</span>
             <span class="text-[11px] font-semibold px-2 py-0.5 rounded bg-brand/10 text-brand uppercase tracking-wide">Stock</span>
           </div>
-          <p class="text-xs text-ink/50 leading-relaxed">Company overview data for VN stocks</p>
+          <p class="text-xs text-ink/50 leading-relaxed">Dữ liệu tổng quan công ty cho cổ phiếu VN</p>
         </div>
         <div class="bg-surface rounded-xl shadow-card p-5 hover:shadow-card-hover transition-shadow animate-on-scroll" style="transition-delay: 0.05s;">
           <div class="flex items-center justify-between mb-2">
             <span class="font-mono text-sm font-semibold">VDS</span>
             <span class="text-[11px] font-semibold px-2 py-0.5 rounded bg-brand/10 text-brand uppercase tracking-wide">Stock</span>
           </div>
-          <p class="text-xs text-ink/50 leading-relaxed">Intraday trading data with auto-cookie</p>
+          <p class="text-xs text-ink/50 leading-relaxed">Dữ liệu giao dịch intraday với tự động cookie</p>
         </div>
         <div class="bg-surface rounded-xl shadow-card p-5 hover:shadow-card-hover transition-shadow animate-on-scroll" style="transition-delay: 0.1s;">
           <div class="flex items-center justify-between mb-2">
             <span class="font-mono text-sm font-semibold">FMP</span>
             <span class="text-[11px] font-semibold px-2 py-0.5 rounded bg-brand/10 text-brand uppercase tracking-wide">Stock</span>
           </div>
-          <p class="text-xs text-ink/50 leading-relaxed">Global stocks — quote, company, financials (API key)</p>
+          <p class="text-xs text-ink/50 leading-relaxed">Cổ phiếu toàn cầu — báo giá, công ty, tài chính (cần API key)</p>
         </div>
         <div class="bg-surface rounded-xl shadow-card p-5 hover:shadow-card-hover transition-shadow animate-on-scroll" style="transition-delay: 0.15s;">
           <div class="flex items-center justify-between mb-2">
             <span class="font-mono text-sm font-semibold">BINANCE</span>
             <span class="text-[11px] font-semibold px-2 py-0.5 rounded bg-yellow-400/10 text-yellow-500 uppercase tracking-wide">Crypto</span>
           </div>
-          <p class="text-xs text-ink/50 leading-relaxed">Crypto — history, intraday, depth (no API key)</p>
+          <p class="text-xs text-ink/50 leading-relaxed">Tiền mã hóa — lịch sử, intraday, độ sâu (không cần API key)</p>
         </div>
         <div class="bg-surface rounded-xl shadow-card p-5 hover:shadow-card-hover transition-shadow animate-on-scroll" style="transition-delay: 0.2s;">
           <div class="flex items-center justify-between mb-2">
             <span class="font-mono text-sm font-semibold">VND</span>
             <span class="text-[11px] font-semibold px-2 py-0.5 rounded bg-sky-400/10 text-sky-500 uppercase tracking-wide">Market</span>
           </div>
-          <p class="text-xs text-ink/50 leading-relaxed">Market P/E, P/B, top movers for VNINDEX</p>
+          <p class="text-xs text-ink/50 leading-relaxed">P/E, P/B thị trường, cổ phiếu tăng/giảm mạnh VNINDEX</p>
         </div>
         <div class="bg-surface rounded-xl shadow-card p-5 hover:shadow-card-hover transition-shadow animate-on-scroll" style="transition-delay: 0.1s;">
           <div class="flex items-center justify-between mb-2">
             <span class="font-mono text-sm font-semibold">MBK</span>
             <span class="text-[11px] font-semibold px-2 py-0.5 rounded bg-amber-500/10 text-amber-500 uppercase tracking-wide">Macro</span>
           </div>
-          <p class="text-xs text-ink/50 leading-relaxed">GDP, CPI, interest rates, FDI, trade balance</p>
+          <p class="text-xs text-ink/50 leading-relaxed">GDP, CPI, lãi suất, FDI, cán cân thương mại</p>
         </div>
         <div class="bg-surface rounded-xl shadow-card p-5 hover:shadow-card-hover transition-shadow animate-on-scroll" style="transition-delay: 0.15s;">
           <div class="flex items-center justify-between mb-2">
             <span class="font-mono text-sm font-semibold">FMARKET</span>
             <span class="text-[11px] font-semibold px-2 py-0.5 rounded bg-purple-500/10 text-purple-500 uppercase tracking-wide">Fund</span>
           </div>
-          <p class="text-xs text-ink/50 leading-relaxed">58+ mutual funds with NAV, holdings, allocation</p>
+          <p class="text-xs text-ink/50 leading-relaxed">58+ quỹ mở với NAV, danh mục và phân bổ</p>
         </div>
         <div class="bg-surface rounded-xl shadow-card p-5 hover:shadow-card-hover transition-shadow animate-on-scroll" style="transition-delay: 0.2s;">
           <div class="flex items-center justify-between mb-2">
             <span class="font-mono text-sm font-semibold">SPL</span>
             <span class="text-[11px] font-semibold px-2 py-0.5 rounded bg-up/10 text-up uppercase tracking-wide">Commodity</span>
           </div>
-          <p class="text-xs text-ink/50 leading-relaxed">Gold, oil, steel, gas, agricultural commodities</p>
+          <p class="text-xs text-ink/50 leading-relaxed">Vàng, dầu, thép, khí đốt, nông sản</p>
         </div>
         <div class="bg-surface rounded-xl shadow-card p-5 hover:shadow-card-hover transition-shadow animate-on-scroll" style="transition-delay: 0.25s;">
           <div class="flex items-center justify-between mb-2">
             <span class="font-mono text-sm font-semibold">Perplexity</span>
             <span class="text-[11px] font-semibold px-2 py-0.5 rounded bg-pink-500/10 text-pink-500 uppercase tracking-wide">Search</span>
           </div>
-          <p class="text-xs text-ink/50 leading-relaxed">Web search via Perplexity API (API key)</p>
+          <p class="text-xs text-ink/50 leading-relaxed">Tìm kiếm web qua Perplexity API (cần API key)</p>
         </div>
       </div>
     </div>
@@ -544,24 +669,24 @@
   <!-- ===== 8. PYTHON LIBRARY ===== -->
   <section id="python-library" class="py-16 md:py-20">
     <div class="max-w-5xl mx-auto px-4">
-      <div class="grid md:grid-cols-2 gap-10 items-start">
+      <div class="grid md:grid-cols-2 gap-10 items-start overflow-hidden">
         <div class="animate-on-scroll">
           <div class="inline-flex items-center gap-1.5 px-3 py-1 bg-up/10 border border-up/20 rounded-md text-xs font-semibold text-up mb-5">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
             Python 3.10+
           </div>
-          <h3 class="text-xl font-bold mb-3">Also available as a Python library</h3>
-          <p class="text-ink/60 text-sm leading-relaxed mb-5">Use Claude Finance Kit directly in your Python scripts, Jupyter notebooks, or data pipelines. Full API access to all 12+ data sources.</p>
+          <h3 class="text-xl font-bold mb-3">Cũng có sẵn dưới dạng thư viện Python</h3>
+          <p class="text-ink/60 text-sm leading-relaxed mb-5">Sử dụng Claude Finance Kit trực tiếp trong script Python, Jupyter notebook hoặc data pipeline. Truy cập đầy đủ API cho 12+ nguồn dữ liệu.</p>
           <div class="flex items-center justify-between gap-3 bg-[#0d1117] rounded-lg px-4 py-3 mb-5 overflow-x-auto">
             <code class="font-mono text-sm text-blue-300 whitespace-nowrap">pip install claude-finance-kit</code>
             <button class="copy-btn shrink-0 px-3 py-1.5 bg-white/10 border border-white/10 text-gray-400 rounded-md text-xs font-medium cursor-pointer hover:bg-brand hover:text-white hover:border-brand transition-all" data-copy="pip install claude-finance-kit">Copy</button>
           </div>
           <div class="flex gap-4">
             <a href="https://pypi.org/project/claude-finance-kit/" target="_blank" rel="noopener" class="text-sm font-semibold text-brand hover:text-brand-dark transition-colors no-underline inline-flex items-center gap-1">PyPI &rarr;</a>
-            <a href="https://github.com/hongbietcode/claude-finance-kit" target="_blank" rel="noopener" class="text-sm font-semibold text-brand hover:text-brand-dark transition-colors no-underline inline-flex items-center gap-1">Documentation &rarr;</a>
+            <a href="https://github.com/hongbietcode/claude-finance-kit" target="_blank" rel="noopener" class="text-sm font-semibold text-brand hover:text-brand-dark transition-colors no-underline inline-flex items-center gap-1">Tài liệu &rarr;</a>
           </div>
         </div>
-        <div class="animate-on-scroll" style="transition-delay: 0.1s;">
+        <div class="animate-on-scroll min-w-0" style="transition-delay: 0.1s;">
           <div class="bg-[#0d1117] rounded-xl overflow-hidden shadow-card">
             <div class="flex items-center justify-between px-5 py-3 bg-white/[0.02] border-b border-white/[0.06]">
               <span class="font-mono text-xs text-gray-500">quick-start.py</span>
@@ -602,7 +727,7 @@ gdp = macro.gdp(period="quarter")'>Copy</button>
   <section id="get-started" class="py-16 md:py-20 bg-gradient-to-br from-brand to-brand-dark text-white text-center">
     <div class="max-w-5xl mx-auto px-4">
       <div class="animate-on-scroll">
-        <h2 class="text-2xl md:text-3xl font-extrabold mb-8 leading-tight">Start analyzing the Vietnamese market<br>in 60 seconds</h2>
+        <h2 class="text-2xl md:text-3xl font-extrabold mb-8 leading-tight">Bắt đầu phân tích thị trường Việt Nam<br>trong 60 giây</h2>
         <div class="flex flex-col sm:flex-row gap-3 justify-center items-center mb-6">
           <button class="cta-copy-btn flex items-center gap-3 px-6 py-3.5 bg-white/10 border border-white/20 rounded-xl text-white text-sm font-semibold cursor-pointer hover:bg-white/20 hover:-translate-y-0.5 transition-all" data-copy="npx claude-finance-kit-cli init --ai claude">
             <svg class="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 17 10 11 4 5"></polyline><line x1="12" y1="19" x2="20" y2="19"></line></svg>
@@ -627,7 +752,7 @@ gdp = macro.gdp(period="quarter")'>Copy</button>
           </button>
         </div>
         <a href="https://github.com/hongbietcode/claude-finance-kit#readme" target="_blank" rel="noopener" class="inline-flex items-center gap-1.5 text-sm font-semibold text-white/80 hover:text-white transition-colors no-underline">
-          Read the docs
+          Đọc tài liệu
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
         </a>
       </div>
@@ -643,11 +768,11 @@ gdp = macro.gdp(period="quarter")'>Copy</button>
             <div class="w-6 h-6 rounded-[5px] bg-gradient-to-br from-brand to-brand-dark flex items-center justify-center text-white text-[11px] font-bold">C</div>
             Claude Finance Kit
           </div>
-          <p class="text-sm text-ink/40 max-w-xs leading-relaxed">AI-powered Vietnamese stock market analysis for Claude Code, Cursor, and GitHub Copilot.</p>
+          <p class="text-sm text-ink/40 max-w-xs leading-relaxed">Phân tích chứng khoán Việt Nam bằng AI cho Claude Code, Cursor và GitHub Copilot.</p>
         </div>
         <div class="flex gap-10">
           <div>
-            <h4 class="text-xs font-semibold text-ink/50 uppercase tracking-wider mb-3">Resources</h4>
+            <h4 class="text-xs font-semibold text-ink/50 uppercase tracking-wider mb-3">Tài nguyên</h4>
             <ul class="space-y-2 list-none">
               <li><a href="https://github.com/hongbietcode/claude-finance-kit" target="_blank" rel="noopener" class="text-sm text-ink/40 hover:text-brand transition-colors no-underline">GitHub</a></li>
               <li><a href="https://www.npmjs.com/package/claude-finance-kit-cli" target="_blank" rel="noopener" class="text-sm text-ink/40 hover:text-brand transition-colors no-underline">npm</a></li>
@@ -655,9 +780,9 @@ gdp = macro.gdp(period="quarter")'>Copy</button>
             </ul>
           </div>
           <div>
-            <h4 class="text-xs font-semibold text-ink/50 uppercase tracking-wider mb-3">Docs</h4>
+            <h4 class="text-xs font-semibold text-ink/50 uppercase tracking-wider mb-3">Tài liệu</h4>
             <ul class="space-y-2 list-none">
-              <li><a href="https://github.com/hongbietcode/claude-finance-kit#readme" target="_blank" rel="noopener" class="text-sm text-ink/40 hover:text-brand transition-colors no-underline">Documentation</a></li>
+              <li><a href="https://github.com/hongbietcode/claude-finance-kit#readme" target="_blank" rel="noopener" class="text-sm text-ink/40 hover:text-brand transition-colors no-underline">Hướng dẫn</a></li>
               <li><a href="https://github.com/hongbietcode/claude-finance-kit/blob/main/LICENSE" target="_blank" rel="noopener" class="text-sm text-ink/40 hover:text-brand transition-colors no-underline">License (MIT)</a></li>
             </ul>
           </div>
@@ -665,13 +790,13 @@ gdp = macro.gdp(period="quarter")'>Copy</button>
       </div>
       <div class="pt-6 border-t border-ink/5 flex flex-col sm:flex-row justify-between items-center gap-3">
         <p class="text-xs text-gray-400">Made by <a href="https://github.com/hongbietcode" target="_blank" rel="noopener" class="text-brand hover:text-brand-dark transition-colors no-underline">hongbietcode</a></p>
-        <p class="text-xs text-gray-400">For reference only. Not investment advice.</p>
+        <p class="text-xs text-gray-400">Chỉ mang tính tham khảo. Không phải lời khuyên đầu tư.</p>
       </div>
     </div>
   </footer>
 
   <!-- Toast -->
-  <div id="toast" class="fixed bottom-8 left-1/2 -translate-x-1/2 translate-y-20 bg-up text-white px-6 py-2.5 rounded-lg text-sm font-semibold z-[10000] opacity-0 transition-all duration-300 pointer-events-none">Copied!</div>
+  <div id="toast" class="fixed bottom-8 left-1/2 -translate-x-1/2 translate-y-20 bg-up text-white px-6 py-2.5 rounded-lg text-sm font-semibold z-[10000] opacity-0 transition-all duration-300 pointer-events-none">Đã sao chép!</div>
 
   <script>
     (function() {
@@ -772,7 +897,7 @@ gdp = macro.gdp(period="quarter")'>Copy</button>
       });
 
       function showToast(msg) {
-        toast.textContent = msg || 'Copied!';
+        toast.textContent = msg || 'Đã sao chép!';
         toast.style.opacity = '1';
         toast.style.transform = 'translateX(-50%) translateY(0)';
         clearTimeout(toastTimeout);
