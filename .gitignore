@@ -19,3 +19,4 @@ uv.lock
 cli/node_modules/
 cli/dist/
 .claude/
+.vercel/
