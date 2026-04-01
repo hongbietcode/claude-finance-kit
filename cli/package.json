@@ -1,6 +1,6 @@
 {
     "name": "claude-finance-kit-cli",
-    "version": "0.1.16",
+    "version": "0.1.17",
     "description": "CLI to install claude-finance-kit plugin for AI coding assistants",
     "type": "module",
     "bin": {
