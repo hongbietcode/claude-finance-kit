@@ -1,1 +1,1 @@
-/Users/huutri/code/claude-finance-kit/src/plugin/references/orchestration-protocol.md
+/Users/huutri/code/claude-finance-kit/plugin/references/orchestration-protocol.md

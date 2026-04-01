@@ -1,1 +1,1 @@
-/Users/huutri/code/claude-finance-kit/src/plugin/references/analysis-methodology.md
+/Users/huutri/code/claude-finance-kit/plugin/references/analysis-methodology.md

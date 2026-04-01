@@ -1,1 +1,1 @@
-/Users/huutri/code/claude-finance-kit/src/plugin/references/html-report-styles.md
+/Users/huutri/code/claude-finance-kit/plugin/references/html-report-styles.md

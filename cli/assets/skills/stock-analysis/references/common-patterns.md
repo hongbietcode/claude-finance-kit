@@ -1,1 +1,1 @@
-/Users/huutri/code/claude-finance-kit/src/plugin/references/common-patterns.md
+/Users/huutri/code/claude-finance-kit/plugin/references/common-patterns.md

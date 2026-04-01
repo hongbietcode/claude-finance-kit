@@ -5,7 +5,7 @@ import { fileURLToPath } from 'node:url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const projectRoot = join(__dirname, '..', '..', '..');
-const pluginSrc = join(projectRoot, 'src', 'plugin');
+const pluginSrc = join(projectRoot, 'plugin');
 const assetsDir = join(projectRoot, 'cli', 'assets');
 
 const dirs = ['skills', 'references', 'agents'];
@@ -25,4 +25,4 @@ cpSync(
   { recursive: true }
 );
 
-console.log('Synced src/plugin/ -> cli/assets/');
+console.log('Synced plugin/ -> cli/assets/');

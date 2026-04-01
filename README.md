@@ -2,15 +2,23 @@
 
 Claude Code plugin for Vietnamese stock market analysis — fundamentals, technicals, macro, news, screening, and fund analysis.
 
-## Install Plugin
+## Install
 
+**Python library:**
 ```bash
-curl -fsSL https://finhay.huutri2208.uk/install.sh | GITHUB_TOKEN=github_pat_xxx  bash
+pip install claude-finance-kit
+```
+
+**Plugin (multi-platform):**
+```bash
+npx cfk init --ai claude    # Claude Code
+npx cfk init --ai cursor    # Cursor
+npx cfk init --ai copilot   # GitHub Copilot
 ```
 
 ## What's Included
 
-**Skills** (auto-invoked by context): stock-analysis, market-research, news-sentiment
+**Skills** (auto-invoked by context): marcus-vance, stock-analysis, market-research, news-sentiment
 
 **Agents**: lead-analyst, fundamental-analyst, technical-analyst, macro-researcher
 
@@ -32,24 +40,29 @@ curl -fsSL https://finhay.huutri2208.uk/install.sh | GITHUB_TOKEN=github_pat_xxx
 | FMARKET | Fund | Mutual fund data (58+ funds) |
 | SPL | Commodity | Gold, oil, steel, gas, fertilizer, agricultural |
 
-## Multi-Platform Install
+## Project Structure
 
-```bash
-npx cfk init --ai claude    # Claude Code
-npx cfk init --ai cursor    # Cursor
-npx cfk init --ai copilot   # GitHub Copilot
+```
+src/claude_finance_kit/    # Python library
+plugin/                    # Plugin source of truth
+├── skills/                # marcus-vance, stock-analysis, market-research, news-sentiment
+├── agents/                # fundamental-analyst, technical-analyst, macro-researcher, lead-analyst
+├── references/            # API docs, methodology, patterns
+└── templates/             # Platform configs (claude, cursor, copilot)
+
+cli/                       # npm CLI installer (cfk)
+.claude/                   # Symlinks → plugin/
+.claude-plugin/            # Claude Marketplace manifest
 ```
 
 ## Development
 
 ```bash
 cd cli
-npm run build                # Build CLI TypeScript
-npm run sync                 # Sync src/plugin/ -> cli/assets/
-npm run export-requirements  # Export requirements.txt from pyproject.toml
-npm run package-plugin       # Package plugin files into zip
-npm run bump -- patch        # Bump version (patch|minor|major)
-npm run release              # Package plugin + build wheel
+npm install
+npm run build              # Build CLI TypeScript
+npm run sync               # Sync plugin/ → cli/assets/
+npm run bump -- patch      # Bump version (patch|minor|major)
 ```
 
 ## License

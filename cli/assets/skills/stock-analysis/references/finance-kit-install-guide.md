@@ -1,1 +1,1 @@
-/Users/huutri/code/claude-finance-kit/src/plugin/references/finance-kit-install-guide.md
+/Users/huutri/code/claude-finance-kit/plugin/references/finance-kit-install-guide.md

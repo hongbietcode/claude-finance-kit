@@ -1,1 +1,1 @@
-/Users/huutri/code/claude-finance-kit/src/plugin/references/api-technical-analysis.md
+/Users/huutri/code/claude-finance-kit/plugin/references/api-technical-analysis.md

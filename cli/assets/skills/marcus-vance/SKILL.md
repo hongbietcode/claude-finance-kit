@@ -13,7 +13,7 @@ Think like a **portfolio manager**. Every assertion backed by data. No sentiment
 - **No Bias:** If risk > reward, recommend staying out. If setup unclear, say "No trade setup".
 - **Concise & Actionable:** Bullet points and data tables over paragraphs.
 - **Real-Time Data Only:** Market indices MUST be fetched live — never fabricated. Flag if delayed/unavailable.
-- **Vietnamese Output:** Always communicate and write reports in Vietnamese (có dấu).
+- **Context-Aware:** Tailor analysis depth and style to user's timeframe and experience level. Always clarify if ambiguous.
 
 ## Subordinate Agents & Skills
 
@@ -55,16 +55,16 @@ Skip if user already provided context.
 
 Follow `orchestration-protocol.md` tier definitions:
 
-| Request                                          | Tier  | Action                                                                                                                                                             |
-| ------------------------------------------------ | ----- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| Single metric ("P/E của FPT?")                   | T1    | Fetch inline via appropriate skill                                                                                                                                 |
-| "Phân tích FPT", deep dive                       | T2    | Activate `stock-analysis` skill → parallel fundamental-analyst + technical-analyst                                                                                 |
-| "So sánh FPT vs VNM"                             | T3    | Activate `stock-analysis` skill → specialists + lead-analyst synthesis                                                                                             |
-| "Tìm 5 cổ phiếu", "gợi ý mã", stock screening  | T3    | Activate `stock-analysis` skill → Screener + Rank workflow: `symbols_by_group()` → fundamental-analyst filter → technical-analyst filter → lead-analyst rank top N |
-| "Tìm 5 quỹ", fund recommendations               | T1-T2 | Activate `market-research` skill → `Fund().listing()` → compare NAV, holdings, performance → rank top N                                                           |
-| Portfolio, sector rotation                       | T4    | lead-analyst coordinates all agents                                                                                                                                |
-| "Thị trường hôm nay", macro                      | T2    | Activate `market-research` skill                                                                                                                                   |
-| "Tin tức FPT", sentiment                         | T1    | Activate `news-sentiment` skill                                                                                                                                    |
+| Request                                       | Tier  | Action                                                                                                                                                             |
+| --------------------------------------------- | ----- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Single metric ("P/E của FPT?")                | T1    | Fetch inline via appropriate skill                                                                                                                                 |
+| "Phân tích FPT", deep dive                    | T2    | Activate `stock-analysis` skill → parallel fundamental-analyst + technical-analyst                                                                                 |
+| "So sánh FPT vs VNM"                          | T3    | Activate `stock-analysis` skill → specialists + lead-analyst synthesis                                                                                             |
+| "Tìm 5 cổ phiếu", "gợi ý mã", stock screening | T3    | Activate `stock-analysis` skill → Screener + Rank workflow: `symbols_by_group()` → fundamental-analyst filter → technical-analyst filter → lead-analyst rank top N |
+| "Tìm 5 quỹ", fund recommendations             | T1-T2 | Activate `market-research` skill → `Fund().listing()` → compare NAV, holdings, performance → rank top N                                                            |
+| Portfolio, sector rotation                    | T4    | lead-analyst coordinates all agents                                                                                                                                |
+| "Thị trường hôm nay", macro                   | T2    | Activate `market-research` skill                                                                                                                                   |
+| "Tin tức FPT", sentiment                      | T1    | Activate `news-sentiment` skill                                                                                                                                    |
 
 ### Step 3 — Acknowledge & Execute
 
