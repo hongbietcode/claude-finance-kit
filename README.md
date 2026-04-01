@@ -32,9 +32,11 @@ Ask natural language questions — the plugin auto-routes to the right analysis 
 ### Example: Stock Analysis in Action
 
 <p align="center">
-  <img src="assets/image.png" alt="Claude Finance Kit analyzing HPG stock" width="800" />
+  <a href="https://github.com/hongbietcode/claude-finance-kit/releases/latest">
+    <img src="assets/image.png" alt="Claude Finance Kit analyzing HPG stock" width="800" />
+  </a>
   <br />
-  <em>Claude Code analyzing HPG stock — orchestrating fundamental and technical agents in parallel</em>
+  <em>Claude Code analyzing HPG stock — orchestrating fundamental and technical agents in parallel. <a href="https://github.com/hongbietcode/claude-finance-kit/releases/latest">Download plugin →</a></em>
 </p>
 
 ## Features
