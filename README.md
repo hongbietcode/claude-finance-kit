@@ -47,6 +47,12 @@ Run `/reload-plugins` to activate. Plugin skills are auto-invoked by context —
 "Latest news sentiment for VNM"
 ```
 
+OR
+
+```bash
+npx claude-finance-kit-cli init --ai claude
+```
+
 ### Other AI Assistants (via CLI)
 
 ```bash

@@ -17,5 +17,17 @@
         "news",
         "sentiment",
         "market-research"
+    ],
+    "agents": [
+        "../cli/assets/agents/lead-analyst.md",
+        "../cli/assets/agents/fundamental-analyst.md",
+        "../cli/assets/agents/technical-analyst.md",
+        "../cli/assets/agents/macro-researcher.md"
+    ],
+    "skills": [
+        "../cli/assets/skills/marcus-vance",
+        "../cli/assets/skills/stock-analysis",
+        "../cli/assets/skills/market-research",
+        "../cli/assets/skills/news-sentiment"
     ]
 }
