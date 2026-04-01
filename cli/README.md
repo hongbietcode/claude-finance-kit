@@ -15,11 +15,11 @@ npx claude-finance-kit init                # Interactive (auto-detect)
 
 ## What Gets Installed
 
-| Platform | Skills | Agents | References |
-|----------|--------|--------|------------|
-| Claude Code | 4 | 4 | 9 |
-| Cursor | 4 | - | 9 |
-| Copilot | 4 | - | 9 |
+| Platform    | Skills | Agents | References |
+| ----------- | ------ | ------ | ---------- |
+| Claude Code | 4      | 4      | 9          |
+| Cursor      | 4      | -      | 9          |
+| Copilot     | 4      | -      | 9          |
 
 **Skills:** marcus-vance, stock-analysis, market-research, news-sentiment
 
@@ -36,17 +36,17 @@ Python >= 3.10 required. See [claude-finance-kit on PyPI](https://pypi.org/proje
 ## Commands
 
 ```bash
-npx claude-finance-kit init --ai <platform>       # Install plugin
-npx claude-finance-kit uninstall --ai <platform>   # Remove plugin
-npx claude-finance-kit --version                    # Show version
+npx claude-finance-kit-cli init --ai <platform>       # Install plugin
+npx claude-finance-kit-cli uninstall --ai <platform>   # Remove plugin
+npx claude-finance-kit-cli --version                    # Show version
 ```
 
 ## Uninstall
 
 ```bash
-npx claude-finance-kit uninstall --ai claude
-npx claude-finance-kit uninstall --ai cursor
-npx claude-finance-kit uninstall --ai copilot
+npx claude-finance-kit-cli uninstall --ai claude
+npx claude-finance-kit-cli uninstall --ai cursor
+npx claude-finance-kit-cli uninstall --ai copilot
 ```
 
 ## License
