@@ -1,10 +1,10 @@
 {
-    "name": "cfk",
+    "name": "cfkit",
     "version": "0.1.14",
     "description": "CLI to install claude-finance-kit plugin for AI coding assistants",
     "type": "module",
     "bin": {
-        "cfk": "./dist/index.js"
+        "cfkit": "./dist/index.js"
     },
     "files": [
         "dist",
