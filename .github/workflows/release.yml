@@ -15,13 +15,14 @@ jobs:
       - uses: actions/checkout@v5
         with:
           fetch-depth: 0
-          token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Get current version
+      - name: Get latest tag version
         id: current
         run: |
-          VERSION=$(grep '^version = ' pyproject.toml | sed 's/version = "\(.*\)"/\1/')
+          LATEST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.0")
+          VERSION="${LATEST_TAG#v}"
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "tag=$LATEST_TAG" >> "$GITHUB_OUTPUT"
 
       - name: Bump patch version
         id: bump
@@ -33,20 +34,11 @@ jobs:
           echo "version=$NEW_VERSION" >> "$GITHUB_OUTPUT"
           echo "tag=v${NEW_VERSION}" >> "$GITHUB_OUTPUT"
 
-      - name: Update pyproject.toml
-        run: |
-          sed -i "s/^version = \".*\"/version = \"${{ steps.bump.outputs.version }}\"/" pyproject.toml
-
-      - name: Update cli/package.json
-        run: |
-          cd cli
-          npm version "${{ steps.bump.outputs.version }}" --no-git-tag-version --allow-same-version
-
       - name: Generate changelog
         id: changelog
         run: |
-          PREV_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
-          if [ -z "$PREV_TAG" ]; then
+          PREV_TAG="${{ steps.current.outputs.tag }}"
+          if [ "$PREV_TAG" = "v0.0.0" ]; then
             LOG=$(git log --pretty=format:"- %s (%h)" --no-merges)
           else
             LOG=$(git log "${PREV_TAG}..HEAD" --pretty=format:"- %s (%h)" --no-merges)
@@ -57,24 +49,17 @@ jobs:
             echo ""
             echo "$LOG"
             echo ""
-            echo "**Full Changelog**: https://github.com/${{ github.repository }}/compare/${PREV_TAG}...${{ steps.bump.outputs.tag }}"
+            if [ "$PREV_TAG" != "v0.0.0" ]; then
+              echo "**Full Changelog**: https://github.com/${{ github.repository }}/compare/${PREV_TAG}...${{ steps.bump.outputs.tag }}"
+            fi
             echo "EOF"
           } >> "$GITHUB_OUTPUT"
 
-      - name: Commit version bump
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add pyproject.toml cli/package.json
-          git commit -m "release: v${{ steps.bump.outputs.version }}"
-          git push
-
-      - name: Create tag and release
+      - name: Create release (auto-creates tag via GitHub API)
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          git tag "${{ steps.bump.outputs.tag }}"
-          git push origin "${{ steps.bump.outputs.tag }}"
           gh release create "${{ steps.bump.outputs.tag }}" \
+            --target main \
             --title "v${{ steps.bump.outputs.version }}" \
             --notes "${{ steps.changelog.outputs.body }}"
