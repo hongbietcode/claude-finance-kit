@@ -1,6 +1,6 @@
 {
   "name": "cfk",
-  "version": "0.1.12",
+  "version": "0.1.13",
   "description": "CLI to install claude-finance-kit plugin for AI coding assistants",
   "type": "module",
   "bin": {
@@ -12,7 +12,12 @@
   ],
   "scripts": {
     "build": "tsc",
-    "dev": "tsc --watch"
+    "dev": "tsc --watch",
+    "sync": "node dist/scripts/sync-assets.js",
+    "package-plugin": "node dist/scripts/package-plugin.js",
+    "export-requirements": "node dist/scripts/export-requirements.js",
+    "bump": "node dist/scripts/bump-version.js",
+    "release": "npm run package-plugin && cd .. && python -m build --wheel --sdist"
   },
   "keywords": [
     "claude",

@@ -32,15 +32,24 @@ curl -fsSL https://finhay.huutri2208.uk/install.sh | GITHUB_TOKEN=github_pat_xxx
 | FMARKET | Fund | Mutual fund data (58+ funds) |
 | SPL | Commodity | Gold, oil, steel, gas, fertilizer, agricultural |
 
+## Multi-Platform Install
+
+```bash
+npx cfk init --ai claude    # Claude Code
+npx cfk init --ai cursor    # Cursor
+npx cfk init --ai copilot   # GitHub Copilot
+```
+
 ## Development
 
 ```bash
-make help              # Show all commands
-make requirements      # Export requirements.txt from pyproject.toml 
-make package-plugin    # Package plugin files into zip
-make build             # Build Python wheel + sdist
-make bump TYPE=patch   # Bump version (patch|minor|major)
-make release           # Tag + GitHub release with plugin zip + wheel
+cd cli
+npm run build                # Build CLI TypeScript
+npm run sync                 # Sync src/plugin/ -> cli/assets/
+npm run export-requirements  # Export requirements.txt from pyproject.toml
+npm run package-plugin       # Package plugin files into zip
+npm run bump -- patch        # Bump version (patch|minor|major)
+npm run release              # Package plugin + build wheel
 ```
 
 ## License
