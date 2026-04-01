@@ -7,10 +7,10 @@ Supports **Claude Code**, **Cursor**, and **GitHub Copilot**.
 ## Install
 
 ```bash
-npx claude-finance-kit init --ai claude    # Claude Code
-npx claude-finance-kit init --ai cursor    # Cursor
-npx claude-finance-kit init --ai copilot   # GitHub Copilot
-npx claude-finance-kit init                # Interactive (auto-detect)
+npx claude-finance-kit-cli init --ai claude    # Claude Code
+npx claude-finance-kit-cli init --ai cursor    # Cursor
+npx claude-finance-kit-cli init --ai copilot   # GitHub Copilot
+npx claude-finance-kit-cli init                # Interactive (auto-detect)
 ```
 
 ## What Gets Installed
