@@ -74,6 +74,7 @@ jobs:
   publish-pypi:
     needs: release
     runs-on: ubuntu-latest
+    environment: release
     permissions:
       id-token: write
     steps:
@@ -106,6 +107,11 @@ jobs:
       - uses: actions/setup-node@v5
         with:
           node-version: "20"
+
+      - name: Set version
+        working-directory: cli
+        run: |
+          npm version "${{ needs.release.outputs.version }}" --no-git-tag-version --allow-same-version
 
       - name: Install and build CLI
         working-directory: cli
