@@ -4,16 +4,52 @@ Claude Code plugin for Vietnamese stock market analysis — fundamentals, techni
 
 ## Install
 
-**Python library:**
+### Prerequisites
+
+Install the Python library first:
 
 ```bash
 pip install claude-finance-kit
 ```
 
-**Plugin (multi-platform):**
+### Claude Code (via Marketplace)
+
+**1. Add the marketplace**
+
+From within Claude Code, add the marketplace:
+
+```
+/plugin marketplace add hongbietcode/claude-finance-kit
+```
+
+**2. Browse and install**
+
+Run `/plugin` to open the plugin manager. Go to the **Discover** tab to find `claude-finance-kit`.
+
+Select it and choose an installation scope:
+- **User scope** — install for yourself across all projects
+- **Project scope** — install for all collaborators on this repository
+- **Local scope** — install for yourself in this repository only
+
+Or install directly from the command line:
+
+```
+/plugin install claude-finance-kit@hongbietcode-claude-finance-kit
+```
+
+**3. Activate and use**
+
+Run `/reload-plugins` to activate. Plugin skills are auto-invoked by context — just ask:
+
+```
+"Analyze FPT stock"
+"Market overview today"
+"Latest news sentiment for VNM"
+```
+
+### Other AI Assistants (via CLI)
 
 ```bash
-npx claude-finance-kit-cli init --ai claude    # Claude Code
 npx claude-finance-kit-cli init --ai cursor    # Cursor
 npx claude-finance-kit-cli init --ai copilot   # GitHub Copilot
 ```
@@ -60,33 +96,10 @@ cli/                       # npm CLI installer (claude-finance-kit-cli)
 
 ## Claude Marketplace
 
-Published as a Claude Marketplace plugin. The manifest lives in `.claude-plugin/`:
+The plugin manifest lives in `.claude-plugin/`:
 
 - **`marketplace.json`** — listing metadata, `source` points to `./cli/assets`
 - **`plugin.json`** — plugin identity, version, keywords
-
-When users install via Marketplace, Claude Code reads `cli/assets/` and copies skills, agents, and references into the project.
-
-## Plugin Content (`cli/assets/`)
-
-Single source of truth for all plugin content:
-
-```
-cli/assets/
-├── skills/               # marcus-vance, stock-analysis, market-research, news-sentiment
-├── agents/               # lead-analyst, fundamental-analyst, technical-analyst, macro-researcher
-├── references/           # Shared API docs, methodology, patterns
-└── templates/platforms/  # Platform configs (claude.json, cursor.json, copilot.json)
-```
-
-Skill-specific references use **relative symlinks** to shared `references/`:
-
-```
-skills/stock-analysis/references/
-├── analysis-methodology.md -> ../../../references/analysis-methodology.md
-├── fundamental-analysis-workflows.md   # Skill-specific (real file)
-└── ...
-```
 
 ## Development
 
