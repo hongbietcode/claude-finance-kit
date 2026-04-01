@@ -1,1 +1,1 @@
-../../../../references/api-technical-analysis.md
+../../../references/api-technical-analysis.md

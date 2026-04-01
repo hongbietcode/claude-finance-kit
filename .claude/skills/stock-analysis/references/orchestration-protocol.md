@@ -1,1 +1,1 @@
-../../../../references/orchestration-protocol.md
+../../../references/orchestration-protocol.md

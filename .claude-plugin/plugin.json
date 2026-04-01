@@ -1,9 +1,24 @@
 {
     "name": "claude-finance-kit",
-    "description": "Vietnamese stock analysis and market research — fundamentals, technicals, macro, news, screening, fund analysis",
-    "version": "0.2.0",
+    "description": "Vietnamese stock market analysis toolkit for Claude Code. Skills: stock-analysis, market-research, news-sentiment. Agents: marcus-vance (senior analyst), fundamental-analyst, technical-analyst, macro-researcher, lead-analyst. Data sources: VCI, KBS, MAS, VND, FMP, Perplexity. Covers: stock analysis, market research, technical analysis, fundamental analysis, macro research, news crawling, batch data collection.",
+    "version": "0.1.12",
     "author": {
-        "name": "claude-finance-kit contributors"
+        "name": "hongbietcode"
     },
-    "homepage": "https://github.com/hongbietcode/claude-finance-kit"
+    "license": "MIT",
+    "keywords": [
+        "stock",
+        "finance",
+        "vietnam",
+        "vnstock",
+        "technical-analysis",
+        "fundamental-analysis",
+        "macro",
+        "news",
+        "sentiment",
+        "market-research"
+    ],
+    "skills": [
+        "./.claude/skills/claude-finance-kit"
+    ]
 }

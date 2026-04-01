@@ -1,1 +1,1 @@
-../../../../references/api-news-and-collector.md
+../../../references/api-news-and-collector.md

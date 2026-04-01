@@ -1,1 +1,1 @@
-../../../../references/finance-kit-install-guide.md
+../../../references/finance-kit-install-guide.md

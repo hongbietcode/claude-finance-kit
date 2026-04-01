@@ -1,1 +1,1 @@
-../../../../references/api-market-macro-fund.md
+../../../references/api-market-macro-fund.md

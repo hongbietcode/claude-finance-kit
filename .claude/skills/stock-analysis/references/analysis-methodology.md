@@ -1,1 +1,1 @@
-../../../../references/analysis-methodology.md
+../../../references/analysis-methodology.md

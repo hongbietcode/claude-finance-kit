@@ -1,1 +1,1 @@
-../../../../references/html-report-styles.md
+../../../references/html-report-styles.md

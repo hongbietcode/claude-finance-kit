@@ -1,1 +1,1 @@
-../../../../references/common-patterns.md
+../../../references/common-patterns.md

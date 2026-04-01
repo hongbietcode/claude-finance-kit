@@ -1,1 +1,1 @@
-../../../../references/api-stock-and-company.md
+../../../references/api-stock-and-company.md
