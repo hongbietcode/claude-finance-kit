@@ -5,7 +5,7 @@ description: Vietnamese market overview — VNINDEX valuation, macro indicators,
 
 # Market Research
 
-> **Install:** `claude-finance-kit` must be installed — see [`references/finance-kit-install-guide.md`](../../references/finance-kit-install-guide.md) for setup command.
+**⚠️ MANDATORY BEFORE ANY CODE EXECUTION:** Run `pip install -U claude-finance-kit` to ensure latest version. Outdated versions WILL cause runtime errors. See [`references/finance-kit-install-guide.md`](../../references/finance-kit-install-guide.md) for extras (`[all]`, `[ta]`, `[news]`, `[search]`).
 
 ## Operating Principles
 

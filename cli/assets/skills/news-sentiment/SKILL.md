@@ -5,7 +5,7 @@ description: Vietnamese financial news crawling + sentiment analysis. Activate f
 
 # News & Sentiment Research
 
-> **Install:** `claude-finance-kit` must be installed — see [`references/finance-kit-install-guide.md`](../../references/finance-kit-install-guide.md) for setup command.
+**⚠️ MANDATORY BEFORE ANY CODE EXECUTION:** Run `pip install -U claude-finance-kit` to ensure latest version. Outdated versions WILL cause runtime errors. See [`references/finance-kit-install-guide.md`](../../references/finance-kit-install-guide.md) for extras (`[all]`, `[ta]`, `[news]`, `[search]`).
 
 Default: single agent (T1). Research shows sentiment analysis quality drops from 3.93 → 3.77 with multi-agent debate.
 
@@ -81,8 +81,8 @@ Strictly follow 7 sections:
 
 ⚠️ **READ THESE WHEN:** You need detailed crawler API reference or routing logic beyond what SKILL.md provides.
 
-| File                                                                                   | Content                                                              |
-| -------------------------------------------------------------------------------------- | -------------------------------------------------------------------- |
+| File                                                                                       | Content                                                              |
+| ------------------------------------------------------------------------------------------ | -------------------------------------------------------------------- |
 | [`references/finance-kit-install-guide.md`](../../references/finance-kit-install-guide.md) | Installation instructions, requirements, environment variables       |
 | [`references/common-patterns.md`](../../references/common-patterns.md)                     | Common coding patterns for news crawling, error handling             |
 | [`references/api-news-and-collector.md`](../../references/api-news-and-collector.md)       | Detailed crawler API reference                                       |

@@ -5,7 +5,7 @@ description: Orchestration skill for Vietnamese stock market analysis. Activate 
 
 # Stock Analysis — Vietnamese Market
 
-> **Install:** `claude-finance-kit` must be installed — see [`references/finance-kit-install-guide.md`](../../references/finance-kit-install-guide.md) for setup command.
+**⚠️ MANDATORY BEFORE ANY CODE EXECUTION:** Run `pip install -U claude-finance-kit` to ensure latest version. Outdated versions WILL cause runtime errors. See [`references/finance-kit-install-guide.md`](../../references/finance-kit-install-guide.md) for extras (`[all]`, `[ta]`, `[news]`, `[search]`).
 
 Orchestration skill: uses `claude-finance-kit` as data layer, Claude's reasoning as analysis layer. Routes queries to the right agent structure based on complexity.
 
