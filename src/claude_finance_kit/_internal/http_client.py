@@ -1,8 +1,8 @@
-"""Shared HTTP client with retry, timeout, and proxy support."""
+"""Shared HTTP client with retry, timeout, and env-based proxy support."""
 
 import json
 import logging
-from enum import Enum
+import os
 from typing import Any, Optional, Union
 
 import requests
@@ -21,45 +21,18 @@ DEFAULT_RETRY_WAIT_MIN = 1
 DEFAULT_RETRY_WAIT_MAX = 8
 
 
-class ProxyMode(str, Enum):
-    TRY = "try"
-    ROTATE = "rotate"
-    RANDOM = "random"
-    SINGLE = "single"
+_LOCAL_PREFIXES = ("localhost", "127.", "0.0.0.0", "::1", "[::1]")
 
 
-class RequestMode(str, Enum):
-    DIRECT = "direct"
-    PROXY = "proxy"
-
-
-_rotate_index: int = 0
-
-
-def _build_proxy_dict(proxy_url: str) -> dict[str, str]:
-    return {"http": proxy_url, "https": proxy_url}
-
-
-def _select_proxy(proxy_list: list[str], mode: ProxyMode) -> str:
-    global _rotate_index
-    if not proxy_list:
-        raise ValueError("proxy_list is empty.")
-    if mode == ProxyMode.SINGLE:
-        return proxy_list[0]
-    if mode == ProxyMode.RANDOM:
-        import random
-        return random.choice(proxy_list)
-    if mode == ProxyMode.ROTATE:
-        proxy = proxy_list[_rotate_index % len(proxy_list)]
-        _rotate_index += 1
-        return proxy
-    return proxy_list[0]
-
-
-def reset_proxy_rotation() -> None:
-    """Reset round-robin proxy index to 0."""
-    global _rotate_index
-    _rotate_index = 0
+def _get_proxy_dict() -> Optional[dict[str, str]]:
+    """Read proxy from HTTPS_PROXY / HTTP_PROXY env vars, skip local proxies."""
+    proxy = os.getenv("HTTPS_PROXY") or os.getenv("HTTP_PROXY")
+    if not proxy:
+        return None
+    stripped = proxy.split("://", 1)[-1].split(":")[0]
+    if stripped.startswith(_LOCAL_PREFIXES):
+        return None
+    return {"http": proxy, "https": proxy}
 
 
 def _do_request(
@@ -69,24 +42,24 @@ def _do_request(
     params: Optional[dict],
     payload: Optional[Union[dict, str]],
     timeout: int,
-    proxies: Optional[dict[str, str]],
 ) -> dict[str, Any]:
     """Execute a single HTTP request and return parsed JSON."""
+    proxies = _get_proxy_dict()
     try:
+        kwargs: dict[str, Any] = {
+            "headers": headers,
+            "timeout": timeout,
+            "proxies": proxies,
+        }
         if method.upper() == "GET":
-            response = requests.get(
-                url, headers=headers, params=params, timeout=timeout, proxies=proxies
-            )
+            kwargs["params"] = params
+            response = requests.get(url, **kwargs)
         else:
             if isinstance(payload, dict):
-                body = json.dumps(payload)
+                kwargs["data"] = json.dumps(payload)
             elif isinstance(payload, str):
-                body = payload
-            else:
-                body = None
-            response = requests.post(
-                url, headers=headers, data=body, timeout=timeout, proxies=proxies
-            )
+                kwargs["data"] = payload
+            response = requests.post(url, **kwargs)
 
         if response.status_code != 200:
             raise ConnectionError(
@@ -111,90 +84,9 @@ def send_request(
     params: Optional[dict] = None,
     payload: Optional[Union[dict, str]] = None,
     timeout: int = DEFAULT_TIMEOUT,
-    proxy_list: Optional[list[str]] = None,
-    proxy_mode: Union[ProxyMode, str] = ProxyMode.TRY,
-    request_mode: Union[RequestMode, str] = RequestMode.DIRECT,
     show_log: bool = False,
 ) -> dict[str, Any]:
-    """
-    Central interface for all HTTP request modes.
-
-    Retries up to DEFAULT_RETRY_ATTEMPTS times on ConnectionError using
-    exponential back-off (tenacity).  Supports direct and proxy request modes.
-
-    Args:
-        url: Endpoint URL.
-        headers: HTTP headers dict.
-        method: 'GET' or 'POST'.
-        params: Query parameters (GET).
-        payload: Request body (POST); dict or raw string.
-        timeout: Per-request timeout in seconds.
-        proxy_list: List of proxy URL strings for PROXY mode.
-        proxy_mode: How to pick a proxy from proxy_list.
-        request_mode: DIRECT (no proxy) or PROXY.
-        show_log: Emit debug-level log lines for each request.
-
-    Returns:
-        Parsed JSON response as a dict.
-
-    Raises:
-        ConnectionError: After all retry attempts are exhausted.
-        ValueError: For invalid enum values or missing proxy_list in PROXY mode.
-    """
-    if isinstance(proxy_mode, str):
-        proxy_mode = ProxyMode(proxy_mode)
-    if isinstance(request_mode, str):
-        request_mode = RequestMode(request_mode)
-
+    """Central HTTP dispatcher with retry and env-based proxy."""
     if show_log:
-        logger.debug("%s %s (mode=%s)", method.upper(), url, request_mode.value)
-
-    if request_mode == RequestMode.PROXY:
-        if not proxy_list:
-            raise ValueError("proxy_list is required for PROXY mode.")
-
-        if proxy_mode == ProxyMode.TRY:
-            last_exc: Exception = ConnectionError("No proxies available.")
-            for proxy_url in proxy_list:
-                try:
-                    if show_log:
-                        logger.debug("Trying proxy: %s", proxy_url)
-                    return _do_request(
-                        url, headers, method, params, payload,
-                        timeout, _build_proxy_dict(proxy_url),
-                    )
-                except ConnectionError as exc:
-                    last_exc = exc
-            raise ConnectionError(f"All proxies failed. Last: {last_exc}") from last_exc
-
-        selected = _select_proxy(proxy_list, proxy_mode)
-        if show_log:
-            logger.debug("Using proxy (%s): %s", proxy_mode.value, selected)
-        return _do_request(
-            url, headers, method, params, payload,
-            timeout, _build_proxy_dict(selected),
-        )
-
-    return _do_request(url, headers, method, params, payload, timeout, proxies=None)
-
-
-def send_direct(
-    url: str,
-    headers: dict[str, str],
-    **kwargs: Any,
-) -> dict[str, Any]:
-    """Convenience wrapper: send a direct (no-proxy) request."""
-    return send_request(url, headers, request_mode=RequestMode.DIRECT, **kwargs)
-
-
-def send_via_proxy(
-    url: str,
-    headers: dict[str, str],
-    proxy_list: list[str],
-    **kwargs: Any,
-) -> dict[str, Any]:
-    """Convenience wrapper: send a request through the provided proxy list."""
-    return send_request(
-        url, headers, proxy_list=proxy_list,
-        request_mode=RequestMode.PROXY, **kwargs,
-    )
+        logger.debug("%s %s", method.upper(), url)
+    return _do_request(url, headers, method, params, payload, timeout)
