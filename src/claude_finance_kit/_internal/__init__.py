@@ -10,14 +10,7 @@ from claude_finance_kit._internal.env import (
     is_jupyter,
     is_venv_active,
 )
-from claude_finance_kit._internal.http_client import (
-    ProxyMode,
-    RequestMode,
-    reset_proxy_rotation,
-    send_direct,
-    send_request,
-    send_via_proxy,
-)
+from claude_finance_kit._internal.http_client import send_request
 from claude_finance_kit._internal.parser import (
     get_asset_type,
     localize_timestamp,
@@ -61,12 +54,7 @@ __all__ = [
     "is_colab",
     "is_jupyter",
     "is_venv_active",
-    "ProxyMode",
-    "RequestMode",
-    "reset_proxy_rotation",
-    "send_direct",
     "send_request",
-    "send_via_proxy",
     "get_asset_type",
     "localize_timestamp",
     "parse_timestamp",
