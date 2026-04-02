@@ -24,14 +24,18 @@ DEFAULT_RETRY_WAIT_MAX = 8
 _LOCAL_PREFIXES = ("localhost", "127.", "0.0.0.0", "::1", "[::1]")
 
 
-def _get_proxy_dict() -> Optional[dict[str, str]]:
-    """Read proxy from HTTPS_PROXY / HTTP_PROXY env vars, skip local proxies."""
+def _get_proxy_dict() -> dict[str, str]:
+    """Read proxy from HTTPS_PROXY / HTTP_PROXY env vars, skip local proxies.
+
+    Returns explicit empty dict for local proxies to override requests' env detection.
+    """
     proxy = os.getenv("HTTPS_PROXY") or os.getenv("HTTP_PROXY")
+    _NO_PROXY = {"http": None, "https": None}
     if not proxy:
-        return None
+        return _NO_PROXY
     stripped = proxy.split("://", 1)[-1].split(":")[0]
     if stripped.startswith(_LOCAL_PREFIXES):
-        return None
+        return _NO_PROXY
     return {"http": proxy, "https": proxy}
 
 
