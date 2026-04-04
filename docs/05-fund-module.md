@@ -164,13 +164,13 @@ from claude_finance_kit import Fund
 fund = Fund()
 
 results = fund.fund_filter("VESAF")
-print(results[["fund_id", "name", "fund_type"]])
+print(results[["id", "shortName"]])
 
-fund_id = results.iloc[0]["fund_id"]
+fund_id = results.iloc[0]["id"]
 
 holdings = fund.top_holding(fund_id)
 print("\n=== Top Holdings ===")
-print(holdings[["symbol", "weight"]].to_string(index=False))
+print(holdings[["stock_code", "net_asset_percent"]].to_string(index=False))
 
 industries = fund.industry_holding(fund_id)
 print("\n=== Industry Allocation ===")
@@ -182,13 +182,16 @@ print(industries.to_string(index=False))
 ```python
 fund = Fund()
 
-fund_ids = ["VESAF", "VEOF", "VIBF"]
-for fid in fund_ids:
+# nav_report requires fund_id (string), not symbol
+# Get fund_id first via fund_filter()
+for symbol in ["VESAF", "VEOF", "VIBF"]:
+    info = fund.fund_filter(symbol)
+    fid = info.iloc[0]["id"]
     nav = fund.nav_report(fid)
-    start_nav = nav.iloc[0]["nav"]
-    end_nav = nav.iloc[-1]["nav"]
+    start_nav = nav.iloc[0]["nav_per_unit"]
+    end_nav = nav.iloc[-1]["nav_per_unit"]
     return_pct = (end_nav - start_nav) / start_nav * 100
-    print(f"{fid}: {return_pct:+.2f}% total return")
+    print(f"{symbol}: {return_pct:+.2f}% total return")
 ```
 
 ## Notes

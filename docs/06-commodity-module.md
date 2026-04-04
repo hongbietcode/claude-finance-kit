@@ -148,9 +148,10 @@ from claude_finance_kit import Commodity
 commodity = Commodity()
 gold = commodity.gold(length="1Y")
 
-print(f"Latest gold price: {gold.iloc[-1]['price']}")
-print(f"52-week high: {gold['price'].max()}")
-print(f"52-week low:  {gold['price'].min()}")
+# Gold columns: buy, sell, global
+print(f"Latest gold (global): {gold.iloc[-1]['global']}")
+print(f"52-week high: {gold['global'].max()}")
+print(f"52-week low:  {gold['global'].min()}")
 ```
 
 ### Compare Oil and Gas Prices
@@ -179,9 +180,14 @@ datasets = {
     "Steel": commodity.steel(length="3M"),
 }
 
+# Each commodity has different columns:
+# gold: buy, sell, global | oil: crude_oil, ron95, ron92, oil_do
+# steel: steel_d10, hrc, iron_ore
+primary_col = {"Gold": "global", "Oil": "crude_oil", "Steel": "steel_d10"}
 for name, df in datasets.items():
-    latest = df.iloc[-1]["price"]
-    first = df.iloc[0]["price"]
+    col = primary_col[name]
+    latest = df.iloc[-1][col]
+    first = df.iloc[0][col]
     change = (latest - first) / first * 100
     print(f"{name}: {latest:.2f} ({change:+.1f}% over 3M)")
 ```

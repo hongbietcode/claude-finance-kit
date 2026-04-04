@@ -164,7 +164,7 @@ Pydantic v2 models for structured data:
 ```python
 from claude_finance_kit.core.models import StockInfo, DateRange
 
-info = StockInfo(symbol="FPT", exchange="HOSE", asset_type="STOCK")
+info = StockInfo(symbol="FPT", exchange="HOSE", name="FPT Corporation")
 dates = DateRange(start="2024-01-01", end="2024-12-31")
 ```
 

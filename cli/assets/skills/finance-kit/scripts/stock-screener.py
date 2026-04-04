@@ -31,7 +31,7 @@ def main():
         symbols = Stock("FPT", source="KBS").listing.symbols_by_group(args.group)
 
     if hasattr(symbols, "tolist"):
-        symbol_list = symbols["symbol"].tolist() if "symbol" in symbols.columns else symbols.iloc[:, 0].tolist()
+        symbol_list = symbols["symbol"].tolist() if "symbol" in getattr(symbols, "columns", []) else symbols.tolist()
     else:
         symbol_list = list(symbols)
 
@@ -55,74 +55,76 @@ def main():
     print(json.dumps(output, ensure_ascii=False, default=str))
 
 
+def get_ratios(stock):
+    """Get ratio DataFrame with deduplicated columns."""
+    ratios = stock.finance.ratio(period="quarter")
+    if not ratios.empty:
+        ratios = ratios.loc[:, ~ratios.columns.duplicated()]
+    return ratios
+
+
 def screen_magic_formula(symbols, source):
-    from claude_finance_kit import Stock
     results = []
     for sym in symbols:
         try:
             stock = safe_stock(sym, source)
-            income = stock.finance.income_statement(period="year")
-            bs = stock.finance.balance_sheet(period="year")
-            overview = stock.company.overview()
-            if income.empty or bs.empty or overview.empty:
+            ratios = get_ratios(stock)
+            if ratios.empty:
                 continue
-            ebit = float(income.iloc[0].get("operatingProfit", 0))
-            market_cap = float(overview.iloc[0].get("marketCap", 0))
-            if market_cap <= 0 or ebit <= 0:
+            pe = float(ratios["P/E"].iloc[0]) if "P/E" in ratios.columns else 0
+            pb = float(ratios["P/B"].iloc[0]) if "P/B" in ratios.columns else 0
+            roe = float(ratios["ROE (%)"].iloc[0]) if "ROE (%)" in ratios.columns else 0
+            roic = float(ratios["ROIC (%)"].iloc[0]) if "ROIC (%)" in ratios.columns else 0
+            if pe <= 0 or pb <= 0:
                 continue
-            short_assets = float(bs.iloc[0].get("shortAsset", 0))
-            short_liab = float(bs.iloc[0].get("shortLiability", 0))
-            fixed_assets = float(bs.iloc[0].get("fixedAsset", 0))
-            debt = float(bs.iloc[0].get("debt", 0))
-            cash = float(bs.iloc[0].get("cash", 0))
-            wc = short_assets - short_liab
-            ev = market_cap + debt - cash
-            invested = wc + fixed_assets
-            roc = ebit / invested if invested > 0 else 0
-            ey = ebit / ev if ev > 0 else 0
-            results.append({"symbol": sym, "roc": round(roc, 4), "earnings_yield": round(ey, 4), "rank_score": round(roc + ey, 4)})
+            ey = 1 / pe if pe > 0 else 0
+            roc = roic if roic > 0 else roe
+            results.append({
+                "symbol": sym,
+                "roc": round(roc, 4),
+                "earnings_yield": round(ey, 4),
+                "pe": round(pe, 2),
+                "rank_score": round(roc + ey, 4),
+            })
         except Exception:
             continue
     return results
 
 
 def screen_canslim(symbols, source):
-    from claude_finance_kit import Market, Stock
     results = []
-    try:
-        vnindex_history = Stock("VNM", source="KBS").quote.history(
-            start=(datetime.now() - timedelta(days=180)).strftime("%Y-%m-%d")
-        )
-        vnindex_return = (float(vnindex_history["close"].iloc[-1]) / float(vnindex_history["close"].iloc[0]) - 1) if not vnindex_history.empty else 0
-    except Exception:
-        vnindex_return = 0
-
     for sym in symbols:
         try:
             stock = safe_stock(sym, source)
-            ratios = stock.finance.ratio(period="quarter")
+            ratios = get_ratios(stock)
             if ratios.empty:
                 continue
             score = 0
-            eps_current = float(ratios.iloc[0].get("earningPerShare", 0))
-            eps_prev = float(ratios.iloc[1].get("earningPerShare", 0)) if len(ratios) > 1 else 0
-            if eps_prev > 0 and (eps_current - eps_prev) / eps_prev > 0.25:
-                score += 1
-            annual_ratios = stock.finance.ratio(period="year")
-            if not annual_ratios.empty and len(annual_ratios) > 1:
-                eps_y0 = float(annual_ratios.iloc[0].get("earningPerShare", 0))
-                eps_y1 = float(annual_ratios.iloc[1].get("earningPerShare", 0))
-                if eps_y1 > 0 and (eps_y0 - eps_y1) / eps_y1 > 0.25:
+
+            if "EPS (VND)" in ratios.columns and len(ratios) > 1:
+                eps_current = float(ratios["EPS (VND)"].iloc[0])
+                eps_prev = float(ratios["EPS (VND)"].iloc[1])
+                if eps_prev > 0 and (eps_current - eps_prev) / eps_prev > 0.25:
                     score += 1
-            history = stock.quote.history(start=(datetime.now() - timedelta(days=252)).strftime("%Y-%m-%d"))
+
+            annual_ratios = stock.finance.ratio(period="year")
+            if not annual_ratios.empty:
+                annual_ratios = annual_ratios.loc[:, ~annual_ratios.columns.duplicated()]
+                if "EPS (VND)" in annual_ratios.columns and len(annual_ratios) > 1:
+                    eps_y0 = float(annual_ratios["EPS (VND)"].iloc[0])
+                    eps_y1 = float(annual_ratios["EPS (VND)"].iloc[1])
+                    if eps_y1 > 0 and (eps_y0 - eps_y1) / eps_y1 > 0.25:
+                        score += 1
+
+            history = stock.quote.history(
+                start=(datetime.now() - timedelta(days=252)).strftime("%Y-%m-%d")
+            )
             if not history.empty:
                 high_52w = float(history["close"].max())
                 current = float(history["close"].iloc[-1])
                 if current >= high_52w * 0.95:
                     score += 1
-                stock_return = current / float(history["close"].iloc[0]) - 1
-                if vnindex_return != 0 and stock_return > vnindex_return:
-                    score += 1
+
             results.append({"symbol": sym, "canslim_score": score, "rank_score": score})
         except Exception:
             continue
@@ -131,18 +133,20 @@ def screen_canslim(symbols, source):
 
 def screen_multifactor(symbols, source):
     import statistics
-    from claude_finance_kit import Stock
+
     data = []
     for sym in symbols:
         try:
             stock = safe_stock(sym, source)
-            ratios = stock.finance.ratio(period="year")
-            history = stock.quote.history(start=(datetime.now() - timedelta(days=180)).strftime("%Y-%m-%d"))
+            ratios = get_ratios(stock)
+            history = stock.quote.history(
+                start=(datetime.now() - timedelta(days=180)).strftime("%Y-%m-%d")
+            )
             if ratios.empty or history.empty:
                 continue
-            pe = float(ratios.iloc[0].get("priceToEarning", 0))
-            pb = float(ratios.iloc[0].get("priceToBook", 0))
-            roe = float(ratios.iloc[0].get("roe", 0))
+            pe = float(ratios["P/E"].iloc[0]) if "P/E" in ratios.columns else 0
+            pb = float(ratios["P/B"].iloc[0]) if "P/B" in ratios.columns else 0
+            roe = float(ratios["ROE (%)"].iloc[0]) if "ROE (%)" in ratios.columns else 0
             momentum = float(history["close"].iloc[-1]) / float(history["close"].iloc[0]) - 1
             if pe > 0 and pb > 0:
                 data.append({"symbol": sym, "pe": pe, "pb": pb, "roe": roe, "momentum": momentum})
@@ -163,7 +167,9 @@ def screen_multifactor(symbols, source):
             d[f"z_{metric}"] = round(z, 3)
 
     for d in data:
-        d["rank_score"] = round(sum(d.get(f"z_{m}", 0) for m in ["pe", "pb", "roe", "momentum"]) / 4, 3)
+        d["rank_score"] = round(
+            sum(d.get(f"z_{m}", 0) for m in ["pe", "pb", "roe", "momentum"]) / 4, 3
+        )
 
     return data
 

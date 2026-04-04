@@ -18,16 +18,16 @@ Does NOT handle: portfolio management, trading bots, brokerage integrations, non
 
 | Name | Description |
 | ---- | ----------- |
-| `finance-kit` | Senior analyst orchestrator (Marcus Vance). Routes queries by complexity, spawns specialist subagents, collects data via scripts, produces HTML reports. Single entry point for all analysis workflows. |
+| `finance-kit` | Orchestrator skill (persona: Marcus Vance). Does NOT analyze data itself — routes queries by complexity tier (T1-T4), collects data via Python scripts, spawns specialist agents by name, assembles HTML reports. Single entry point for all analysis workflows. |
 
-## Agents (specialist references — spawned by skill)
+## Agents (specialist — spawned by skill, trigger skill for data)
 
 | Name | Role |
 | ---- | ---- |
-| `fundamental-analyst` | Financials, valuation, earnings quality |
-| `technical-analyst` | Price trends, momentum, S/R levels |
-| `macro-researcher` | GDP, CPI, rates, FX, commodities |
-| `lead-analyst` | Synthesis + decision for T3/T4 comparative/portfolio analysis |
+| `fundamental-analyst` | Financials, valuation ratios, balance sheet health, earnings quality. Triggers `finance-kit` skill for data. |
+| `technical-analyst` | Trend identification, momentum signals, S/R levels, volume analysis. Triggers `finance-kit` skill for data. |
+| `macro-researcher` | GDP, CPI, interest rates, FX, FDI, trade balance, commodity impact. Triggers `finance-kit` skill for data. |
+| `lead-analyst` | Synthesis + decision for T3/T4 comparative/portfolio analysis. Coordinates `fundamental-analyst`, `technical-analyst`, `macro-researcher`. |
 
 ## References (load when needed)
 
@@ -55,7 +55,7 @@ Reports are for reference only, not investment advice. You are responsible for y
 ```
 Price history  → Stock("FPT").quote.history(start, end, interval)
 Intraday       → Stock("FPT").quote.intraday()
-Price board    → Stock("FPT").quote.price_board(symbols=["FPT","VNM"])
+Price board    → Stock("FPT").quote.price_board(symbols=["FPT","VNM"])  # MultiIndex: df[("match","match_price")]
 Company info   → stock.company.overview() / shareholders() / officers() / news() / events()
 Financials     → stock.finance.balance_sheet() / income_statement() / cash_flow() / ratio()
 Listing        → stock.listing.all_symbols() / symbols_by_group("VN30") / symbols_by_industries()
