@@ -198,4 +198,3 @@ for fid in fund_ids:
 - Pass an empty string `""` to `fund_type` in `listing()` to retrieve all fund types.
 - NAV data frequency depends on the fund; most report daily NAV.
 
-**See also:** [`references/common-patterns.md`](../references/common-patterns.md) — fund ID lookup pattern, error handling.

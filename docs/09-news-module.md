@@ -197,4 +197,3 @@ for a in articles:
 
 Requires `[news]` extra: `pip install claude-finance-kit[news]`.
 
-**See also:** [`references/common-patterns.md`](../references/common-patterns.md) — news crawling pattern, error handling.

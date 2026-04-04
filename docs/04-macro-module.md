@@ -193,4 +193,3 @@ print(monthly_rate.tail(6))
 - All date parameters use `"YYYY-MM-DD"` format. `None` returns full available range.
 - Period controls time aggregation; not all methods support both `"month"` and `"year"`.
 
-**See also:** [`references/common-patterns.md`](../references/common-patterns.md) — error handling, date format gotchas.

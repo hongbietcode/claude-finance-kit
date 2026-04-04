@@ -166,4 +166,3 @@ ratios = Stock("HPG").finance.ratio(period="quarter")
 print(ratios[["year_report", "length_report", "pe", "pb", "roe"]].tail(8))
 ```
 
-**See also:** [`references/common-patterns.md`](../references/common-patterns.md) — error handling, source fallback, caching, batch processing, gotchas.
