@@ -18,7 +18,7 @@ Does NOT handle: portfolio management, trading bots, brokerage integrations, non
 
 | Name | Description |
 | ---- | ----------- |
-| `claude-finance` | Senior analyst — stock analysis, market research, news sentiment, technical analysis, fundamental analysis, macro research, screening, sector analysis. Routes by complexity to specialist agents. |
+| `finance-kit` | Senior analyst — stock analysis, market research, news sentiment, technical analysis, fundamental analysis, macro research, screening, sector analysis. Routes by complexity to specialist agents. |
 
 ## Agents (specialized)
 
@@ -34,14 +34,14 @@ Does NOT handle: portfolio management, trading bots, brokerage integrations, non
 
 | File | Content |
 | ---- | ------- |
-| `cli/assets/skills/claude-finance/references/stock-quote-company-finance-api.md` | Stock, Quote, Company, Finance, Listing, Trading |
-| `cli/assets/skills/claude-finance/references/market-macro-fund-commodity-api.md` | Market, Macro, Fund, Commodity |
-| `cli/assets/skills/claude-finance/references/technical-indicators-api.md` | All TA indicators with params |
-| `cli/assets/skills/claude-finance/references/news-crawler-collector-search-api.md` | News crawlers, Collector tasks, Perplexity Search |
-| `cli/assets/skills/claude-finance/references/valuation-screening-methodology.md` | Valuation, financial health, TA signals, screening, macro, sentiment, fund flows |
-| `cli/assets/skills/claude-finance/references/error-handling-and-common-patterns.md` | Error handling, caching, batch processing |
-| `cli/assets/skills/claude-finance/references/banking-realestate-consumer-sectors.md` | Banking NIM/NPL, Real estate NAV, Consumer ROIC |
-| `cli/assets/skills/claude-finance/references/html-report-design-system.md` | HTML report design system: Tailwind, Plotly, components |
+| `cli/assets/skills/finance-kit/references/stock-quote-company-finance-api.md` | Stock, Quote, Company, Finance, Listing, Trading |
+| `cli/assets/skills/finance-kit/references/market-macro-fund-commodity-api.md` | Market, Macro, Fund, Commodity |
+| `cli/assets/skills/finance-kit/references/technical-indicators-api.md` | All TA indicators with params |
+| `cli/assets/skills/finance-kit/references/news-crawler-collector-search-api.md` | News crawlers, Collector tasks, Perplexity Search |
+| `cli/assets/skills/finance-kit/references/valuation-screening-methodology.md` | Valuation, financial health, TA signals, screening, macro, sentiment, fund flows |
+| `cli/assets/skills/finance-kit/references/error-handling-and-common-patterns.md` | Error handling, caching, batch processing |
+| `cli/assets/skills/finance-kit/references/banking-realestate-consumer-sectors.md` | Banking NIM/NPL, Real estate NAV, Consumer ROIC |
+| `cli/assets/skills/finance-kit/references/html-report-design-system.md` | HTML report design system: Tailwind, Plotly, components |
 
 ## Disclaimer
 
@@ -49,7 +49,7 @@ Reports are for reference only, not investment advice. You are responsible for y
 
 ## Installation
 
-**⚠️ MANDATORY BEFORE ANY CODE EXECUTION:** Run `pip install -U claude-finance-kit` to ensure latest version. Outdated versions WILL cause runtime errors. See [`references/installation-guide.md`](cli/assets/skills/claude-finance/references/installation-guide.md) for extras (`[all]`, `[ta]`, `[news]`, `[search]`).
+**⚠️ MANDATORY BEFORE ANY CODE EXECUTION:** Run `pip install -U claude-finance-kit` to ensure latest version. Outdated versions WILL cause runtime errors. See [`references/installation-guide.md`](cli/assets/skills/finance-kit/references/installation-guide.md) for extras (`[all]`, `[ta]`, `[news]`, `[search]`).
 
 ## Quick API Lookup
 
@@ -102,7 +102,7 @@ Queries route to different agent structures based on complexity. See `cli/assets
 
 ## Rules
 
-- **HTML Report (MANDATORY):** Every analysis MUST produce a self-contained HTML report file saved to `{CWD}/plans/reports/{slug}-report.html`, then auto-open via `open`. See `cli/assets/skills/claude-finance/references/html-report-design-system.md` for styling.
+- **HTML Report (MANDATORY):** Every analysis MUST produce a self-contained HTML report file saved to `{CWD}/plans/reports/{slug}-report.html`, then auto-open via `open`. See `cli/assets/skills/finance-kit/references/html-report-design-system.md` for styling.
 - Date format: always `YYYY-MM-DD`
 - Always `try-except` + check `df.empty` before processing
 - TA requires `df.set_index('time')` before `Indicator()`

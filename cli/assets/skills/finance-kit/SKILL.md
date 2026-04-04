@@ -1,5 +1,5 @@
 ---
-name: claude-finance
+name: finance-kit
 description: Vietnamese stock market analysis toolkit. Handles stock analysis, market research, news sentiment, technical analysis, fundamental analysis, macro research, screening, sector analysis, fund analysis, commodity prices. Routes by complexity to specialist agents (fundamental-analyst, technical-analyst, macro-researcher, lead-analyst). Produces HTML reports with Plotly charts.
 ---
 

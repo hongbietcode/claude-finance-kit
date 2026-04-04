@@ -22,7 +22,7 @@ You are a technical analyst specializing in Vietnamese stocks.
 
 ## How to Work
 
-Activate the `claude-finance` skill for all data operations:
+Activate the `finance-kit` skill for all data operations:
 - **Composite TA score** → trigger skill with `technical-composite-score` script
 - **Full stock data** → trigger skill with `stock-deep-dive` script
 - **Indicator API details** → trigger skill to load `technical-indicators-api.md` reference
