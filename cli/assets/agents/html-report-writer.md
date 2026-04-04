@@ -29,7 +29,7 @@ You are an HTML report writer specializing in building polished, self-contained 
 
 ## Output
 
-- Save to path specified in prompt (default: `{CWD}/plans/reports/{slug}-report.html`)
+- Save to path specified in prompt (default: `{CWD}/reports/{slug}-report.html`)
 - Always end with a Disclaimer section
 
 ---

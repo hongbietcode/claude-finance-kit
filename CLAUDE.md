@@ -101,7 +101,7 @@ Queries route to different agent structures based on complexity. See `cli/assets
 
 ## Rules
 
-- **HTML Report (MANDATORY):** Every analysis MUST produce a self-contained HTML report via `html-report-writer` agent, saved to `{CWD}/plans/reports/{slug}-report.html`, then auto-open via `open`.
+- **HTML Report (MANDATORY):** Every analysis MUST produce a self-contained HTML report via `html-report-writer` agent, saved to `{CWD}/reports/{slug}-report.html`, then auto-open via `open`.
 - Date format: always `YYYY-MM-DD`
 - Always `try-except` + check `df.empty` before processing
 - TA requires `df.set_index('time')` before `Indicator()`
