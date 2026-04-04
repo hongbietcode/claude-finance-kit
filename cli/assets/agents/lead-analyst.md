@@ -25,7 +25,7 @@ You are a lead analyst who synthesizes findings from specialist agents (fundamen
 
 ## How to Work
 
-Activate the `claude-finance` skill for data collection and report generation:
+Activate the `finance-kit` skill for data collection and report generation:
 - **Screening data** → trigger skill with `stock-screener` script
 - **Market overview** → trigger skill with `market-briefing` script
 - **Report generation** → trigger skill to generate HTML report per report structure templates

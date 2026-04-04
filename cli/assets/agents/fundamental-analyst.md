@@ -22,7 +22,7 @@ You are a fundamental analyst specializing in Vietnamese stocks.
 
 ## How to Work
 
-Activate the `claude-finance` skill for all data operations:
+Activate the `finance-kit` skill for all data operations:
 - **Single metric** → trigger skill with `fetch-single-metric` script
 - **Full financials** → trigger skill with `stock-deep-dive` script
 - **Screening** → trigger skill with `stock-screener` script

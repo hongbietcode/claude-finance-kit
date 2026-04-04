@@ -32,11 +32,10 @@ async function main() {
     logger.success('Plugin ZIP ready for distribution!');
     console.log();
     console.log(chalk.bold('Contents:'));
-    console.log(chalk.dim('  .claude-plugin/ — plugin metadata'));
-    console.log(chalk.dim('  agents/         — analyst agent definitions'));
-    console.log(chalk.dim('  skills/         — stock-analysis, market-research, news-sentiment, marcus-vance'));
-    console.log(chalk.dim('  references/     — API docs, methodology, patterns'));
-    console.log(chalk.dim('  templates/      — platform configs (claude, cursor, copilot)'));
+    console.log(chalk.dim('  .claude-plugin/          — plugin metadata'));
+    console.log(chalk.dim('  agents/                  — marcus-vance, fundamental, technical, macro, lead'));
+    console.log(chalk.dim('  skills/finance-kit/   — skill + references + scripts'));
+    console.log(chalk.dim('  templates/               — platform configs (claude, cursor, copilot)'));
     console.log();
   } catch (error) {
     spinner.fail('Packaging failed');

@@ -104,11 +104,11 @@ npx claude-finance-kit-cli init --ai claude    # Claude Code (CLI alternative)
 Once installed, just ask naturally — the plugin auto-invokes the right skill:
 
 ```
-"Analyze FPT stock"                                        → claude-finance (stock deep dive)
-"Market overview today"                                    → claude-finance (market briefing)
-"Compare VNM vs MSN"                                       → claude-finance (comparative)
-"Latest news sentiment for HPG"                            → claude-finance (news sentiment)
-/claude-finance "tôi mua HPG ở giá 26.6k, có nên bán không" → claude-finance (full analysis)
+"Analyze FPT stock"                                        → finance-kit (stock deep dive)
+"Market overview today"                                    → finance-kit (market briefing)
+"Compare VNM vs MSN"                                       → finance-kit (comparative)
+"Latest news sentiment for HPG"                            → finance-kit (news sentiment)
+/finance-kit "tôi mua HPG ở giá 26.6k, có nên bán không" → finance-kit (full analysis)
 ```
 
 ### Python Library Usage
@@ -186,7 +186,7 @@ ind.volume.obv()
 src/claude_finance_kit/       # Python library (PyPI)
 cli/                          # npm CLI installer (claude-finance-kit-cli)
 ├── assets/
-│   ├── skills/claude-finance/ # Single skill with references + scripts
+│   ├── skills/finance-kit/ # Single skill with references + scripts
 │   ├── agents/               # marcus-vance, fundamental-analyst, technical-analyst, macro-researcher, lead-analyst
 │   └── templates/            # Platform configs (claude, cursor, copilot)
 ├── src/                      # CLI source code
@@ -198,7 +198,7 @@ cli/                          # npm CLI installer (claude-finance-kit-cli)
 
 | Component | Type | Role |
 |-----------|------|------|
-| `claude-finance` | Skill | Stock analysis, market research, news sentiment, screening, TA, macro |
+| `finance-kit` | Skill | Stock analysis, market research, news sentiment, screening, TA, macro |
 | `marcus-vance` | Agent | Senior orchestrator — routes by complexity, coordinates agents |
 | `lead-analyst` | Agent | Synthesis for comparative analysis |
 | `fundamental-analyst` | Agent | Financials, valuation, earnings |

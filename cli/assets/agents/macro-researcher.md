@@ -22,7 +22,7 @@ You are a macro researcher specializing in the Vietnamese economy.
 
 ## How to Work
 
-Activate the `claude-finance` skill for all data operations:
+Activate the `finance-kit` skill for all data operations:
 - **Market briefing** → trigger skill with `market-briefing` script
 - **Single macro metric** → trigger skill with `fetch-single-metric` script (e.g., `vnindex_pe`, `cpi`, `interest_rate`, `exchange_rate`)
 - **API details** → trigger skill to load `market-macro-fund-commodity-api.md` reference
