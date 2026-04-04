@@ -53,7 +53,12 @@ def main():
                      ("fdi", lambda: macro.fdi(period="month"))]:
         try:
             df = fn()
-            result[name] = df.tail(6).to_dict(orient="records") if not df.empty else []
+            if not df.empty:
+                if any(isinstance(c, tuple) for c in df.columns):
+                    df.columns = ["_".join(str(x).strip() for x in c) for c in df.columns]
+                result[name] = df.tail(6).to_dict(orient="records")
+            else:
+                result[name] = []
         except Exception as e:
             result[name] = {"error": str(e)}
 

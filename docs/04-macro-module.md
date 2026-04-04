@@ -167,8 +167,7 @@ from claude_finance_kit import Macro
 macro = Macro()
 gdp = macro.gdp(start="2019-01-01", period="quarter")
 
-gdp["growth_pct"] = gdp["gdp"].pct_change() * 100
-print(gdp[["date", "gdp", "growth_pct"]].tail(12))
+print(gdp[["year", "name", "value"]].tail(12))
 ```
 
 ### CPI vs Interest Rate Comparison
@@ -179,13 +178,12 @@ macro = Macro()
 cpi = macro.cpi(length="2Y", period="month")
 rates = macro.interest_rate(start="2024-01-01")
 
-monthly_rate = rates.resample("M", on="date").mean()
-
+# interest_rate returns MultiIndex columns with report_time index
 print("=== CPI (last 6 months) ===")
 print(cpi.tail(6).to_string(index=False))
 
-print("\n=== Avg Monthly Interest Rate ===")
-print(monthly_rate.tail(6))
+print("\n=== Interest Rate (last 6 entries) ===")
+print(rates.tail(6))
 ```
 
 ## Notes

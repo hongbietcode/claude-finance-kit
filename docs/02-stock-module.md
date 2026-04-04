@@ -110,7 +110,7 @@ Common fields: `symbol`, `year` (int), `period` (int: 1-4 for quarter, 0 for yea
 
 ### `ratio()` → DataFrame
 
-Common fields: `symbol`, `year`, `period`, plus: `Revenue`, `Revenue Growth`, `Net Profit`, `ROE`, `ROA`, `PE`, `PB`, `EPS`, `BVPS`, `Dividend`, and additional ratio columns.
+Common fields: `symbol`, `year`, `period`, plus: `P/E`, `P/B`, `P/S`, `EPS (VND)`, `BVPS (VND)`, `ROE (%)`, `ROA (%)`, `ROIC (%)`, `Dividend yield (%)`, `Debt/Equity`, `Current Ratio`, `Gross Profit Margin (%)`, `Net Profit Margin (%)`, and additional ratio columns. **Note:** VCI returns duplicate columns — use `df.loc[:, ~df.columns.duplicated()]` to deduplicate.
 
 ### `all_symbols()` → DataFrame
 
@@ -159,10 +159,11 @@ income = stock.finance.income_statement(period="year")
 
 # Screen VN30 stocks, fetch price board
 vn30 = Stock("FPT").listing.symbols_by_group("VN30")
-board = Stock("FPT").quote.price_board(symbols=vn30["symbol"].tolist())
+board = Stock("FPT").quote.price_board(symbols=vn30.tolist())
 
-# Quarterly financial ratios
+# Quarterly financial ratios (VCI returns English column names)
 ratios = Stock("HPG").finance.ratio(period="quarter")
-print(ratios[["year_report", "length_report", "pe", "pb", "roe"]].tail(8))
+ratios = ratios.loc[:, ~ratios.columns.duplicated()]
+print(ratios[["year", "period", "P/E", "P/B", "ROE (%)"]].tail(8))
 ```
 

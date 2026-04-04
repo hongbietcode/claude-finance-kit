@@ -134,13 +134,13 @@ losers = market.top_loser(limit=5)
 liquid = market.top_liquidity(limit=5)
 
 print("=== Top Gainers ===")
-print(gainers[["symbol", "price", "change_pct"]].to_string(index=False))
+print(gainers[["symbol", "last_price", "price_change_pct_1d"]].to_string(index=False))
 
 print("\n=== Top Losers ===")
-print(losers[["symbol", "price", "change_pct"]].to_string(index=False))
+print(losers[["symbol", "last_price", "price_change_pct_1d"]].to_string(index=False))
 
 print("\n=== Most Liquid ===")
-print(liquid[["symbol", "value"]].to_string(index=False))
+print(liquid[["symbol", "accumulated_value"]].to_string(index=False))
 ```
 
 ### P/E and P/B Side by Side
@@ -151,7 +151,7 @@ market = Market("VN30")
 pe = market.pe(duration="1Y")
 pb = market.pb(duration="1Y")
 
-merged = pe.merge(pb, on="date", suffixes=("_pe", "_pb"))
+merged = pe.merge(pb, left_index=True, right_index=True, suffixes=("_pe", "_pb"))
 print(merged.tail(10))
 ```
 

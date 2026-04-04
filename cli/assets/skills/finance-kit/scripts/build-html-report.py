@@ -41,8 +41,8 @@ def inline_scripts(html):
         pattern = rf'<script\s+src="{re.escape(cdn_url)}">\s*</script>'
         if re.search(pattern, html):
             js_content = download_and_cache(cdn_url, cache_name)
-            replacement = f"<script>{js_content}</script>"
-            html = re.sub(pattern, replacement, html)
+            inline_tag = f"<script>{js_content}</script>"
+            html = re.sub(pattern, lambda _: inline_tag, html)
             print(f"Inlined {cache_name} ({len(js_content):,} chars)")
     return html
 

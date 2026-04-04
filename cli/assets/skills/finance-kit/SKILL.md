@@ -1,6 +1,6 @@
 ---
 name: finance-kit
-description: Vietnamese stock market analysis toolkit. Senior analyst orchestrator — routes queries by complexity, spawns specialist subagents (fundamental, technical, macro, lead-analyst), collects data via scripts, produces HTML reports. Single entry point for all stock analysis, market research, news sentiment, screening, sector analysis.
+description: Vietnamese stock market analysis toolkit. Orchestrator skill (persona: Marcus Vance) — does NOT analyze data itself. Routes queries by complexity tier (T1-T4), collects data via Python scripts, spawns specialist agents by name (fundamental-analyst, technical-analyst, macro-researcher, lead-analyst), assembles HTML reports. Single entry point for all analysis workflows.
 ---
 
 **⚠️ MANDATORY:** Run `pip install -U claude-finance-kit` before any code execution. See [install guide](references/installation-guide.md) for extras (`[all]`, `[ta]`, `[news]`, `[search]`).
@@ -47,17 +47,13 @@ You do NOT analyze data yourself — you route, coordinate, and deliver.
 
 ### How to Spawn Specialists
 
-Use the `Agent` tool. Read the specialist's agent definition file, then include its content in the subagent prompt along with the data from scripts.
+Use the `Agent` tool with `subagent_type` matching the specialist name. Pass collected data in the prompt.
 
 ```
-Agent(prompt="
-[Contents of agents/fundamental-analyst.md instructions]
-
-DATA:
-[JSON output from scripts/stock-deep-dive.py]
-
-TASK: Analyze FPT fundamentals. Produce your analysis section.
-")
+Agent(
+  subagent_type="fundamental-analyst",
+  prompt="DATA: [JSON from scripts] TASK: Analyze FPT fundamentals."
+)
 ```
 
 For T2+, spawn multiple Agent calls in a single message for parallel execution.
@@ -125,7 +121,7 @@ Run appropriate script. Scripts output JSON to stdout. Pass data to subagents.
 
 ### Step 4 — Spawn Agents
 
-Read specialist agent definition from `agents/` directory. Include its instructions + script data in the `Agent` tool prompt. Per tier: T1 = single, T2 = parallel, T3 = specialists → lead-analyst, T4 = lead-analyst coordinates.
+Spawn specialists by name via `Agent` tool with `subagent_type`. Pass script data in the prompt. Per tier: T1 = single, T2 = parallel, T3 = specialists → lead-analyst, T4 = lead-analyst coordinates.
 
 ### Step 5 — Generate HTML Report (MANDATORY)
 
@@ -149,16 +145,16 @@ Pre-built data collectors. Execute via `python scripts/<name>.py [args]`. Output
 | `scripts/fetch-single-metric.py` | Quick single metric lookup | `TICKER METRIC` |
 | `scripts/build-html-report.py` | Inline CDN scripts for offline HTML | `INPUT_HTML [OUTPUT_HTML]` |
 
-## Specialist Agents (reference definitions)
+## Specialist Agents
 
-Agent definitions in `agents/` directory. Read and include in subagent prompts when spawning.
+Spawn via `Agent` tool using `subagent_type` matching the agent name.
 
-| Agent | File | Domain |
-|-------|------|--------|
-| fundamental-analyst | `agents/fundamental-analyst.md` | Valuation, financials, balance sheet |
-| technical-analyst | `agents/technical-analyst.md` | Trend, momentum, S/R, volume |
-| macro-researcher | `agents/macro-researcher.md` | GDP, CPI, rates, FX, commodities |
-| lead-analyst | `agents/lead-analyst.md` | Synthesis, decisions, risk ranking |
+| Agent | Domain |
+|-------|--------|
+| fundamental-analyst | Valuation, financials, balance sheet |
+| technical-analyst | Trend, momentum, S/R, volume |
+| macro-researcher | GDP, CPI, rates, FX, commodities |
+| lead-analyst | Synthesis, decisions, risk ranking |
 
 ## Report Structures
 
@@ -211,7 +207,7 @@ Agent definitions in `agents/` directory. Read and include in subagent prompts w
 ```
 Price history  → Stock("FPT").quote.history(start, end, interval)
 Intraday       → Stock("FPT").quote.intraday()
-Price board    → Stock("FPT").quote.price_board(symbols=["FPT","VNM"])
+Price board    → Stock("FPT").quote.price_board(symbols=["FPT","VNM"])  # MultiIndex: df[("match","match_price")]
 Company info   → stock.company.overview() / shareholders() / officers() / news() / events()
 Financials     → stock.finance.balance_sheet() / income_statement() / cash_flow() / ratio()
 Listing        → stock.listing.all_symbols() / symbols_by_group("VN30") / symbols_by_industries()

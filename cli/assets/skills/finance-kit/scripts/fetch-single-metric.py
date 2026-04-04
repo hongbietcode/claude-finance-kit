@@ -15,16 +15,16 @@ from datetime import datetime
 
 
 STOCK_METRICS = {
-    "pe": ("ratio", "priceToEarning"),
-    "pb": ("ratio", "priceToBook"),
-    "roe": ("ratio", "roe"),
-    "roa": ("ratio", "roa"),
-    "eps": ("ratio", "earningPerShare"),
-    "dividend_yield": ("ratio", "dividend"),
-    "debt_equity": ("ratio", "debtOnEquity"),
-    "current_ratio": ("ratio", "currentPayment"),
-    "gross_margin": ("ratio", "grossProfitMargin"),
-    "net_margin": ("ratio", "postTaxMargin"),
+    "pe": ("ratio", "P/E"),
+    "pb": ("ratio", "P/B"),
+    "roe": ("ratio", "ROE (%)"),
+    "roa": ("ratio", "ROA (%)"),
+    "eps": ("ratio", "EPS (VND)"),
+    "dividend_yield": ("ratio", "Dividend yield (%)"),
+    "debt_equity": ("ratio", "Debt/Equity"),
+    "current_ratio": ("ratio", "Current Ratio"),
+    "gross_margin": ("ratio", "Gross Profit Margin (%)"),
+    "net_margin": ("ratio", "Net Profit Margin (%)"),
 }
 
 MARKET_METRICS = {"vnindex_pe", "cpi", "interest_rate", "exchange_rate"}
@@ -44,7 +44,7 @@ def main():
     elif metric == "price":
         result = fetch_price(args.ticker, args.source)
     elif metric == "market_cap":
-        result = fetch_overview_field(args.ticker, args.source, "marketCap")
+        result = fetch_market_cap(args.ticker, args.source)
     elif metric in STOCK_METRICS:
         result = fetch_ratio_metric(args.ticker, args.source, metric)
     else:
@@ -66,7 +66,11 @@ def fetch_ratio_metric(ticker, source, metric):
     if ratios.empty:
         return {"ticker": ticker, "metric": metric, "value": None, "error": "no data"}
     _, col = STOCK_METRICS[metric]
-    val = ratios.iloc[0].get(col)
+    ratios = ratios.loc[:, ~ratios.columns.duplicated()]
+    if col in ratios.columns:
+        val = ratios[col].iloc[0]
+    else:
+        val = ratios.iloc[0].get(col)
     return {"ticker": ticker, "metric": metric, "value": float(val) if val is not None else None}
 
 
@@ -85,19 +89,21 @@ def fetch_price(ticker, source):
     return {"ticker": ticker, "metric": "price", "value": float(last.get("close", last.get("price", 0)))}
 
 
-def fetch_overview_field(ticker, source, field):
+def fetch_market_cap(ticker, source):
     from claude_finance_kit import Stock
     from claude_finance_kit.core.exceptions import ProviderError
+    col = "Market Capital (Bn. VND)"
     try:
         stock = Stock(ticker, source=source)
-        overview = stock.company.overview()
+        ratios = stock.finance.ratio(period="quarter")
     except (ProviderError, Exception):
         stock = Stock(ticker, source="KBS")
-        overview = stock.company.overview()
-    if overview.empty:
-        return {"ticker": ticker, "metric": field, "value": None}
-    val = overview.iloc[0].get(field)
-    return {"ticker": ticker, "metric": field, "value": float(val) if val is not None else None}
+        ratios = stock.finance.ratio(period="quarter")
+    ratios = ratios.loc[:, ~ratios.columns.duplicated()]
+    if ratios.empty or col not in ratios.columns:
+        return {"ticker": ticker, "metric": "market_cap", "value": None}
+    val = ratios[col].iloc[0]
+    return {"ticker": ticker, "metric": "market_cap", "value": float(val) if val is not None else None}
 
 
 def fetch_market_metric(metric):
