@@ -1,4 +1,4 @@
-"""Private shared utilities: HTTP client, proxy, parser, transform, validation."""
+"""Private shared utilities: HTTP client, parser, transform, validation."""
 
 from claude_finance_kit._internal.browser_profiles import USER_AGENTS, list_all_profiles
 from claude_finance_kit._internal.env import (
@@ -17,7 +17,6 @@ from claude_finance_kit._internal.parser import (
     parse_timestamp,
     safe_json_get,
 )
-from claude_finance_kit._internal.proxy import Proxy, ProxyPool, fetch_free_proxies, parse_proxy_string
 from claude_finance_kit._internal.transform import (
     clean_html_dict,
     clean_numeric_string,
@@ -59,10 +58,6 @@ __all__ = [
     "localize_timestamp",
     "parse_timestamp",
     "safe_json_get",
-    "Proxy",
-    "ProxyPool",
-    "fetch_free_proxies",
-    "parse_proxy_string",
     "clean_html_dict",
     "clean_numeric_string",
     "flatten_hierarchical_index",

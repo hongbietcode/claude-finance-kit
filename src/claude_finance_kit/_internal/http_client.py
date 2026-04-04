@@ -1,8 +1,7 @@
-"""Shared HTTP client with retry, timeout, and env-based proxy support."""
+"""Shared HTTP client with retry and timeout support."""
 
 import json
 import logging
-import os
 from typing import Any, Optional, Union
 
 import requests
@@ -21,23 +20,6 @@ DEFAULT_RETRY_WAIT_MIN = 1
 DEFAULT_RETRY_WAIT_MAX = 8
 
 
-_LOCAL_PREFIXES = ("localhost", "127.", "0.0.0.0", "::1", "[::1]")
-
-
-def _get_proxy_dict() -> dict[str, str]:
-    """Read proxy from HTTPS_PROXY / HTTP_PROXY env vars, skip local proxies.
-
-    Returns explicit empty dict for local proxies to override requests' env detection.
-    """
-    proxy = os.getenv("HTTPS_PROXY") or os.getenv("HTTP_PROXY")
-    _NO_PROXY = {"http": None, "https": None}
-    if not proxy:
-        return _NO_PROXY
-    stripped = proxy.split("://", 1)[-1].split(":")[0]
-    if stripped.startswith(_LOCAL_PREFIXES):
-        return _NO_PROXY
-    return {"http": proxy, "https": proxy}
-
 
 def _do_request(
     url: str,
@@ -48,12 +30,10 @@ def _do_request(
     timeout: int,
 ) -> dict[str, Any]:
     """Execute a single HTTP request and return parsed JSON."""
-    proxies = _get_proxy_dict()
     try:
         kwargs: dict[str, Any] = {
             "headers": headers,
             "timeout": timeout,
-            "proxies": proxies,
         }
         if method.upper() == "GET":
             kwargs["params"] = params
@@ -90,7 +70,7 @@ def send_request(
     timeout: int = DEFAULT_TIMEOUT,
     show_log: bool = False,
 ) -> dict[str, Any]:
-    """Central HTTP dispatcher with retry and env-based proxy."""
+    """Central HTTP dispatcher with retry."""
     if show_log:
         logger.debug("%s %s", method.upper(), url)
     return _do_request(url, headers, method, params, payload, timeout)
