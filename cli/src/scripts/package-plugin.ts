@@ -33,7 +33,7 @@ async function main() {
     console.log();
     console.log(chalk.bold('Contents:'));
     console.log(chalk.dim('  .claude-plugin/          — plugin metadata'));
-    console.log(chalk.dim('  agents/                  — marcus-vance, fundamental, technical, macro, lead'));
+    console.log(chalk.dim('  agents/                  — fundamental, technical, macro, lead'));
     console.log(chalk.dim('  skills/finance-kit/   — skill + references + scripts'));
     console.log(chalk.dim('  templates/               — platform configs (claude, cursor, copilot)'));
     console.log();

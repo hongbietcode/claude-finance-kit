@@ -187,7 +187,7 @@ src/claude_finance_kit/       # Python library (PyPI)
 cli/                          # npm CLI installer (claude-finance-kit-cli)
 ├── assets/
 │   ├── skills/finance-kit/ # Single skill with references + scripts
-│   ├── agents/               # marcus-vance, fundamental-analyst, technical-analyst, macro-researcher, lead-analyst
+│   ├── agents/               # fundamental-analyst, technical-analyst, macro-researcher, lead-analyst
 │   └── templates/            # Platform configs (claude, cursor, copilot)
 ├── src/                      # CLI source code
 └── dist/                     # Built CLI
@@ -198,12 +198,11 @@ cli/                          # npm CLI installer (claude-finance-kit-cli)
 
 | Component | Type | Role |
 |-----------|------|------|
-| `finance-kit` | Skill | Stock analysis, market research, news sentiment, screening, TA, macro |
-| `marcus-vance` | Agent | Senior orchestrator — routes by complexity, coordinates agents |
-| `lead-analyst` | Agent | Synthesis for comparative analysis |
-| `fundamental-analyst` | Agent | Financials, valuation, earnings |
-| `technical-analyst` | Agent | Price trends, momentum, S/R levels |
-| `macro-researcher` | Agent | GDP, CPI, rates, FX, commodities |
+| `finance-kit` | Skill | Senior analyst orchestrator (Marcus Vance). Single entry point — routes by complexity, spawns specialists, produces reports |
+| `fundamental-analyst` | Agent | Financials, valuation, earnings (spawned by skill) |
+| `technical-analyst` | Agent | Price trends, momentum, S/R levels (spawned by skill) |
+| `macro-researcher` | Agent | GDP, CPI, rates, FX, commodities (spawned by skill) |
+| `lead-analyst` | Agent | Synthesis + decision for T3/T4 analysis (spawned by skill) |
 
 ## Environment Variables
 
