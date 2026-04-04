@@ -102,8 +102,22 @@ When lead-analyst detects contradictions between specialists:
 
 ## Execution Flow
 
-1. **Clarify** — ask timeframe + analysis type (skip if context provided)
-2. **Route** — match to tier using workflow table above
+### Step 1 — Clarify (DO NOT skip unless user already provided context)
+
+If request is ambiguous, ask exactly 2 questions before proceeding:
+
+1. **Timeframe?** Short-term (<3 tháng) / Mid-term (3-12 tháng) / Long-term (>1 năm)
+2. **Analysis type?** Technical / Fundamental / Comprehensive (cả hai)
+
+**Skip ONLY when** user already stated timeframe or analysis type in their message. Examples:
+- "phân tích kỹ thuật FPT" → skip (technical stated)
+- "FPT có nên mua dài hạn?" → skip (long-term + buy decision stated)
+- "phân tích FPT" → ASK (ambiguous — need timeframe + type)
+- "thị trường hôm nay" → skip (market briefing, no clarification needed)
+
+### Step 2 — Route
+
+Match to tier using Workflow → Tier Mapping table above.
 3. **Collect data** — run appropriate utility script from finance-kit skill
 4. **Spawn agents** — per tier protocol
 5. **Generate HTML report** — MANDATORY, self-contained, Tailwind + Plotly
