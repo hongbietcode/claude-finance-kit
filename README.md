@@ -104,11 +104,11 @@ npx claude-finance-kit-cli init --ai claude    # Claude Code (CLI alternative)
 Once installed, just ask naturally — the plugin auto-invokes the right skill:
 
 ```
-"Analyze FPT stock"                                        → stock-analysis
-"Market overview today"                                    → market-research
-"Compare VNM vs MSN"                                       → stock-analysis (comparative)
-"Latest news sentiment for HPG"                            → news-sentiment
-/marcus-vance "tôi mua HPG ở giá 26.6k, có nên bán không" → marcus-vance (full analysis)
+"Analyze FPT stock"                                        → claude-finance (stock deep dive)
+"Market overview today"                                    → claude-finance (market briefing)
+"Compare VNM vs MSN"                                       → claude-finance (comparative)
+"Latest news sentiment for HPG"                            → claude-finance (news sentiment)
+/claude-finance "tôi mua HPG ở giá 26.6k, có nên bán không" → claude-finance (full analysis)
 ```
 
 ### Python Library Usage
@@ -186,9 +186,8 @@ ind.volume.obv()
 src/claude_finance_kit/       # Python library (PyPI)
 cli/                          # npm CLI installer (claude-finance-kit-cli)
 ├── assets/
-│   ├── skills/               # marcus-vance, stock-analysis, market-research, news-sentiment
-│   ├── agents/               # fundamental-analyst, technical-analyst, macro-researcher, lead-analyst
-│   ├── references/           # API docs, methodology, patterns
+│   ├── skills/claude-finance/ # Single skill with references + scripts
+│   ├── agents/               # marcus-vance, fundamental-analyst, technical-analyst, macro-researcher, lead-analyst
 │   └── templates/            # Platform configs (claude, cursor, copilot)
 ├── src/                      # CLI source code
 └── dist/                     # Built CLI
@@ -199,10 +198,8 @@ cli/                          # npm CLI installer (claude-finance-kit-cli)
 
 | Component | Type | Role |
 |-----------|------|------|
-| `marcus-vance` | Skill | Senior analyst — orchestrates workflows, routes by complexity |
-| `stock-analysis` | Skill | Individual stock deep dive |
-| `market-research` | Skill | Market-wide analysis |
-| `news-sentiment` | Skill | News crawling + sentiment |
+| `claude-finance` | Skill | Stock analysis, market research, news sentiment, screening, TA, macro |
+| `marcus-vance` | Agent | Senior orchestrator — routes by complexity, coordinates agents |
 | `lead-analyst` | Agent | Synthesis for comparative analysis |
 | `fundamental-analyst` | Agent | Financials, valuation, earnings |
 | `technical-analyst` | Agent | Price trends, momentum, S/R levels |
