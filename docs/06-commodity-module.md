@@ -192,4 +192,3 @@ for name, df in datasets.items():
 - Explicit `start`/`end` take precedence over `length`.
 - Data availability varies by commodity; some may have gaps on non-trading days.
 
-**See also:** [`references/common-patterns.md`](../references/common-patterns.md) — error handling, caching pattern, gotchas.

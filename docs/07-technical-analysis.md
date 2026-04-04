@@ -226,4 +226,3 @@ signals = df[(df["SMA_20"] > df["SMA_50"]) & (df["RSI"] < 70)]
 print(signals[["close", "SMA_20", "SMA_50", "RSI", "ATR"]].tail())
 ```
 
-**See also:** [`references/common-patterns.md`](../references/common-patterns.md) — TA setup pattern, DatetimeIndex requirement, NaN warmup gotcha.

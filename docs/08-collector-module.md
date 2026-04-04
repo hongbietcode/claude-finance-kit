@@ -224,4 +224,3 @@ Additional provider-specific columns may be present depending on the intraday so
 
 Requires `[collector]` extra: duckdb, pyarrow, tqdm, aiohttp, nest-asyncio, websockets.
 
-**See also:** [`references/common-patterns.md`](../references/common-patterns.md) — batch processing pattern, caching, error handling.

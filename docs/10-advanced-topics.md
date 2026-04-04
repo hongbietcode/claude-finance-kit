@@ -174,4 +174,3 @@ dates = DateRange(start="2024-01-01", end="2024-12-31")
 from claude_finance_kit.core.constants import INDICES_INFO, INDICES_MAP, INDEX_GROUPS, SECTOR_IDS, EXCHANGES
 ```
 
-**See also:** [`references/common-patterns.md`](../references/common-patterns.md) — error handling patterns, source fallback, gotchas.

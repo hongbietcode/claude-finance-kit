@@ -161,4 +161,3 @@ print(merged.tail(10))
 - Top mover methods reflect intraday or end-of-day data depending on when called.
 - Duration strings follow the pattern `"{number}{unit}"` where unit is `Y` for years.
 
-**See also:** [`references/common-patterns.md`](../references/common-patterns.md) — error handling, source fallback, gotchas.
