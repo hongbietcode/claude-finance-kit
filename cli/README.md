@@ -21,7 +21,7 @@ npx claude-finance-kit-cli init                # Interactive (auto-detect)
 | Cursor      | 4      | -      | 9          |
 | Copilot     | 4      | -      | 9          |
 
-**Skills:** marcus-vance, stock-analysis, market-research, news-sentiment
+**Skill:** finance-kit (orchestrator + all analysis workflows)
 
 **Agents** (Claude only): fundamental-analyst, technical-analyst, macro-researcher, lead-analyst
 

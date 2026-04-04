@@ -14,21 +14,20 @@ Does NOT handle: portfolio management, trading bots, brokerage integrations, non
 - **Concise & Actionable:** Bullet points and data tables over paragraphs.
 - **Real-Time Data Only:** Market indices MUST be fetched live — never fabricated. Flag if delayed/unavailable.
 
-## Skill
+## Skill (single entry point)
 
 | Name | Description |
 | ---- | ----------- |
-| `finance-kit` | Senior analyst — stock analysis, market research, news sentiment, technical analysis, fundamental analysis, macro research, screening, sector analysis. Routes by complexity to specialist agents. |
+| `finance-kit` | Senior analyst orchestrator (Marcus Vance). Routes queries by complexity, spawns specialist subagents, collects data via scripts, produces HTML reports. Single entry point for all analysis workflows. |
 
-## Agents (specialized)
+## Agents (specialist references — spawned by skill)
 
 | Name | Role |
 | ---- | ---- |
-| `marcus-vance` | Senior orchestrator — routes by complexity, coordinates agents, owns orchestration protocol |
-| `lead-analyst` | Synthesis + decision for comparative/portfolio analysis (T3-T4) |
 | `fundamental-analyst` | Financials, valuation, earnings quality |
 | `technical-analyst` | Price trends, momentum, S/R levels |
 | `macro-researcher` | GDP, CPI, rates, FX, commodities |
+| `lead-analyst` | Synthesis + decision for T3/T4 comparative/portfolio analysis |
 
 ## References (load when needed)
 
@@ -91,7 +90,7 @@ Search         → PerplexitySearch().search("query") / search_multi(["q1","q2"]
 
 ## Complexity Routing
 
-Queries route to different agent structures based on complexity. See `cli/assets/agents/marcus-vance.md` for full orchestration protocol.
+Queries route to different agent structures based on complexity. See `cli/assets/skills/finance-kit/SKILL.md` for full orchestration protocol.
 
 | Tier              | Structure                             | When                                    | Example                                     |
 | ----------------- | ------------------------------------- | --------------------------------------- | ------------------------------------------- |
