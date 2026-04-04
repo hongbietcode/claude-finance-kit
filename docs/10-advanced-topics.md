@@ -141,22 +141,6 @@ claude_finance_kit.news            # loads news module (requires [news] extra)
 - Random user-agent rotation to avoid blocks
 - Configurable timeouts
 
-### Proxy Support
-
-Set the `OPEN_STOCK_PROXY` environment variable:
-
-```bash
-export OPEN_STOCK_PROXY="http://proxy:8080"
-```
-
-Or use the proxy pool programmatically:
-
-```python
-from claude_finance_kit._internal.proxy import ProxyPool
-
-pool = ProxyPool(proxies=["http://p1:8080", "http://p2:8080"])
-```
-
 ### Data Models
 
 Pydantic v2 models for structured data:
