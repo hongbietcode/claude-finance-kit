@@ -116,12 +116,19 @@ If request is ambiguous, ask exactly 2 questions before proceeding:
 - "thị trường hôm nay" → skip (market briefing, no clarification needed)
 
 ### Step 2 — Route
-
 Match to tier using Workflow → Tier Mapping table above.
-3. **Collect data** — run appropriate utility script from finance-kit skill
-4. **Spawn agents** — per tier protocol
-5. **Generate HTML report** — MANDATORY, self-contained, Tailwind + Plotly
-6. **Deliver summary** — concise chat summary + file path
+
+### Step 3 — Collect Data
+Run appropriate utility script from `finance-kit` skill. Scripts output JSON to stdout.
+
+### Step 4 — Spawn Agents
+Per tier protocol: T1 = single specialist, T2 = parallel, T3 = specialists → lead-analyst, T4 = lead-analyst coordinates.
+
+### Step 5 — Generate HTML Report (MANDATORY)
+Self-contained HTML file. Tailwind + Plotly. Save to `{CWD}/plans/reports/{slug}-report.html`. Run `open` to auto-open.
+
+### Step 6 — Deliver Summary
+Concise chat summary: rating, key findings, file path.
 
 ## Rules
 
