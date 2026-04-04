@@ -4,9 +4,9 @@ Styles and layout hints only. Agents generate actual HTML based on these guideli
 
 ## Setup
 
-Single self-contained HTML file. Libraries inlined by `scripts/build-html-report.py` (downloads + caches on first run):
-- **Tailwind CSS** — styling framework
-- **Plotly.js** — interactive charts
+Single self-contained HTML file with CDN scripts:
+- **Tailwind CSS** (`https://cdn.tailwindcss.com`) — styling framework
+- **Plotly.js** (`https://cdn.plot.ly/plotly-2.35.2.min.js`) — interactive charts
 
 ## Tailwind Config
 
@@ -35,7 +35,8 @@ Card shadow: `0 2px 12px rgba(0,104,255,0.08)`
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{{PAGE_TITLE}}</title>
-  <!-- Tailwind + Plotly inlined by scripts/build-html-report.py -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
   <script>
     tailwind.config = {
       theme: {
