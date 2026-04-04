@@ -125,7 +125,7 @@ Spawn specialists by name via `Agent` tool with `subagent_type`. Pass script dat
 
 ### Step 5 — Generate HTML Report (MANDATORY)
 
-Self-contained HTML file. Tailwind + Plotly. Save to `{CWD}/plans/reports/{slug}-report.html`. Run `open` to auto-open. See [html-report-design-system.md](references/html-report-design-system.md) for styling.
+Spawn `html-report-writer` agent via `Agent` tool. Pass all analysis sections/data. It builds and auto-opens the report.
 
 ### Step 6 — Deliver Summary
 
@@ -143,7 +143,6 @@ Pre-built data collectors. Execute via `python scripts/<name>.py [args]`. Output
 | `scripts/technical-composite-score.py` | TA composite score (trend+momentum+volume+volatility) | `TICKER [--days 200]` |
 | `scripts/stock-screener.py` | Multi-criteria screening (Magic Formula, CAN SLIM) | `[--group VN30] [--strategy magic]` |
 | `scripts/fetch-single-metric.py` | Quick single metric lookup | `TICKER METRIC` |
-| `scripts/build-html-report.py` | Inline CDN scripts for offline HTML | `INPUT_HTML [OUTPUT_HTML]` |
 
 ## Specialist Agents
 
@@ -155,6 +154,7 @@ Spawn via `Agent` tool using `subagent_type` matching the agent name.
 | technical-analyst | Trend, momentum, S/R, volume |
 | macro-researcher | GDP, CPI, rates, FX, commodities |
 | lead-analyst | Synthesis, decisions, risk ranking |
+| html-report-writer | HTML report generation with design system |
 
 ## Report Structures
 
@@ -199,7 +199,6 @@ Spawn via `Agent` tool using `subagent_type` matching the agent name.
 | [news-crawler-collector-search-api.md](references/news-crawler-collector-search-api.md) | News crawlers, Collector, Perplexity Search |
 | [valuation-screening-methodology.md](references/valuation-screening-methodology.md) | Valuation, financial health, TA signals, screening, macro thresholds |
 | [error-handling-and-common-patterns.md](references/error-handling-and-common-patterns.md) | Error handling, caching, batch processing, source fallback |
-| [html-report-design-system.md](references/html-report-design-system.md) | Tailwind config, components, Plotly layout |
 | [banking-realestate-consumer-sectors.md](references/banking-realestate-consumer-sectors.md) | Banking NIM/NPL, Real estate NAV, Consumer ROIC |
 
 ## Quick API Lookup
@@ -225,7 +224,8 @@ Search         → PerplexitySearch().search("query") / search_multi(["q1","q2"]
 
 - Always communicate in user's language (Vietnamese có dấu if user writes Vietnamese)
 - Date format: YYYY-MM-DD
-- Every analysis MUST produce an HTML report file
+- Every analysis MUST produce an HTML report via `html-report-writer` agent
+- **ALWAYS delegate to specialist agents** — you orchestrate, they analyze and write reports
 - Source fallback: VCI → KBS (see [error-handling-and-common-patterns.md](references/error-handling-and-common-patterns.md))
 - `df.set_index('time')` before `Indicator()`
 - Always `try-except` + check `df.empty`

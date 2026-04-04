@@ -28,6 +28,7 @@ Does NOT handle: portfolio management, trading bots, brokerage integrations, non
 | `technical-analyst` | Trend identification, momentum signals, S/R levels, volume analysis. Triggers `finance-kit` skill for data. |
 | `macro-researcher` | GDP, CPI, interest rates, FX, FDI, trade balance, commodity impact. Triggers `finance-kit` skill for data. |
 | `lead-analyst` | Synthesis + decision for T3/T4 comparative/portfolio analysis. Coordinates `fundamental-analyst`, `technical-analyst`, `macro-researcher`. |
+| `html-report-writer` | Builds self-contained HTML reports with Tailwind + Plotly following the ZaloPay Fintech design system. |
 
 ## References (load when needed)
 
@@ -40,7 +41,6 @@ Does NOT handle: portfolio management, trading bots, brokerage integrations, non
 | `cli/assets/skills/finance-kit/references/valuation-screening-methodology.md` | Valuation, financial health, TA signals, screening, macro, sentiment, fund flows |
 | `cli/assets/skills/finance-kit/references/error-handling-and-common-patterns.md` | Error handling, caching, batch processing |
 | `cli/assets/skills/finance-kit/references/banking-realestate-consumer-sectors.md` | Banking NIM/NPL, Real estate NAV, Consumer ROIC |
-| `cli/assets/skills/finance-kit/references/html-report-design-system.md` | HTML report design system: Tailwind, Plotly, components |
 
 ## Disclaimer
 
@@ -101,7 +101,7 @@ Queries route to different agent structures based on complexity. See `cli/assets
 
 ## Rules
 
-- **HTML Report (MANDATORY):** Every analysis MUST produce a self-contained HTML report file saved to `{CWD}/plans/reports/{slug}-report.html`, then auto-open via `open`. See `cli/assets/skills/finance-kit/references/html-report-design-system.md` for styling.
+- **HTML Report (MANDATORY):** Every analysis MUST produce a self-contained HTML report via `html-report-writer` agent, saved to `{CWD}/plans/reports/{slug}-report.html`, then auto-open via `open`.
 - Date format: always `YYYY-MM-DD`
 - Always `try-except` + check `df.empty` before processing
 - TA requires `df.set_index('time')` before `Indicator()`
