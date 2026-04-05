@@ -47,7 +47,7 @@ fund.asset_holding(fund_id=fund_id)   # asset type breakdown → DataFrame
 fund.nav_report(fund_id=fund_id)      # full NAV history → DataFrame
 ```
 
-Note: use `fund_id` (string from `fund_filter`) — NOT `fundId`.
+Note: use `fund_id` (int from `fund_filter`) — NOT `fundId`.
 Source: FMARKET (58+ quỹ mở).
 
 ## Commodity

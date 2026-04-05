@@ -110,7 +110,8 @@ Batch crawl with rate limiting and temp file support.
 ```python
 from claude_finance_kit.news import BatchCrawler
 
-bc = BatchCrawler(site_name="cafef", request_delay=1.0, temp_file="temp_articles.csv", output_path=None, debug=False)
+bc = BatchCrawler(site_name="cafef", request_delay=1.0)
+# Either site_name OR custom_config is required (cannot omit both)
 articles = bc.fetch_articles(sitemap_url=None, limit=10, top_n=None, top_n_per_feed=None, within=None)
 details = bc.fetch_details_for_urls(urls=["https://cafef.vn/article.htm"])
 ```

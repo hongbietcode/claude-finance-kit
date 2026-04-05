@@ -222,7 +222,7 @@ Listing        → stock.listing.all_symbols() / symbols_by_group("VN30") / symb
 Market val.    → Market("VNINDEX").pe(duration="5Y") / pb(duration="5Y")
 Top movers     → Market("VNINDEX").top_gainer(limit=10) / top_loser(10) / top_liquidity(10)
 Macro          → Macro().gdp() / cpi() / interest_rate() / exchange_rate() / fdi() / trade_balance()
-Fund           → Fund().listing("STOCK") / fund_filter("VESAF") / top_holding(id) / nav_report(id)
+Fund           → Fund().listing("STOCK") / fund_filter("VESAF") / top_holding(id) / industry_holding(id) / nav_report(id) / asset_holding(id)
 Commodity      → Commodity().gold() / oil() / steel() / gas() / fertilizer() / agricultural()
 TA indicators  → Indicator(df).trend.sma/ema / momentum.rsi/macd / volatility.atr / volume.obv/cmf
 News           → Crawler("cafef").get_latest_articles(10) / get_article_details(url)

@@ -176,7 +176,7 @@ class FmarketProvider(FundProvider):
         """Full NAV history for given fund_id."""
         fid = int(fund_id)
         current_date = datetime.now().strftime("%Y%m%d")
-        nav_url = _BASE_URL[:-1] + "get-nav-history"
+        nav_url = _BASE_URL.replace("products", "product/get-nav-history")
         payload = {
             "isAllData": 1,
             "productId": fid,
