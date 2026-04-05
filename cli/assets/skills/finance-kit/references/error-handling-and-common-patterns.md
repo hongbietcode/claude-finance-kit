@@ -108,7 +108,7 @@ from claude_finance_kit import Fund
 
 fund = Fund()
 row = fund.fund_filter(symbol="SSISCA")
-fund_id = row['id'].iloc[0]      # string — pass to top_holding, nav_report, etc.
+fund_id = row['id'].iloc[0]      # int — pass to top_holding, nav_report, asset_holding, etc.
 holdings = fund.top_holding(fund_id=fund_id)
 ```
 
@@ -121,7 +121,7 @@ c = Crawler(site_name="cafef")
 articles = c.get_latest_articles(limit=10)
 detail = c.get_article_details(url=articles[0]['url'])
 
-bc = BatchCrawler(site_name="cafef", request_delay=1.0)
+bc = BatchCrawler(site_name="cafef", request_delay=1.0)  # site_name OR custom_config required
 batch = bc.fetch_articles(limit=100)
 ```
 
@@ -135,7 +135,10 @@ batch = bc.fetch_articles(limit=100)
 6. DatetimeIndex: `Indicator()` requires `df.set_index('time')`
 7. Empty data: always check `df.empty` before use
 8. NaN warmup: TA indicators produce NaN for first N-1 rows
-9. Fund ID: use `fund.fund_filter(symbol)['id'].iloc[0]` — not symbol directly
+9. Fund ID: use `fund.fund_filter(symbol)['id'].iloc[0]` (int) — not symbol directly
+
 10. No auth needed: claude-finance-kit requires no API keys (except FMP for global stocks)
 11. Intervals: use `"30m"`, `"1H"` (not `"30M"`, `"1h"`) — case-sensitive
 12. News: `Crawler` and `BatchCrawler` are public exports; `NewsArticleParser`, `RSS`, `TrendingAnalyzer` require direct imports
+13. `BatchCrawler` requires either `site_name` or `custom_config` — omitting both raises error
+14. `run_intraday_task` default mode is `"live"` (not `"eod"`); signature: `(tickers, mode="live", interval=60, backup=True, max_backups=2)`

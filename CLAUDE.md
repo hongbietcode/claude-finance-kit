@@ -58,7 +58,7 @@ Intraday       → Stock("FPT").quote.intraday()
 Price board    → Stock("FPT").quote.price_board(symbols=["FPT","VNM"])  # MultiIndex: df[("match","match_price")]
 Company info   → stock.company.overview() / shareholders() / officers() / news() / events()
 Financials     → stock.finance.balance_sheet() / income_statement() / cash_flow() / ratio()
-Listing        → stock.listing.all_symbols() / symbols_by_group("VN30") / symbols_by_industries()
+Listing        → stock.listing.all_symbols(exchange=None) / symbols_by_group("VN30") / symbols_by_industries()  # all_symbols has NO limit param
 Price depth    → stock.trading.price_depth()
 Market val.    → Market("VNINDEX").pe(duration="5Y") / pb(duration="5Y")
 Top movers     → Market("VNINDEX").top_gainer(limit=10) / top_loser(10) / top_liquidity(10)
@@ -67,7 +67,7 @@ Fund           → Fund().listing("STOCK") / fund_filter("VESAF") / top_holding(
 Commodity      → Commodity().gold() / oil() / steel() / gas() / fertilizer() / agricultural()
 TA indicators  → Indicator(df).trend.sma/ema/dema/tema/donchian / momentum.rsi/macd/cci/tsi/uo/ao / volatility.atr/hv/ulcer / volume.obv/adl/cmf/pvt/emv
 News           → Crawler("cafef").get_latest_articles(10) / get_articles(10) / get_article_details(url)
-Collector      → from claude_finance_kit.collector import run_ohlcv_task, run_financial_task, run_intraday_task
+Collector      → from claude_finance_kit.collector import run_ohlcv_task, run_financial_task, run_intraday_task  # all take tickers: list[str]
 Search         → PerplexitySearch().search("query") / search_multi(["q1","q2"])
 ```
 
@@ -107,7 +107,7 @@ Queries route to different agent structures based on complexity. See `cli/assets
 - TA requires `df.set_index('time')` before `Indicator()`
 - TA indicators produce NaN for first N-1 rows (warmup)
 - Source fallback: if VCI returns 403, use `Stock("FPT", source="KBS")`
-- Fund methods use `fund_id` (string) — get via `fund.fund_filter(symbol)['id'].iloc[0]`
+- Fund methods use `fund_id` (int) — get via `fund.fund_filter(symbol)['id'].iloc[0]`
 - FMP requires API key: set `FMP_API_KEY` env var
 - MAS does not support company info or listing — use VCI/KBS
 - Real-time data: trading hours 9:00-15:00 Vietnam time only

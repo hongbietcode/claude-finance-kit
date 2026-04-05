@@ -20,7 +20,7 @@ feed = c.get_articles_from_feed(limit_per_feed=20)
 combined = c.get_articles(limit=10)       # prefers RSS, fallback sitemap
 detail = c.get_article_details(url=articles[0]['url'])
 
-bc = BatchCrawler(site_name="cafef", request_delay=1.0)
+bc = BatchCrawler(site_name="cafef", request_delay=1.0)  # site_name OR custom_config required
 batch = bc.fetch_articles(limit=100, top_n=None, top_n_per_feed=None, within=None)
 details_df = bc.fetch_details_for_urls(urls=["https://cafef.vn/article-1.htm"])
 ```

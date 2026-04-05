@@ -56,7 +56,7 @@ Batch fetch intraday tick data.
 ```python
 from claude_finance_kit.collector import IntradayTask, run_intraday_task
 
-run_intraday_task(["FPT", "VNM"], mode="eod")
+run_intraday_task(["FPT", "VNM"], mode="live")
 
 task = IntradayTask(base_path="data/intraday")
 task.run(["FPT", "VNM"], mode="live", interval=60, backup=True)
