@@ -12,9 +12,9 @@ from claude_finance_kit._internal.user_agent import get_headers
 from claude_finance_kit._provider.mas.const import (
     _CHART_URL,
     _INDEX_MAPPING,
+    _INTERVAL_MAP,
     _INTRADAY_DTYPE,
     _INTRADAY_MAP,
-    _INTERVAL_MAP,
     _OHLC_DTYPE,
     _OHLC_MAP,
     _PRICE_DEPTH_MAP,

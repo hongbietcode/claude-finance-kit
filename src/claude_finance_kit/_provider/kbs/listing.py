@@ -42,6 +42,8 @@ class KBSListing:
         return df
 
     def symbols_by_group(self, group: str) -> pd.DataFrame:
+        if group == "FU_BOND":
+            raise NotImplementedError("KBS does not provide government-bond group discovery.")
         if group not in _GROUP_CODE:
             raise ValueError(
                 f"Invalid group '{group}'. Valid groups: {list(_GROUP_CODE.keys())}"

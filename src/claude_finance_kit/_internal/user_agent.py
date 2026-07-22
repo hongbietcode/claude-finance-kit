@@ -137,4 +137,7 @@ def get_headers(
     if override_headers:
         headers.update(override_headers)
 
-    return validate_headers(headers)
+    headers = validate_headers(headers)
+    if data_source.upper() == "VCI":
+        headers = {key: value for key, value in headers.items() if key.lower() not in {"device-id", "device_id"}}
+    return headers

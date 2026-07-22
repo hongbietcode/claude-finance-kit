@@ -18,7 +18,7 @@
 
 ## Overview
 
-**claude-finance-kit** is a Python library + AI plugin that gives your coding assistant deep access to Vietnamese stock market data and analysis tools. It works as a **Claude Code plugin** (via Marketplace), and also supports **Cursor** and **GitHub Copilot** through a CLI installer.
+**claude-finance-kit** is a Python library + AI plugin that gives your coding assistant deep access to Vietnamese stock market data and analysis tools. It ships valid plugin manifests for **Codex** and **Claude Code**, and also supports **Cursor** and **GitHub Copilot** through the CLI installer.
 
 Ask natural language questions — the plugin auto-routes to the right analysis workflow:
 
@@ -47,6 +47,7 @@ Ask natural language questions — the plugin auto-routes to the right analysis 
 - **Macro Research** — GDP, CPI, interest rates, exchange rates, FDI, trade balance
 - **News & Sentiment** — crawl and classify news from Vietnamese financial sites (CafeF, VnExpress, etc.)
 - **Fund Analysis** — 58+ mutual funds: NAV, holdings, industry allocation, performance
+- **Bond Analysis** — corporate and government bond discovery plus OHLCV, trades, and quotes
 - **Batch Collection** — scheduled OHLCV, financial, and intraday data collection tasks
 - **Multi-Source** — automatic fallback across 12 data providers
 
@@ -59,6 +60,21 @@ pip install claude-finance-kit
 ```
 
 ### 2. Install the AI plugin
+
+<details>
+<summary><strong>Codex</strong></summary>
+
+Install the repo-local skill into Codex's documented `.agents/skills/` location:
+
+```bash
+npx claude-finance-kit-cli init --ai codex
+```
+
+Restart Codex if the skill does not appear immediately, then invoke `$finance-kit` or ask a Vietnamese-market analysis question naturally. Release ZIPs also contain the required `.codex-plugin/plugin.json` manifest for plugin distribution.
+
+See OpenAI's [Codex plugin structure](https://learn.chatgpt.com/docs/build-plugins#plugin-structure) and [skill locations](https://learn.chatgpt.com/docs/build-skills#where-to-save-skills).
+
+</details>
 
 <details>
 <summary><strong>Claude Code (via Marketplace)</strong></summary>
@@ -89,7 +105,7 @@ Run `/reload-plugins` to activate.
 </details>
 
 <details>
-<summary><strong>Other AI Assistants (Cursor, Copilot)</strong></summary>
+<summary><strong>CLI alternatives (Claude Code, Cursor, Copilot)</strong></summary>
 
 ```bash
 npx claude-finance-kit-cli init --ai cursor    # Cursor
@@ -114,13 +130,19 @@ Once installed, just ask naturally — the plugin auto-invokes the right skill:
 ### Python Library Usage
 
 ```python
-from claude_finance_kit import Stock, Market, Macro, Commodity, Fund
+from claude_finance_kit import Bond, Stock, Market, Macro, Commodity, Fund
 
 # Stock data
 stock = Stock("FPT")
 stock.quote.history(start="2025-01-01", end="2025-12-31")
-stock.finance.income_statement(period="quarter", lang="en")
+stock.finance.income_statement(period="quarter")
 stock.company.overview()
+
+# Bond data
+bond = Bond("BAB123032")
+bond.ohlcv(start="2025-01-01")
+bond.trades()
+bond.quote()
 
 # Market valuation
 market = Market("VNINDEX")
@@ -165,8 +187,11 @@ ind.volume.obv()
 
 | Source | Type | Coverage |
 |--------|------|----------|
-| **VCI** | Stock (default) | Quote, company, finance, listing, trading — full VN coverage |
-| **KBS** | Stock (fallback) | Same as VCI — full VN coverage |
+| **VCI** | Stock (default) | Quote, company, finance, listing, trading via REST — full VN coverage |
+| **KBS** | Stock (fallback) | Same normalized stock coverage as VCI — full VN coverage |
+| **MSN** | Stock | Historical OHLCV with dynamic MSN SecId resolution |
+| **VCI** | Bond | Corporate/government listing, OHLCV, matched trades, current quote |
+| **KBS** | Bond | Corporate listing and market data; no government-group discovery |
 | **MAS** | Stock | Quote, intraday, financials, price depth |
 | **TVS** | Stock | Company overview only |
 | **VDS** | Stock | Intraday only |
@@ -188,7 +213,8 @@ cli/                          # npm CLI installer (claude-finance-kit-cli)
 ├── assets/
 │   ├── skills/finance-kit/ # Single skill with references + scripts
 │   ├── agents/               # fundamental-analyst, technical-analyst, macro-researcher, lead-analyst
-│   └── templates/            # Platform configs (claude, cursor, copilot)
+│   ├── .codex-plugin/        # Codex plugin manifest
+│   └── templates/            # Platform configs (claude, codex, cursor, copilot)
 ├── src/                      # CLI source code
 └── dist/                     # Built CLI
 .claude-plugin/               # Claude Marketplace manifest
@@ -203,6 +229,7 @@ cli/                          # npm CLI installer (claude-finance-kit-cli)
 | `technical-analyst` | Agent | Price trends, momentum, S/R levels (spawned by skill) |
 | `macro-researcher` | Agent | GDP, CPI, rates, FX, commodities (spawned by skill) |
 | `lead-analyst` | Agent | Synthesis + decision for T3/T4 analysis (spawned by skill) |
+| `html-report-writer` | Agent | Self-contained HTML report generation for Claude Code; Codex falls back to the active agent |
 
 ## Environment Variables
 
@@ -226,6 +253,7 @@ cli/                          # npm CLI installer (claude-finance-kit-cli)
 | [News Module](docs/09-news-module.md) | News crawlers, sites |
 | [Advanced Topics](docs/10-advanced-topics.md) | Provider registry, error handling |
 | [Search Module](docs/11-search-module.md) | Perplexity Search API |
+| [Bond Module](docs/12-bond-module.md) | Bond listing, OHLCV, trades, and quotes |
 
 ## Development
 
@@ -245,8 +273,9 @@ npm run bump -- patch      # Bump version (patch|minor|major)
 | `pyproject.toml` | `version` |
 | `src/claude_finance_kit/__init__.py` | `__version__` |
 | `cli/package.json` | `version` |
-| `.claude-plugin/plugin.json` | `version` |
-| `.claude-plugin/marketplace.json` | `metadata.version` + `plugins[0].version` |
+| `cli/assets/.claude-plugin/plugin.json` | `version` |
+| `cli/assets/.codex-plugin/plugin.json` | `version` |
+| `.claude-plugin/marketplace.json` | `plugins[0].version` |
 
 ### Publishing
 

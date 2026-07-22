@@ -13,6 +13,7 @@ from claude_finance_kit._internal.env import (
 from claude_finance_kit._internal.http_client import send_request
 from claude_finance_kit._internal.parser import (
     get_asset_type,
+    get_instrument_type,
     localize_timestamp,
     parse_timestamp,
     safe_json_get,
@@ -55,6 +56,7 @@ __all__ = [
     "is_venv_active",
     "send_request",
     "get_asset_type",
+    "get_instrument_type",
     "localize_timestamp",
     "parse_timestamp",
     "safe_json_get",

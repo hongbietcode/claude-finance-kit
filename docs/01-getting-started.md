@@ -22,12 +22,24 @@ pip install claude-finance-kit[search]    # Perplexity web search (perplexityai)
 pip install claude-finance-kit[all]       # Everything above
 ```
 
+### Codex Plugin
+
+Install the bundled `finance-kit` skill into Codex's repository skill directory:
+
+```bash
+npx claude-finance-kit-cli init --ai codex
+```
+
+This creates `.agents/skills/finance-kit/` with its scripts and references. The
+release plugin archive also includes `.codex-plugin/plugin.json` for Codex plugin
+distribution. Restart Codex if `$finance-kit` is not visible immediately.
+
 ---
 
 ## Quick Start
 
 ```python
-from claude_finance_kit import Stock, Market, Macro, Fund, Commodity
+from claude_finance_kit import Bond, Stock, Market, Macro, Fund, Commodity
 from claude_finance_kit.search import PerplexitySearch
 ```
 
@@ -67,6 +79,10 @@ df = stock.finance.cash_flow(period="quarter")
 df = stock.finance.ratio(period="quarter")
 ```
 
+Financial statement calls return quarterly rows with `period` values of `Q1`
+through `Q4`, or annual rows with `period="FY"`. `unit_multiplier` scales only
+numeric metric columns, not identifiers like `year` or `period`.
+
 **Listing** -- symbol discovery:
 
 ```python
@@ -81,6 +97,25 @@ df = stock.listing.symbols_by_industries()       # Sector classification
 ```python
 df = stock.trading.price_depth()   # Bid/ask depth
 ```
+
+### Bond Data
+
+Use the same provider layer for Vietnamese corporate and government bonds:
+
+```python
+bonds = Bond(source="VCI").list()                  # Corporate + government bonds
+bond = Bond("BAB123032", source="VCI")
+history = bond.ohlcv(start="2025-01-01")
+trades = bond.trades()
+current = bond.quote()
+```
+
+`Bond(source="KBS").list("government")` raises `NotImplementedError` because KBS
+does not expose government-bond discovery. `Bond(source="KBS").list()` still
+returns the corporate rows it can discover and records the unsupported type in
+`df.attrs["unsupported_types"]`.
+
+See the [Bond Module](12-bond-module.md) for the complete contract.
 
 ### Market Data
 
@@ -191,7 +226,8 @@ Each module uses a default data provider. You can switch providers via the `sour
 
 | Module    | Default Provider | Alternatives |
 |-----------|-----------------|--------------|
-| Stock     | VCI             | KBS, MAS, TVS, VDS, BINANCE, FMP |
+| Stock     | VCI             | KBS, MAS, TVS, VDS, MSN, BINANCE, FMP |
+| Bond      | VCI             | KBS |
 | Market    | VND             | --           |
 | Macro     | MBK             | --           |
 | Fund      | FMARKET         | --           |
@@ -216,6 +252,7 @@ claude_finance_kit/
   __init__.py          # Lazy-loading entry point
   core/                # Shared models, types, constants, exceptions
   stock/               # Stock facade (quote, company, finance, listing, trading)
+  bond/                # Bond facade (listing, OHLCV, trades, current quote)
   market/              # Market facade (PE, PB, top movers)
   macro/               # Macro facade (GDP, CPI, rates)
   commodity/           # Commodity facade (gold, oil, steel, gas)

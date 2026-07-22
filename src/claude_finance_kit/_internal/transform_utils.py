@@ -1,9 +1,27 @@
 """DataFrame column utilities and HTML-to-text helpers."""
 
+import re
+import unicodedata
 from typing import Any, Optional
 
 import pandas as pd
 from bs4 import BeautifulSoup
+
+
+def camel_to_snake(name: str) -> str:
+    """Convert a camelCase or PascalCase identifier to snake_case."""
+    first_pass = re.sub(r"(.)([A-Z][a-z]+)", r"\1_\2", str(name))
+    return re.sub(r"([a-z0-9])([A-Z])", r"\1_\2", first_pass).lower()
+
+
+def normalize_field_name(name: Any) -> str:
+    """Build a deterministic ASCII snake-case identifier from a field label."""
+    if name is None:
+        return ""
+    value = unicodedata.normalize("NFKD", str(name)).encode("ascii", "ignore").decode()
+    value = re.sub(r"^\s*(?:(?:[ivxlcdm]+|\d+|[a-z])[.)-]\s*)+", "", value, flags=re.IGNORECASE)
+    value = re.sub(r"[^A-Za-z0-9]+", "_", value).strip("_").lower()
+    return re.sub(r"_+", "_", value)
 
 
 def clean_numeric_string(value: Any) -> Any:

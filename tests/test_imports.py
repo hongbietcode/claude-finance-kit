@@ -1,11 +1,10 @@
 """Test that all public APIs can be imported successfully."""
 
-
-
 def test_main_facades_import():
     """Test importing main facade classes."""
-    from claude_finance_kit import Commodity, Fund, Macro, Market, Stock
+    from claude_finance_kit import Bond, Commodity, Fund, Macro, Market, Stock
 
+    assert Bond is not None
     assert Stock is not None
     assert Market is not None
     assert Macro is not None
@@ -31,20 +30,26 @@ def test_news_import():
 def test_core_import():
     """Test importing core module components."""
     from claude_finance_kit.core import (
+        ClaudeFinanceKitError,
         DataNotFoundError,
         DataSource,
         Exchange,
+        InstrumentType,
         Interval,
         InvalidDateRangeError,
         InvalidSymbolError,
-        ClaudeFinanceKitError,
         RateLimitError,
         SourceNotAvailableError,
+        get_asset_type,
+        get_instrument_type,
     )
 
     assert DataSource is not None
     assert Interval is not None
     assert Exchange is not None
+    assert InstrumentType is not None
+    assert get_asset_type("VNINDEX") == "index"
+    assert get_instrument_type("FUEVFVND") is InstrumentType.ETF
     assert ClaudeFinanceKitError is not None
     assert SourceNotAvailableError is not None
     assert InvalidSymbolError is not None

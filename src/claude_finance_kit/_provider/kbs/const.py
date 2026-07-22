@@ -11,7 +11,7 @@ _INDEX_URL = f"{_IIS_BASE_URL}/index"
 _STOCK_ISS_URL = f"{_IIS_BASE_URL}/stock/iss"
 
 _SAS_STOCK_URL = f"{_SAS_BASE_URL}/kbsv-stock-data-store/stock"
-_SAS_FINANCE_INFO_URL = f"{_SAS_STOCK_URL}/finance-info"
+_SAS_FINANCE_INFO_URL = f"{_IIS_BASE_URL}/stock/finance-info"
 
 _INDEX_MAPPING = {
     "VNINDEX": "VNINDEX",
@@ -100,7 +100,8 @@ _INTRADAY_DTYPE = {
 }
 
 _PRICE_BOARD_MAP = {
-    "TT": "total_trades",
+    "TT": "volume_accumulated",
+    "CV": "volume_last",
     "HI": "high_price",
     "TV": "total_value",
     "LO": "low_price",
@@ -135,7 +136,7 @@ _PRICE_BOARD_MAP = {
 _PRICE_BOARD_STANDARD_COLUMNS = [
     "symbol", "time", "exchange", "ceiling_price", "floor_price",
     "reference_price", "open_price", "high_price", "low_price",
-    "close_price", "average_price", "total_trades", "total_value",
+    "close_price", "volume_last", "average_price", "volume_accumulated", "total_value",
     "price_change", "percent_change",
     "bid_price_1", "bid_vol_1", "bid_price_2", "bid_vol_2",
     "bid_price_3", "bid_vol_3", "ask_price_1", "ask_vol_1",

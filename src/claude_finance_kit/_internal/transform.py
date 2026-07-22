@@ -13,9 +13,11 @@ from claude_finance_kit._internal.transform_ohlcv import (
     resample_ohlcv,
 )
 from claude_finance_kit._internal.transform_utils import (
+    camel_to_snake,
     clean_html_dict,
     clean_numeric_string,
     flatten_hierarchical_index,
+    normalize_field_name,
     reorder_cols,
 )
 
@@ -25,7 +27,9 @@ __all__ = [
     "ohlc_to_df",
     "resample_ohlcv",
     "clean_html_dict",
+    "camel_to_snake",
     "clean_numeric_string",
     "flatten_hierarchical_index",
+    "normalize_field_name",
     "reorder_cols",
 ]

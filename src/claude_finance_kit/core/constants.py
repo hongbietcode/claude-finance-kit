@@ -1,6 +1,27 @@
 """Market constants: indices, sectors, exchanges."""
 
 INDICES_INFO: dict = {
+    "VNINDEX": {
+        "name": "VNINDEX",
+        "description": "Chỉ số đại diện cho cổ phiếu niêm yết trên HOSE",
+        "full_name": "VN-Index",
+        "group": "Market Indices",
+        "index_id": None,
+    },
+    "HNXINDEX": {
+        "name": "HNXINDEX",
+        "description": "Chỉ số đại diện cho cổ phiếu niêm yết trên HNX",
+        "full_name": "HNX Index",
+        "group": "Market Indices",
+        "index_id": None,
+    },
+    "UPCOMINDEX": {
+        "name": "UPCOMINDEX",
+        "description": "Chỉ số đại diện cho cổ phiếu đăng ký giao dịch trên UPCOM",
+        "full_name": "UPCOM Index",
+        "group": "Market Indices",
+        "index_id": None,
+    },
     "VN30": {
         "name": "VN30",
         "description": "30 cổ phiếu vốn hóa lớn nhất & thanh khoản tốt nhất HOSE",
@@ -170,13 +191,91 @@ INDICES_INFO: dict = {
         "group": "VNX Indices",
         "index_id": 1,
     },
+    "HNX30": {
+        "name": "HNX30",
+        "description": "30 cổ phiếu thanh khoản cao trên HNX",
+        "full_name": "HNX30 Index",
+        "group": "HNX Indices",
+        "index_id": None,
+    },
+    "HNXFIN": {
+        "name": "HNXFIN",
+        "description": "Chỉ số ngành tài chính HNX",
+        "full_name": "HNX Financials Index",
+        "group": "HNX Indices",
+        "index_id": None,
+    },
+    "HNXCON": {
+        "name": "HNXCON",
+        "description": "Chỉ số ngành xây dựng HNX",
+        "full_name": "HNX Construction Index",
+        "group": "HNX Indices",
+        "index_id": None,
+    },
+    "HNXLCAP": {
+        "name": "HNXLCAP",
+        "description": "Chỉ số cổ phiếu vốn hóa lớn HNX",
+        "full_name": "HNX Large Cap Index",
+        "group": "HNX Indices",
+        "index_id": None,
+    },
+    "HNXMAN": {
+        "name": "HNXMAN",
+        "description": "Chỉ số ngành công nghiệp HNX",
+        "full_name": "HNX Manufacturing Index",
+        "group": "HNX Indices",
+        "index_id": None,
+    },
+    "HNXMSCAP": {
+        "name": "HNXMSCAP",
+        "description": "Chỉ số cổ phiếu vốn hóa vừa và nhỏ HNX",
+        "full_name": "HNX Mid/Small Cap Index",
+        "group": "HNX Indices",
+        "index_id": None,
+    },
+    "UPCOMLAR": {
+        "name": "UPCOMLAR",
+        "description": "Chỉ số cổ phiếu vốn hóa lớn UPCOM",
+        "full_name": "UPCOM Large Index",
+        "group": "UPCOM Indices",
+        "index_id": None,
+    },
+    "UPCOMMID": {
+        "name": "UPCOMMID",
+        "description": "Chỉ số cổ phiếu vốn hóa vừa UPCOM",
+        "full_name": "UPCOM Medium Index",
+        "group": "UPCOM Indices",
+        "index_id": None,
+    },
+    "UPCOMSML": {
+        "name": "UPCOMSML",
+        "description": "Chỉ số cổ phiếu vốn hóa nhỏ UPCOM",
+        "full_name": "UPCOM Small Index",
+        "group": "UPCOM Indices",
+        "index_id": None,
+    },
 }
 
-INDICES_MAP: dict[str, int] = {
+INDICES_MAP: dict[str, int | None] = {
     sym: info["index_id"] for sym, info in INDICES_INFO.items()
 }
 
+INDEX_ALIASES: dict[str, str] = {
+    "VNI": "VNINDEX",
+    "HNX": "HNXINDEX",
+    "UPCOM": "UPCOMINDEX",
+    "VNMIDCAP": "VNMID",
+    "VNSMALLCAP": "VNSML",
+    "VNALLSHARE": "VNALL",
+    "HNXFINANCIALS": "HNXFIN",
+    "HNXCONSTRUCTION": "HNXCON",
+    "HNXLARGECAP": "HNXLCAP",
+    "HNXMANUFACTURING": "HNXMAN",
+    "HNXMIDSMALLCAP": "HNXMSCAP",
+}
+
 INDEX_GROUPS: dict[str, list[str]] = {
+    "Market Indices": ["VNINDEX", "HNXINDEX", "UPCOMINDEX"],
     "HOSE Indices": ["VN30", "VNMID", "VNSML", "VN100", "VNALL", "VNSI"],
     "Sector Indices": [
         "VNIT", "VNIND", "VNCONS", "VNCOND", "VNHEAL",
@@ -184,6 +283,8 @@ INDEX_GROUPS: dict[str, list[str]] = {
     ],
     "Investment Indices": ["VNDIAMOND", "VNFINLEAD", "VNFINSELECT"],
     "VNX Indices": ["VNX50", "VNXALL"],
+    "HNX Indices": ["HNX30", "HNXFIN", "HNXCON", "HNXLCAP", "HNXMAN", "HNXMSCAP"],
+    "UPCOM Indices": ["UPCOMLAR", "UPCOMMID", "UPCOMSML"],
 }
 
 SECTOR_IDS: dict[int, str] = {

@@ -2,7 +2,7 @@
 
 from functools import cached_property
 
-from claude_finance_kit._provider import binance, fmp, kbs, mas, tvs, vci, vds  # noqa: F401 — trigger provider registration
+from claude_finance_kit._provider import binance, fmp, kbs, mas, msn, tvs, vci, vds  # noqa: F401 — trigger registration
 from claude_finance_kit._provider._registry import registry
 from claude_finance_kit.stock.company import Company
 from claude_finance_kit.stock.financial import Finance

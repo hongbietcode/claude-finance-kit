@@ -38,6 +38,19 @@ class AssetType(str, Enum):
     COMMODITY = "COMMODITY"
 
 
+class InstrumentType(str, Enum):
+    """Specific exchange-traded instrument identifiers."""
+
+    STOCK = "STOCK"
+    ETF = "ETF"
+    FUND = "FUND"
+    WARRANT = "WARRANT"
+    FUTURE = "FUTURE"
+    BOND = "BOND"
+    FUND_BOND = "FUND_BOND"
+    INDEX = "INDEX"
+
+
 class DataSource(str, Enum):
     """Data source identifiers used in the provider registry."""
 

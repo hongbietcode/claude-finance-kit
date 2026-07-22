@@ -42,7 +42,10 @@ class VCIQuote:
         symbol = symbol.upper()
         asset_type = get_asset_type(symbol)
 
-        if "INDEX" in symbol and symbol in _INDEX_MAPPING:
+        if asset_type == "index":
+            if symbol not in _INDEX_MAPPING:
+                valid = ", ".join(sorted(_INDEX_MAPPING))
+                raise ValueError(f"Index '{symbol}' not supported by VCI. Valid: {valid}")
             symbol = _INDEX_MAPPING[symbol]
 
         interval_key = interval if interval in _INTERVAL_MAP else "1D"

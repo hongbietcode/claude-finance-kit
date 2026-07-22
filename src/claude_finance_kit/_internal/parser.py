@@ -8,9 +8,16 @@ import numpy as np
 import pandas as pd
 from pytz import timezone
 
+from claude_finance_kit.core.constants import INDEX_ALIASES, INDICES_INFO
+from claude_finance_kit.core.types import InstrumentType
+
 VIETNAM_TZ = timezone("Asia/Ho_Chi_Minh")
 
-KNOWN_INDICES: set[str] = {"VNINDEX", "HNXINDEX", "UPCOMINDEX", "HNX30"}
+KNOWN_INDICES: set[str] = set(INDICES_INFO) | set(INDEX_ALIASES)
+_ETF_PATTERN = re.compile(r"^(?:E1|FUE)[A-Z0-9]{5,6}$")
+_FUND_PATTERN = re.compile(r"^FUC[A-Z0-9]{5}$")
+_COVERED_WARRANT_PATTERN = re.compile(r"^C[A-Z0-9]{3}\d{4}$")
+_GOVERNMENT_BOND_PATTERN = re.compile(r"^GB\d{2}F\d{4}$")
 
 
 def get_asset_type(symbol: str) -> str:
@@ -25,6 +32,11 @@ def get_asset_type(symbol: str) -> str:
     if symbol in KNOWN_INDICES:
         return "index"
 
+    # ETFs and listed funds trade through the stock quote endpoints. Their
+    # specific identity is exposed by get_instrument_type().
+    if _ETF_PATTERN.fullmatch(symbol) or _FUND_PATTERN.fullmatch(symbol):
+        return "stock"
+
     if len(symbol) == 3:
         return "stock"
 
@@ -37,11 +49,10 @@ def get_asset_type(symbol: str) -> str:
         return "derivative"
 
     if len(symbol) in (7, 9):
-        gov_bond = re.compile(r"^GB\d{2}F\d{4}$")
         comp_bond = re.compile(r"^(?!VN30F)[A-Z]{3}\d{6}$")
         vn30_fm = re.compile(r"^VN30F\d{1,2}[MQ]$")
         vn30_ym = re.compile(r"^VN30F\d{4}$")
-        if gov_bond.match(symbol) or comp_bond.match(symbol):
+        if _GOVERNMENT_BOND_PATTERN.match(symbol) or comp_bond.match(symbol):
             return "bond"
         if vn30_fm.match(symbol) or vn30_ym.match(symbol):
             return "derivative"
@@ -51,9 +62,32 @@ def get_asset_type(symbol: str) -> str:
         )
 
     if len(symbol) == 8:
-        return "coveredWarr"
+        if _COVERED_WARRANT_PATTERN.fullmatch(symbol):
+            return "coveredWarr"
+        raise ValueError(f"Unrecognised 8-character security symbol: {symbol!r}")
 
     raise ValueError(f"Unrecognised symbol format: {symbol!r}")
+
+
+def get_instrument_type(symbol: str) -> InstrumentType:
+    """Return the specific instrument enum for a recognizable symbol."""
+    normalized = symbol.upper()
+    if _ETF_PATTERN.fullmatch(normalized):
+        return InstrumentType.ETF
+    if _FUND_PATTERN.fullmatch(normalized):
+        return InstrumentType.FUND
+
+    asset_type = get_asset_type(normalized)
+    if asset_type == "bond" and _GOVERNMENT_BOND_PATTERN.fullmatch(normalized):
+        return InstrumentType.FUND_BOND
+    mapping = {
+        "index": InstrumentType.INDEX,
+        "stock": InstrumentType.STOCK,
+        "derivative": InstrumentType.FUTURE,
+        "bond": InstrumentType.BOND,
+        "coveredWarr": InstrumentType.WARRANT,
+    }
+    return mapping[asset_type]
 
 
 def parse_timestamp(time_value: Union[datetime, str]) -> int | None:

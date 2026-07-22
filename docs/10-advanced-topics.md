@@ -59,6 +59,11 @@ market = Market("VNINDEX", source="VND")
 | TVS | Stock | Thien Viet Securities — company overview only |
 | VDS | Stock | Viet Dragon Securities — intraday only (auto-cookie) |
 | BINANCE | Stock | Crypto — history, intraday, depth (no API key required) |
+| MSN | Stock | Historical OHLCV with dynamic SecId resolution |
+
+VCI company, listing, and finance modules use Vietcap REST endpoints instead of
+GraphQL. Requests sanitize URLs, restrict configured hosts, and can fall back to
+a safe alternate listing URL when the primary endpoint is unavailable.
 
 ## Error Handling
 
@@ -112,7 +117,7 @@ Each exception has:
 ## Type System
 
 ```python
-from claude_finance_kit.core.types import Interval, Exchange, AssetType, DataSource
+from claude_finance_kit.core.types import Interval, Exchange, AssetType, DataSource, InstrumentType
 ```
 
 | Enum | Values |
@@ -120,7 +125,21 @@ from claude_finance_kit.core.types import Interval, Exchange, AssetType, DataSou
 | `Interval` | `MINUTE_1`, `MINUTE_5`, `MINUTE_15`, `MINUTE_30`, `HOUR_1`, `DAY_1`, `WEEK_1`, `MONTH_1` |
 | `Exchange` | `HOSE`, `HNX`, `UPCOM` |
 | `AssetType` | `STOCK`, `ETF`, `BOND`, `DERIVATIVE`, `FUND`, `INDEX`, `FOREX`, `CRYPTO`, `COMMODITY` |
+| `InstrumentType` | `STOCK`, `ETF`, `FUND`, `WARRANT`, `FUTURE`, `BOND`, `FUND_BOND`, `INDEX` |
 | `DataSource` | `all_sources()` → `['VCI', 'KBS', 'MAS', 'TVS', 'VND', 'VDS', 'CAFEF', 'FMARKET', 'SPL', 'MBK', 'MSN', 'DNSE', 'SSI', 'FMP', 'BINANCE']` |
+
+`get_asset_type(symbol)` checks known market indices and aliases before any
+length-based heuristics. That covers `VNINDEX`/`VNI`, `HNXINDEX`, `UPCOMINDEX`,
+`VN30`, `VNMID`/`VNMIDCAP`, `VNSML`/`VNSMALLCAP`, `VN100`, `VNALL`/
+`VNALLSHARE`, `VNSI`, `VNX50`, `VNXALL`, `HNX30`, `HNXFIN`/`HNXFINANCIALS`,
+`HNXCON`/`HNXCONSTRUCTION`, `HNXLCAP`/`HNXLARGECAP`, `HNXMAN`/
+`HNXMANUFACTURING`, `HNXMSCAP`/`HNXMIDSMALLCAP`, `UPCOMLAR`, `UPCOMMID`, and
+`UPCOMSML`.
+
+`get_instrument_type(symbol)` distinguishes listed ETFs and listed funds before
+falling back to asset-type checks. Government bond codes are surfaced as
+`InstrumentType.FUND_BOND`, corporate bonds as `InstrumentType.BOND`, and
+covered warrants and futures are mapped separately.
 
 ## Lazy Loading
 
@@ -157,4 +176,3 @@ dates = DateRange(start="2024-01-01", end="2024-12-31")
 ```python
 from claude_finance_kit.core.constants import INDICES_INFO, INDICES_MAP, INDEX_GROUPS, SECTOR_IDS, EXCHANGES
 ```
-

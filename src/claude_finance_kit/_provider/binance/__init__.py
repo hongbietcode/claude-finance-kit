@@ -1,7 +1,5 @@
 """Binance crypto data provider (public API, no key required)."""
 
-import pandas as pd
-
 from claude_finance_kit._provider._base import StockProvider
 from claude_finance_kit._provider._registry import registry
 from claude_finance_kit._provider.binance.quote import BinanceQuote

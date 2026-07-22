@@ -1,177 +1,240 @@
-"""VCI financial module: balance sheet, income statement, cash flow, ratios."""
+"""VCI financial statements and ratios backed by Vietcap REST services."""
 
-import json
-import logging
-import re
+import math
+from typing import Any
 
 import pandas as pd
 
-from ..._internal.http_client import send_request
-from ..._internal.user_agent import get_headers
-from .const import (
-    _FINANCIAL_REPORT_PERIOD_MAP,
-    _GRAPHQL_URL,
-    _UNIT_MAP,
-    SUPPORTED_LANGUAGES,
-)
-
-logger = logging.getLogger(__name__)
-
-_RATIOS_QUERY = (
-    '{"query":"fragment Ratios on CompanyFinancialRatio {\\n  ticker\\n  yearReport\\n  lengthReport\\n'
-    "  updateDate\\n  revenue\\n  revenueGrowth\\n  netProfit\\n  netProfitGrowth\\n  ebitMargin\\n"
-    "  roe\\n  roic\\n  roa\\n  pe\\n  pb\\n  eps\\n  currentRatio\\n  cashRatio\\n  quickRatio\\n"
-    "  interestCoverage\\n  ae\\n  netProfitMargin\\n  grossMargin\\n  ev\\n  issueShare\\n  ps\\n"
-    "  pcf\\n  bvps\\n  evPerEbitda\\n  at\\n  fat\\n  acp\\n  dso\\n  dpo\\n  ccc\\n  de\\n  le\\n"
-    "  ebitda\\n  ebit\\n  dividend\\n  charterCapital\\n  epsTTM\\n  __typename\\n}\\n\\n"
-    "query Query($ticker: String!, $period: String!) {\\n  CompanyFinancialRatio(ticker: $ticker, period: $period) {\\n"
-    '    ratio {\\n      ...Ratios\\n      __typename\\n    }\\n    period\\n    __typename\\n  }\\n}\\n",'
-    '"variables":{"ticker":"VCI","period":"Q"}}'
-)
-
-_RATIO_DICT_QUERY = (
-    '{"query":"query Query {\\n  ListFinancialRatio {\\n    id\\n    type\\n    name\\n    unit\\n'
-    "    isDefault\\n    fieldName\\n    en_Type\\n    en_Name\\n    tagName\\n    comTypeCode\\n"
-    '    order\\n    __typename\\n  }\\n}\\n","variables":{}}'
+from claude_finance_kit._internal.http_client import send_request
+from claude_finance_kit._internal.parser import get_asset_type
+from claude_finance_kit._internal.transform import camel_to_snake, normalize_field_name
+from claude_finance_kit._internal.user_agent import get_headers
+from claude_finance_kit._internal.validation import validate_symbol
+from claude_finance_kit._provider.vci.const import (
+    _FINANCIAL_SECTIONS,
+    _VCI_ALLOWED_HOSTS,
+    _VCI_COMPANY_URL,
 )
 
 
-def _camel_to_snake(name: str) -> str:
-    s1 = re.sub("(.)([A-Z][a-z]+)", r"\1_\2", name)
-    return re.sub("([a-z0-9])([A-Z])", r"\1_\2", s1).lower()
+def _validate_period(period: str) -> str:
+    if period not in {"year", "quarter"}:
+        raise ValueError("period must be 'year' or 'quarter'.")
+    return period
+
+
+def _validate_multiplier(unit_multiplier: float) -> float:
+    if isinstance(unit_multiplier, bool) or not isinstance(unit_multiplier, (int, float)):
+        raise TypeError("unit_multiplier must be a positive number.")
+    if not math.isfinite(unit_multiplier) or unit_multiplier <= 0:
+        raise ValueError("unit_multiplier must be a finite number greater than zero.")
+    return float(unit_multiplier)
+
+
+def _numeric_series(df: pd.DataFrame, *columns: str) -> pd.Series:
+    """Return the first available numeric column or an aligned NaN series."""
+    for column in columns:
+        if column in df.columns:
+            return pd.to_numeric(df[column], errors="coerce")
+    return pd.Series(float("nan"), index=df.index, dtype="float64")
+
+
+def _validate_stock_symbol(symbol: str) -> str:
+    normalized = validate_symbol(symbol)
+    if get_asset_type(normalized) != "stock":
+        raise ValueError(f"VCI financial data requires a stock symbol, got '{normalized}'.")
+    return normalized
 
 
 class VCIFinancial:
-    """Fetches financial statements and ratios from VCI GraphQL API."""
+    """Fetch normalized financial data from Vietcap REST APIs."""
 
     DATA_SOURCE = "VCI"
 
     def __init__(self) -> None:
         self._headers = get_headers(data_source=self.DATA_SOURCE, random_agent=True)
+        self._metric_maps: dict[str, dict[str, dict[str, str]]] = {}
 
-    def _fetch_ratio_data(self, symbol: str, period: str) -> pd.DataFrame:
-        payload = json.loads(_RATIOS_QUERY)
-        payload["variables"]["ticker"] = symbol.upper()
-        payload["variables"]["period"] = period
-
-        response = send_request(
-            url=_GRAPHQL_URL,
+    def _request(self, url: str, params: dict[str, Any] | None = None) -> Any:
+        return send_request(
+            url=url,
             headers=self._headers,
-            method="POST",
-            payload=payload,
+            method="GET",
+            params=params,
+            allowed_hosts=_VCI_ALLOWED_HOSTS,
         )
 
-        selected = response["data"]["CompanyFinancialRatio"]["ratio"]
-        return pd.DataFrame(selected)
+    def _data(self, url: str, params: dict[str, Any] | None = None) -> Any:
+        response = self._request(url, params)
+        if not isinstance(response, dict) or "data" not in response:
+            raise ValueError("VCI financial response does not contain data.")
+        return response["data"]
 
-    def _fetch_ratio_dict(self) -> pd.DataFrame:
-        payload = json.loads(_RATIO_DICT_QUERY)
-        response = send_request(
-            url=_GRAPHQL_URL,
-            headers=self._headers,
-            method="POST",
-            payload=payload,
-        )
+    def _load_metric_maps(self, symbol: str) -> dict[str, dict[str, str]]:
+        symbol_key = _validate_stock_symbol(symbol)
+        if symbol_key in self._metric_maps:
+            return self._metric_maps[symbol_key]
 
-        data = response["data"]["ListFinancialRatio"]
-        df = pd.DataFrame(data)
-        df.columns = [_camel_to_snake(col).replace("__", "_") for col in df.columns]
-        df["unit"] = df["unit"].map(_UNIT_MAP)
-        return df[["field_name", "name", "en_name", "type", "order", "unit", "com_type_code"]]
+        data = self._data(f"{_VCI_COMPANY_URL}/{symbol_key}/financial-statement/metrics")
+        if not isinstance(data, dict):
+            raise ValueError(f"VCI financial metadata is unavailable for '{symbol}'.")
 
-    def _process_report(
+        maps: dict[str, dict[str, str]] = {}
+        for section, records in data.items():
+            used: set[str] = set()
+            field_map: dict[str, str] = {}
+            for record in records if isinstance(records, list) else []:
+                if not isinstance(record, dict) or not record.get("field"):
+                    continue
+                field = str(record["field"])
+                name = normalize_field_name(record.get("titleEn")) or field.lower()
+                if name in used:
+                    name = f"{name}__{field.lower()}"
+                used.add(name)
+                field_map[field] = name
+            maps[section] = field_map
+
+        self._metric_maps[symbol_key] = maps
+        return maps
+
+    def _statement(
         self,
         symbol: str,
+        report_type: str,
         period: str,
-        report_key: str,
-        lang: str = "en",
+        unit_multiplier: float,
     ) -> pd.DataFrame:
-        if lang not in SUPPORTED_LANGUAGES:
-            raise ValueError(f"Unsupported language '{lang}'. Use one of {SUPPORTED_LANGUAGES}.")
-
-        period_code = _FINANCIAL_REPORT_PERIOD_MAP.get(period, "Q")
-        ratio_df: pd.DataFrame = self._fetch_ratio_data(symbol, period_code)
-
-        if ratio_df.empty:
-            return pd.DataFrame()
-
-        mapping_df = self._fetch_ratio_dict()
-        target_col = "name" if lang == "vi" else "en_name"
-        name_map = dict(zip(mapping_df["field_name"], mapping_df[target_col]))
-        type_field_dict = mapping_df.groupby("type")["field_name"].apply(list).to_dict()
-
-        if lang == "vi":
-            index_cols = ["ticker", "yearReport", "lengthReport"]
-        else:
-            index_cols = ["ticker", "yearReport", "lengthReport"]
-
-        orphan_cols = [c for c in ratio_df.columns if c not in mapping_df["field_name"].values and c not in index_cols]
-        ratio_df: pd.DataFrame = ratio_df.drop(columns=orphan_cols, errors="ignore")
-
-        fields = type_field_dict.get(report_key, [])
-        if not fields:
-            return pd.DataFrame()
-
-        available_fields = [f for f in fields if f in ratio_df.columns]
-        report_df = ratio_df[index_cols + available_fields].copy()  # pylint: disable=unsubscriptable-object
-        report_df = report_df.rename(columns=name_map)
-        report_df = report_df.rename(
-            columns={
-                "ticker": "symbol",
-                "yearReport": "year",
-                "lengthReport": "period",
-            }
+        symbol = _validate_stock_symbol(symbol)
+        period = _validate_period(period)
+        multiplier = _validate_multiplier(unit_multiplier)
+        section = _FINANCIAL_SECTIONS[report_type]
+        data = self._data(
+            f"{_VCI_COMPANY_URL}/{symbol}/financial-statement",
+            {"section": section},
         )
-        return report_df
+        raw_records = (
+            data.get("years" if period == "year" else "quarters") or []
+            if isinstance(data, dict)
+            else []
+        )
+        records = [record for record in raw_records if isinstance(record, dict)]
+        if not records:
+            empty = pd.DataFrame(columns=["symbol", "year", "period"])
+            empty.attrs.update(
+                symbol=symbol, source=self.DATA_SOURCE, period_type=period, unit_multiplier=multiplier
+            )
+            return empty
 
-    def balance_sheet(self, symbol: str, period: str = "quarter") -> pd.DataFrame:
-        return self._process_report(symbol, period, "Chỉ tiêu cân đối kế toán")
+        df = pd.DataFrame(records)
+        df.columns = [camel_to_snake(column) for column in df.columns]
+        field_map = self._load_metric_maps(symbol).get(section, {})
+        if not field_map:
+            raise ValueError(f"VCI financial metadata has no '{section}' section for '{symbol}'.")
+        snake_map = {camel_to_snake(field): name for field, name in field_map.items()}
+        metric_source_columns = [column for column in df.columns if column in snake_map]
+        if not metric_source_columns:
+            raise ValueError(f"VCI '{section}' records have no fields present in financial metadata.")
+        df = df.rename(columns=snake_map)
+        metric_columns = [snake_map[column] for column in metric_source_columns]
 
-    def income_statement(self, symbol: str, period: str = "quarter") -> pd.DataFrame:
-        return self._process_report(symbol, period, "Chỉ tiêu kết quả kinh doanh")
+        result = pd.DataFrame(index=df.index)
+        if "ticker" in df.columns:
+            symbol_values = df["ticker"]
+        elif "organ_code" in df.columns:
+            symbol_values = df["organ_code"]
+        else:
+            symbol_values = pd.Series(symbol, index=df.index)
+        result["symbol"] = symbol_values.fillna(symbol)
+        result["year"] = _numeric_series(df, "year_report", "year").astype("Int64")
+        if period == "quarter":
+            quarter = _numeric_series(df, "length_report", "quarter").astype("Int64")
+            result["period"] = quarter.map(lambda value: f"Q{value}" if pd.notna(value) else pd.NA)
+        else:
+            result["period"] = "FY"
 
-    def cash_flow(self, symbol: str, period: str = "quarter") -> pd.DataFrame:
-        return self._process_report(symbol, period, "Chỉ tiêu lưu chuyển tiền tệ")
+        metric_frame = pd.DataFrame(
+            {
+                column: pd.to_numeric(df[column], errors="coerce") * multiplier
+                for column in metric_columns
+            },
+            index=df.index,
+        )
+        result = pd.concat([result, metric_frame], axis=1)
+
+        result.attrs.update(
+            symbol=symbol, source=self.DATA_SOURCE, period_type=period, unit_multiplier=multiplier
+        )
+        return result.reset_index(drop=True)
+
+    def balance_sheet(
+        self, symbol: str, period: str = "quarter", unit_multiplier: float = 1.0
+    ) -> pd.DataFrame:
+        return self._statement(symbol, "balance_sheet", period, unit_multiplier)
+
+    def income_statement(
+        self, symbol: str, period: str = "quarter", unit_multiplier: float = 1.0
+    ) -> pd.DataFrame:
+        return self._statement(symbol, "income_statement", period, unit_multiplier)
+
+    def cash_flow(
+        self, symbol: str, period: str = "quarter", unit_multiplier: float = 1.0
+    ) -> pd.DataFrame:
+        return self._statement(symbol, "cash_flow", period, unit_multiplier)
 
     def ratio(self, symbol: str, period: str = "quarter") -> pd.DataFrame:
-        period_code = _FINANCIAL_REPORT_PERIOD_MAP.get(period, "Q")
-        ratio_df: pd.DataFrame = self._fetch_ratio_data(symbol, period_code)
+        symbol = _validate_stock_symbol(symbol)
+        period = _validate_period(period)
+        data = self._data(f"{_VCI_COMPANY_URL}/{symbol}/statistics-financial")
+        records = [record for record in data if isinstance(record, dict)] if isinstance(data, list) else []
+        df = pd.DataFrame(records)
+        if df.empty:
+            empty = pd.DataFrame(columns=["symbol", "year", "period"])
+            empty.attrs.update(symbol=symbol, source=self.DATA_SOURCE, period_type=period)
+            return empty
 
-        if ratio_df.empty:
-            return pd.DataFrame()
-
-        mapping_df = self._fetch_ratio_dict()
-        other_types = [
-            t
-            for t in mapping_df["type"].unique()
-            if t
-            not in (
-                "Chỉ tiêu cân đối kế toán",
-                "Chỉ tiêu lưu chuyển tiền tệ",
-                "Chỉ tiêu kết quả kinh doanh",
-            )
-        ]
-
-        index_cols = ["ticker", "yearReport", "lengthReport"]
-        result_frames = []
-        for rtype in other_types:
-            fields = mapping_df[mapping_df["type"] == rtype]["field_name"].tolist()
-            available = [f for f in fields if f in ratio_df.columns]
-            if available:
-                result_frames.append(ratio_df[available])
-
-        if not result_frames:
-            return pd.DataFrame()
-
-        merged = pd.concat(result_frames, axis=1)
-        name_map = dict(zip(mapping_df["field_name"], mapping_df["en_name"]))
-        merged = merged.rename(columns=name_map)
-
-        index_part = ratio_df[index_cols].rename(
-            columns={
-                "ticker": "symbol",
-                "yearReport": "year",
-                "lengthReport": "period",
-            }
+        df.columns = [camel_to_snake(column) for column in df.columns]
+        quarter = _numeric_series(df, "quarter", "length_report")
+        ratio_type = (
+            df["ratio_type"].astype(str).str.upper()
+            if "ratio_type" in df.columns
+            else pd.Series("", index=df.index)
         )
-        return pd.concat([index_part, merged], axis=1)
+        if period == "year":
+            df = df[(quarter == 5) | (ratio_type == "RATIO_YEAR")]
+            period_values = pd.Series("FY", index=df.index)
+        else:
+            df = df[quarter.between(1, 4)]
+            period_values = quarter[df.index].map(lambda value: f"Q{int(value)}")
+
+        metadata = {
+            "year",
+            "quarter",
+            "year_report",
+            "organ_code",
+            "ticker",
+            "ratio_ttm_id",
+            "ratio_year_id",
+            "ratio_type",
+        }
+        result = pd.DataFrame(index=df.index)
+        if "ticker" in df.columns:
+            symbol_values = df["ticker"]
+        elif "organ_code" in df.columns:
+            symbol_values = df["organ_code"]
+        else:
+            symbol_values = pd.Series(symbol, index=df.index)
+        result["symbol"] = symbol_values.fillna(symbol)
+        result["year"] = _numeric_series(df, "year_report", "year").astype("Int64")
+        result["period"] = period_values
+        metric_frame = pd.DataFrame(
+            {
+                column: pd.to_numeric(df[column], errors="coerce")
+                for column in df.columns
+                if column not in metadata
+            },
+            index=df.index,
+        )
+        result = pd.concat([result, metric_frame], axis=1)
+
+        result.attrs.update(symbol=symbol, source=self.DATA_SOURCE, period_type=period)
+        return result.reset_index(drop=True)

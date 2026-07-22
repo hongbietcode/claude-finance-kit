@@ -6,6 +6,7 @@ __version__ = "0.1.15"
 
 __all__ = [
     "Stock",
+    "Bond",
     "Market",
     "Macro",
     "Fund",
@@ -14,6 +15,7 @@ __all__ = [
 
 _LAZY_IMPORTS = {
     "Stock": "claude_finance_kit.stock",
+    "Bond": "claude_finance_kit.bond",
     "Market": "claude_finance_kit.market",
     "Macro": "claude_finance_kit.macro",
     "Fund": "claude_finance_kit.fund",

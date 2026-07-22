@@ -3,6 +3,7 @@
 
 from claude_finance_kit.core import (
     EXCHANGES,
+    INDEX_ALIASES,
     INDEX_GROUPS,
     INDICES_INFO,
     INDICES_MAP,
@@ -11,14 +12,15 @@ from claude_finance_kit.core import (
     DataSource,
     DateRange,
     Exchange,
+    InstrumentType,
     Interval,
     StockInfo,
 )
 from claude_finance_kit.core.exceptions import (
+    ClaudeFinanceKitError,
     DataNotFoundError,
     InvalidDateRangeError,
     InvalidSymbolError,
-    ClaudeFinanceKitError,
     ProviderError,
     RateLimitError,
     SourceNotAvailableError,
@@ -74,6 +76,20 @@ class TestAssetTypeEnum:
         assert len(AssetType) >= 5
 
 
+class TestInstrumentTypeEnum:
+    def test_specific_instrument_values(self):
+        assert {item.value for item in InstrumentType} == {
+            "STOCK",
+            "ETF",
+            "FUND",
+            "WARRANT",
+            "FUTURE",
+            "BOND",
+            "FUND_BOND",
+            "INDEX",
+        }
+
+
 class TestDataSourceEnum:
     """Test DataSource enum."""
 
@@ -114,6 +130,11 @@ class TestConstants:
         """INDEX_GROUPS exists and is populated."""
         assert isinstance(INDEX_GROUPS, dict)
         assert len(INDEX_GROUPS) > 0
+
+    def test_hnx_and_upcom_indices_populated(self):
+        assert {"HNX30", "HNXFIN", "HNXCON", "HNXLCAP", "HNXMAN", "HNXMSCAP"} <= set(INDICES_INFO)
+        assert {"UPCOMLAR", "UPCOMMID", "UPCOMSML"} <= set(INDICES_INFO)
+        assert INDEX_ALIASES["HNXFINANCIALS"] == "HNXFIN"
 
     def test_sector_ids_populated(self):
         """SECTOR_IDS is populated."""

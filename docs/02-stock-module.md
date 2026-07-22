@@ -35,16 +35,25 @@ Symbol is auto-uppercased. Source selects the data provider (see [Data Sources](
 | `news(limit=20, **kwargs)` | `DataFrame` | Company-specific news articles |
 | `events(**kwargs)` | `DataFrame` | Corporate events (dividends, AGMs, etc.) |
 
+VCI normalizes ownership percentages to percentage points in the `0-100` range.
+`officers(filter_by="working")` is the only supported status view; VCI REST
+does not expose enough status metadata for `"resigned"` or `"all"`, so those
+filters raise `NotImplementedError`.
+
 ### Finance (`stock.finance`)
 
 | Method | Returns | Description |
 |--------|---------|-------------|
-| `balance_sheet(period="quarter")` | `DataFrame` | Assets, liabilities, equity |
-| `income_statement(period="quarter")` | `DataFrame` | Revenue, expenses, net income |
-| `cash_flow(period="quarter")` | `DataFrame` | Operating, investing, financing flows |
+| `balance_sheet(period="quarter", unit_multiplier=1)` | `DataFrame` | Assets, liabilities, equity |
+| `income_statement(period="quarter", unit_multiplier=1)` | `DataFrame` | Revenue, expenses, net income |
+| `cash_flow(period="quarter", unit_multiplier=1)` | `DataFrame` | Operating, investing, financing flows |
 | `ratio(period="quarter")` | `DataFrame` | Financial ratios (PE, PB, ROE, etc.) |
 
-All methods accept `period`: `"quarter"` or `"year"`.
+All methods accept `period`: `"quarter"` or `"year"`. Financial statements also
+accept a positive `unit_multiplier`; identifier columns such as `year` and `period`
+are never scaled. KBS thousand-VND payloads are converted to VND before this
+optional facade multiplier is applied. VCI and KBS use the same normalized
+metric-column structure. Quarterly rows use `Q1`-`Q4`; annual rows use `FY`.
 
 ### Listing (`stock.listing`)
 
@@ -56,7 +65,9 @@ All methods accept `period`: `"quarter"` or `"year"`.
 
 **`all_symbols` params:** `exchange` -- `"HOSE"`, `"HNX"`, `"UPCOM"`, or `None` for all.
 
-**Common groups:** `"VN30"`, `"VN100"`, `"HNX30"`, `"VNMidCap"`, `"VNSmallCap"`.
+**Common groups and aliases:** `"VN30"`, `"VN100"`, `"VNALL"`, `"VNX50"`,
+`"VNXALL"`, `"HNX30"`, `"HNXFIN"`, `"HNXCON"`, `"HNXLCAP"`, `"HNXMAN"`,
+`"HNXMSCAP"`, `"UPCOMLAR"`, `"UPCOMMID"`, `"UPCOMSML"`.
 
 ### Trading (`stock.trading`)
 
@@ -74,19 +85,27 @@ Fields: `time` (datetime64), `open`, `high`, `low`, `close` (float64), `volume` 
 
 Fields: `time` (datetime64), `price` (float64), `volume` (int64), `match_type` (str: "BUY"/"SELL").
 
-### `price_board()` → DataFrame (MultiIndex columns)
+### `price_board()` → DataFrame
 
-Two-level column structure: `(category, field)`.
+VCI uses two-level columns in the form `(category, field)`.
 
 | Category | Fields |
 |----------|--------|
-| **listing** | `organ_name`, `exchange`, `ceiling_price`, `floor_price`, `ref_price` |
+| **listing** | `organ_name`, `exchange`, `ceiling`, `floor`, `ref_price` |
 | **bid_ask** | `bid_{1-3}_price`, `bid_{1-3}_volume`, `ask_{1-3}_price`, `ask_{1-3}_volume`, `total_bid_volume`, `total_ask_volume` |
-| **match** | `match_price`, `match_volume`, `total_volume`, `total_value` |
+| **match** | `match_price`, `match_vol`, `accumulated_volume`, `accumulated_value`, `open_price`, `highest`, `lowest` |
+
+KBS returns flat columns. Its accumulated and latest matched volumes are named
+`volume_accumulated` and `volume_last`; the former `total_trades` name is no
+longer emitted.
 
 ### `overview()` → DataFrame
 
-Fields: `symbol`, `id`, `issue_share`, `history`, `company_profile`, `icb_name2` (sector), `icb_name3` (industry), `icb_name4` (sub-sector), `financial_ratio_charter_capital`, `financial_ratio_issue_share`.
+Fields are provider-normalized to snake_case and typically include `symbol`,
+`organ_name`, `organ_short_name`, `issue_share`, `company_profile`,
+`market_cap`, `sector`, `sector_vn`, and `listing_date`. The exact extras vary
+by provider response; fields available only from the retired GraphQL endpoint
+are not guaranteed.
 
 ### `shareholders()` → DataFrame
 
@@ -94,7 +113,8 @@ Fields: `share_holder` (str), `quantity` (float), `share_own_percent` (float, 0-
 
 ### `officers()` → DataFrame
 
-Fields: `officer_name`, `officer_position`, `officer_own_percent`, `quantity`, `update_date`, `position_short_name`.
+Fields: `officer_name`, `officer_position`, `officer_own_percent`,
+`quantity`, `update_date`.
 
 ### `news()` → DataFrame
 
@@ -106,11 +126,16 @@ Fields: `id`, `event_title`, `event_list_name`, `event_list_code`, `public_date`
 
 ### Financial statements (`balance_sheet`, `income_statement`, `cash_flow`) → DataFrame
 
-Common fields: `symbol`, `year` (int), `period` (int: 1-4 for quarter, 0 for year), plus dynamic line-item columns (float, translated to English). All three share the same structure.
+Common fields: `symbol`, `year` (int), `period` (`"Q1"`-`"Q4"` or
+`"FY"`), plus dynamic normalized line-item columns (float). VCI and KBS
+return the same row-per-period structure, and annual rows are emitted with
+`period="FY"` for both providers.
 
 ### `ratio()` → DataFrame
 
-Common fields: `symbol`, `year`, `period`, plus: `P/E`, `P/B`, `P/S`, `EPS (VND)`, `BVPS (VND)`, `ROE (%)`, `ROA (%)`, `ROIC (%)`, `Dividend yield (%)`, `Debt/Equity`, `Current Ratio`, `Gross Profit Margin (%)`, `Net Profit Margin (%)`, and additional ratio columns. **Note:** VCI returns duplicate columns — use `df.loc[:, ~df.columns.duplicated()]` to deduplicate.
+Common fields: `symbol`, `year`, `period`, plus normalized snake-case
+metrics such as `pe`, `pb`, `ps`, `roe`, `roa`, `roic`, `dividend_yield`,
+`debt_to_equity`, `current_ratio`, and `gross_margin`.
 
 ### `all_symbols()` → DataFrame
 
@@ -122,7 +147,8 @@ Returns `pd.Series` of ticker symbols in the requested group.
 
 ### `symbols_by_industries()` → DataFrame
 
-Fields: `symbol`, `organ_name`, `icb_name2`, `icb_name3`, `icb_name4`, `com_type_code`, `icb_code1`..`icb_code4`.
+Long-form fields: `symbol`, `organ_name`, `exchange`, `com_type_code`,
+`icb_level` (1-4), `icb_code`, and `icb_name`.
 
 ### `price_depth()` → DataFrame
 
@@ -137,6 +163,7 @@ Fields: `price` (float), `acc_volume`, `acc_buy_volume`, `acc_sell_volume`, `acc
 | `"MAS"` | Mirae Asset Securities | VN stocks — quote, financials, price depth. No company/listing. |
 | `"TVS"` | Thien Viet Securities | VN stocks — company overview only. |
 | `"VDS"` | Viet Dragon Securities | VN stocks — intraday only (auto-cookie). |
+| `"MSN"` | MSN Finance | Historical OHLCV only. Resolves provider SecId dynamically. |
 | `"BINANCE"` | Binance | Crypto (BTCUSDT, ETHUSDT). No API key required. |
 | `"FMP"` | Financial Modeling Prep | Global stocks. Requires `FMP_API_KEY` env var or `api_key` kwarg. |
 
@@ -161,9 +188,7 @@ income = stock.finance.income_statement(period="year")
 vn30 = Stock("FPT").listing.symbols_by_group("VN30")
 board = Stock("FPT").quote.price_board(symbols=vn30.tolist())
 
-# Quarterly financial ratios (VCI returns English column names)
+# Quarterly financial ratios
 ratios = Stock("HPG").finance.ratio(period="quarter")
-ratios = ratios.loc[:, ~ratios.columns.duplicated()]
-print(ratios[["year", "period", "P/E", "P/B", "ROE (%)"]].tail(8))
+print(ratios[["year", "period", "pe", "pb", "roe"]].tail(8))
 ```
-
