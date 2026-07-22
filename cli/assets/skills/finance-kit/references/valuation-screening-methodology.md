@@ -189,7 +189,7 @@ Compare P/E, P/B, EV/EBITDA vs peer median.
 
 ## Sentiment Classification
 
-Per article, classify via Claude reasoning:
+Per article, classify using the active AI assistant's reasoning:
 - **Sentiment:** bullish / bearish / neutral
 - **Event type:** earnings, M&A, regulatory, macro
 - **Confidence:** 0.0–1.0

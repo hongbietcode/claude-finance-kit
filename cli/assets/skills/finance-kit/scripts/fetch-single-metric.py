@@ -13,18 +13,17 @@ import argparse
 import json
 from datetime import datetime
 
-
 STOCK_METRICS = {
-    "pe": ("ratio", "P/E"),
-    "pb": ("ratio", "P/B"),
-    "roe": ("ratio", "ROE (%)"),
-    "roa": ("ratio", "ROA (%)"),
-    "eps": ("ratio", "EPS (VND)"),
-    "dividend_yield": ("ratio", "Dividend yield (%)"),
-    "debt_equity": ("ratio", "Debt/Equity"),
-    "current_ratio": ("ratio", "Current Ratio"),
-    "gross_margin": ("ratio", "Gross Profit Margin (%)"),
-    "net_margin": ("ratio", "Net Profit Margin (%)"),
+    "pe": ("pe", "pe_ratio"),
+    "pb": ("pb", "pb_ratio"),
+    "roe": ("roe",),
+    "roa": ("roa",),
+    "eps": ("eps", "trailing_eps", "earnings_per_share"),
+    "dividend_yield": ("dividend_yield",),
+    "debt_equity": ("debt_to_equity",),
+    "current_ratio": ("current_ratio", "short_term_ratio"),
+    "gross_margin": ("gross_margin",),
+    "net_margin": ("net_margin", "after_tax_profit_margin"),
 }
 
 MARKET_METRICS = {"vnindex_pe", "cpi", "interest_rate", "exchange_rate"}
@@ -48,7 +47,8 @@ def main():
     elif metric in STOCK_METRICS:
         result = fetch_ratio_metric(args.ticker, args.source, metric)
     else:
-        result = {"error": f"Unknown metric: {metric}. Available: {', '.join(list(STOCK_METRICS.keys()) + ['price', 'market_cap'] + list(MARKET_METRICS))}"}
+        available = list(STOCK_METRICS) + ["price", "market_cap"] + list(MARKET_METRICS)
+        result = {"error": f"Unknown metric: {metric}. Available: {', '.join(available)}"}
 
     result["timestamp"] = datetime.now().isoformat()
     print(json.dumps(result, ensure_ascii=False, default=str))
@@ -65,13 +65,24 @@ def fetch_ratio_metric(ticker, source, metric):
         ratios = stock.finance.ratio(period="quarter")
     if ratios.empty:
         return {"ticker": ticker, "metric": metric, "value": None, "error": "no data"}
-    _, col = STOCK_METRICS[metric]
-    ratios = ratios.loc[:, ~ratios.columns.duplicated()]
-    if col in ratios.columns:
-        val = ratios[col].iloc[0]
-    else:
-        val = ratios.iloc[0].get(col)
+    val = latest_ratio_value(ratios, STOCK_METRICS[metric])
     return {"ticker": ticker, "metric": metric, "value": float(val) if val is not None else None}
+
+
+def latest_ratio_value(ratios, columns):
+    """Return the newest available normalized ratio metric."""
+    if ratios.empty:
+        return None
+    ratios = ratios.loc[:, ~ratios.columns.duplicated()]
+    sort_columns = [column for column in ("year", "period") if column in ratios.columns]
+    if sort_columns:
+        ratios = ratios.sort_values(sort_columns, ascending=False, kind="stable")
+    row = ratios.iloc[0]
+    for column in columns:
+        value = row.get(column)
+        if column in ratios.columns and value is not None and value == value:
+            return value
+    return None
 
 
 def fetch_price(ticker, source):
@@ -92,17 +103,15 @@ def fetch_price(ticker, source):
 def fetch_market_cap(ticker, source):
     from claude_finance_kit import Stock
     from claude_finance_kit.core.exceptions import ProviderError
-    col = "Market Capital (Bn. VND)"
     try:
         stock = Stock(ticker, source=source)
         ratios = stock.finance.ratio(period="quarter")
     except (ProviderError, Exception):
         stock = Stock(ticker, source="KBS")
         ratios = stock.finance.ratio(period="quarter")
-    ratios = ratios.loc[:, ~ratios.columns.duplicated()]
-    if ratios.empty or col not in ratios.columns:
+    val = latest_ratio_value(ratios, ("market_cap",))
+    if val is None:
         return {"ticker": ticker, "metric": "market_cap", "value": None}
-    val = ratios[col].iloc[0]
     return {"ticker": ticker, "metric": "market_cap", "value": float(val) if val is not None else None}
 
 

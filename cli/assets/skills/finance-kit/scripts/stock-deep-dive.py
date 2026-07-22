@@ -6,7 +6,6 @@ Output: JSON to stdout with sections: overview, financials, ratios, technicals, 
 
 import argparse
 import json
-import sys
 from datetime import datetime, timedelta
 
 

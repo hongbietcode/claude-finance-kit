@@ -19,7 +19,7 @@ stock.quote.price_board(symbols=["FPT", "VNM", "VCB"])                    # live
 
 Intervals: 1m, 5m, 15m, 30m, 1H, 1D, 1W, 1M. Date format: YYYY-MM-DD.
 
-#### price_board() — MultiIndex columns
+#### VCI price_board() — MultiIndex columns
 
 Returns a DataFrame with **two-level MultiIndex columns** `(group, field)`. Access columns using tuples:
 
@@ -43,12 +43,13 @@ df[("bid_ask", "bid_1_price")]      # best bid
 df[("bid_ask", "ask_1_price")]      # best ask
 ```
 
-**IMPORTANT:** Do NOT use flat column names like `df["match_price"]` — this will raise `KeyError`.
+**IMPORTANT:** VCI uses MultiIndex columns; KBS uses flat normalized columns,
+including `volume_accumulated` and `volume_last`.
 
 ### Company
 
 ```python
-stock.company.overview()            # name, industry, market_cap, P/E, P/B, etc. → DataFrame
+stock.company.overview()            # name, sector, profile, market_cap, etc. → DataFrame
 stock.company.shareholders()        # major shareholders + ownership % → DataFrame
 stock.company.officers()            # board members and officers → DataFrame
 stock.company.news(limit=20)        # recent company news → DataFrame
@@ -58,11 +59,14 @@ stock.company.events()              # corporate events (dividends, AGM) → Data
 ### Finance
 
 ```python
-stock.finance.balance_sheet(period="quarter")     # or "year"
+stock.finance.balance_sheet(period="quarter", unit_multiplier=1)  # or "year"
 stock.finance.income_statement(period="quarter")
 stock.finance.cash_flow(period="quarter")
-stock.finance.ratio(period="quarter")             # ROE, ROA, EPS, P/E, P/B, etc.
+stock.finance.ratio(period="quarter")             # snake_case: roe, roa, pe, pb, etc.
 ```
+
+Statement rows use `symbol`, `year`, `period` (`Q1`-`Q4` or `FY`) plus
+normalized metric columns. Ratio fields are snake_case and may vary by provider.
 
 ### Listing
 
@@ -87,6 +91,7 @@ stock.trading.price_depth()    # bid/ask depth for the symbol → DataFrame
 | MAS | full | — | full | — | price_depth |
 | TVS | — | overview | — | — | — |
 | VDS | intraday | — | — | — | — |
+| MSN | history | — | — | — | — |
 | BINANCE | full | — | — | — | depth |
 | FMP | full | overview+officers | full | — | — |
 

@@ -3,7 +3,7 @@
 Usage: python scripts/news-sentiment.py [TICKER] [--sites cafef,vnexpress] [--limit 20]
 Output: JSON to stdout with articles (title, url, description, publish_time, source)
 
-Note: Sentiment classification is done by Claude's reasoning, not this script.
+Note: Sentiment classification is performed by the active AI assistant, not this script.
 This script handles data collection only.
 """
 

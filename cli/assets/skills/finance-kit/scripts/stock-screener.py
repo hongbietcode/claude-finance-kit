@@ -13,6 +13,14 @@ import argparse
 import json
 from datetime import datetime, timedelta
 
+RATIO_COLUMNS = {
+    "pe": ("pe", "pe_ratio"),
+    "pb": ("pb", "pb_ratio"),
+    "roe": ("roe",),
+    "roic": ("roic", "return_on_capital_employed_roce"),
+    "eps": ("eps", "trailing_eps", "earnings_per_share"),
+}
+
 
 def main():
     parser = argparse.ArgumentParser(description="Stock screener")
@@ -56,11 +64,25 @@ def main():
 
 
 def get_ratios(stock):
-    """Get ratio DataFrame with deduplicated columns."""
+    """Get normalized ratio rows in newest-first order."""
     ratios = stock.finance.ratio(period="quarter")
     if not ratios.empty:
         ratios = ratios.loc[:, ~ratios.columns.duplicated()]
+        sort_columns = [column for column in ("year", "period") if column in ratios.columns]
+        if sort_columns:
+            ratios = ratios.sort_values(sort_columns, ascending=False, kind="stable").reset_index(drop=True)
     return ratios
+
+
+def ratio_value(ratios, metric, row=0, default=0.0):
+    """Read a normalized metric using verified provider aliases."""
+    if ratios.empty or row >= len(ratios):
+        return default
+    for column in RATIO_COLUMNS[metric]:
+        value = ratios.iloc[row].get(column)
+        if column in ratios.columns and value is not None and value == value:
+            return float(value)
+    return default
 
 
 def screen_magic_formula(symbols, source):
@@ -71,10 +93,10 @@ def screen_magic_formula(symbols, source):
             ratios = get_ratios(stock)
             if ratios.empty:
                 continue
-            pe = float(ratios["P/E"].iloc[0]) if "P/E" in ratios.columns else 0
-            pb = float(ratios["P/B"].iloc[0]) if "P/B" in ratios.columns else 0
-            roe = float(ratios["ROE (%)"].iloc[0]) if "ROE (%)" in ratios.columns else 0
-            roic = float(ratios["ROIC (%)"].iloc[0]) if "ROIC (%)" in ratios.columns else 0
+            pe = ratio_value(ratios, "pe")
+            pb = ratio_value(ratios, "pb")
+            roe = ratio_value(ratios, "roe")
+            roic = ratio_value(ratios, "roic")
             if pe <= 0 or pb <= 0:
                 continue
             ey = 1 / pe if pe > 0 else 0
@@ -101,18 +123,19 @@ def screen_canslim(symbols, source):
                 continue
             score = 0
 
-            if "EPS (VND)" in ratios.columns and len(ratios) > 1:
-                eps_current = float(ratios["EPS (VND)"].iloc[0])
-                eps_prev = float(ratios["EPS (VND)"].iloc[1])
+            eps_current = ratio_value(ratios, "eps", row=0, default=float("nan"))
+            eps_prev = ratio_value(ratios, "eps", row=1, default=float("nan"))
+            if eps_current == eps_current and eps_prev == eps_prev:
                 if eps_prev > 0 and (eps_current - eps_prev) / eps_prev > 0.25:
                     score += 1
 
             annual_ratios = stock.finance.ratio(period="year")
             if not annual_ratios.empty:
                 annual_ratios = annual_ratios.loc[:, ~annual_ratios.columns.duplicated()]
-                if "EPS (VND)" in annual_ratios.columns and len(annual_ratios) > 1:
-                    eps_y0 = float(annual_ratios["EPS (VND)"].iloc[0])
-                    eps_y1 = float(annual_ratios["EPS (VND)"].iloc[1])
+                annual_ratios = annual_ratios.sort_values("year", ascending=False, kind="stable")
+                eps_y0 = ratio_value(annual_ratios, "eps", row=0, default=float("nan"))
+                eps_y1 = ratio_value(annual_ratios, "eps", row=1, default=float("nan"))
+                if eps_y0 == eps_y0 and eps_y1 == eps_y1:
                     if eps_y1 > 0 and (eps_y0 - eps_y1) / eps_y1 > 0.25:
                         score += 1
 
@@ -144,9 +167,9 @@ def screen_multifactor(symbols, source):
             )
             if ratios.empty or history.empty:
                 continue
-            pe = float(ratios["P/E"].iloc[0]) if "P/E" in ratios.columns else 0
-            pb = float(ratios["P/B"].iloc[0]) if "P/B" in ratios.columns else 0
-            roe = float(ratios["ROE (%)"].iloc[0]) if "ROE (%)" in ratios.columns else 0
+            pe = ratio_value(ratios, "pe")
+            pb = ratio_value(ratios, "pb")
+            roe = ratio_value(ratios, "roe")
             momentum = float(history["close"].iloc[-1]) / float(history["close"].iloc[0]) - 1
             if pe > 0 and pb > 0:
                 data.append({"symbol": sym, "pe": pe, "pb": pb, "roe": roe, "momentum": momentum})
