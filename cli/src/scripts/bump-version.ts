@@ -33,7 +33,8 @@ switch (bumpType) {
 const filesToUpdate = [
   { path: pyprojectPath, pattern: `version = "${oldVersion}"`, replacement: `version = "${newVersion}"` },
   { path: join(projectRoot, 'src', 'claude_finance_kit', '__init__.py'), pattern: `__version__ = "${oldVersion}"`, replacement: `__version__ = "${newVersion}"` },
-  { path: join(projectRoot, '.claude-plugin', 'plugin.json'), pattern: `"version": "${oldVersion}"`, replacement: `"version": "${newVersion}"` },
+  { path: join(projectRoot, 'cli', 'assets', '.claude-plugin', 'plugin.json'), pattern: `"version": "${oldVersion}"`, replacement: `"version": "${newVersion}"` },
+  { path: join(projectRoot, 'cli', 'assets', '.codex-plugin', 'plugin.json'), pattern: `"version": "${oldVersion}"`, replacement: `"version": "${newVersion}"` },
   { path: join(projectRoot, '.claude-plugin', 'marketplace.json'), pattern: `"version": "${oldVersion}"`, replacement: `"version": "${newVersion}"` },
   { path: join(projectRoot, 'cli', 'package.json'), pattern: `"version": "${oldVersion}"`, replacement: `"version": "${newVersion}"` },
 ];

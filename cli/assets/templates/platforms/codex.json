@@ -1,0 +1,18 @@
+{
+  "platform": "codex",
+  "displayName": "Codex",
+  "folderStructure": {
+    "root": ".agents",
+    "skillPath": "skills",
+    "filename": "SKILL.md"
+  },
+  "components": {
+    "skills": true,
+    "references": false,
+    "agents": false
+  },
+  "frontmatter": {
+    "format": "yaml"
+  },
+  "description": "Codex-compatible finance-kit skill with bundled references and scripts."
+}

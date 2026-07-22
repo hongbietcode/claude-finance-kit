@@ -11,6 +11,10 @@ export function detectAIType(cwd: string = process.cwd()): DetectionResult {
   const detected: AIType[] = [];
 
   if (existsSync(join(cwd, '.claude'))) detected.push('claude');
+  if (
+    existsSync(join(cwd, '.codex')) ||
+    existsSync(join(cwd, '.agents', 'skills'))
+  ) detected.push('codex');
   if (existsSync(join(cwd, '.cursor'))) detected.push('cursor');
   if (existsSync(join(cwd, '.github'))) detected.push('copilot');
 
@@ -26,6 +30,8 @@ export function getAITypeDescription(aiType: AIType): string {
   switch (aiType) {
     case 'claude':
       return 'Claude Code (.claude/)';
+    case 'codex':
+      return 'Codex (.agents/skills/)';
     case 'cursor':
       return 'Cursor (.cursor/rules/)';
     case 'copilot':

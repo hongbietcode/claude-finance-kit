@@ -1,6 +1,6 @@
-export type AIType = 'claude' | 'cursor' | 'copilot';
+export type AIType = 'claude' | 'codex' | 'cursor' | 'copilot';
 
-export const AI_TYPES: AIType[] = ['claude', 'cursor', 'copilot'];
+export const AI_TYPES: AIType[] = ['claude', 'codex', 'cursor', 'copilot'];
 
 export interface PlatformConfig {
   platform: string;

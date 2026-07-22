@@ -1,0 +1,38 @@
+{
+  "name": "claude-finance-kit",
+  "version": "0.1.23",
+  "description": "Vietnamese stock-market data and analysis workflows for Codex and AI coding assistants.",
+  "author": {
+    "name": "hongbietcode",
+    "url": "https://github.com/hongbietcode"
+  },
+  "homepage": "https://github.com/hongbietcode/claude-finance-kit",
+  "repository": "https://github.com/hongbietcode/claude-finance-kit",
+  "license": "MIT",
+  "keywords": [
+    "stock",
+    "finance",
+    "vietnam",
+    "vnstock",
+    "market-research"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Claude Finance Kit",
+    "shortDescription": "Vietnamese market data and analysis workflows.",
+    "longDescription": "Analyze Vietnamese stocks, bonds, market valuation, macro data, funds, commodities, technical indicators, and financial news.",
+    "developerName": "hongbietcode",
+    "category": "Finance",
+    "capabilities": [
+      "Read",
+      "Execute"
+    ],
+    "websiteURL": "https://github.com/hongbietcode/claude-finance-kit",
+    "defaultPrompt": [
+      "Analyze FPT stock with current data.",
+      "Create today's Vietnam market briefing.",
+      "Compare VNM and MSN across fundamentals and technicals."
+    ],
+    "brandColor": "#0F766E"
+  }
+}

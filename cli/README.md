@@ -2,12 +2,13 @@
 
 CLI to install [claude-finance-kit](https://github.com/hongbietcode/claude-finance-kit) plugin for AI coding assistants.
 
-Supports **Claude Code**, **Cursor**, and **GitHub Copilot**.
+Supports **Codex**, **Claude Code**, **Cursor**, and **GitHub Copilot**.
 
 ## Install
 
 ```bash
 npx claude-finance-kit-cli init --ai claude    # Claude Code
+npx claude-finance-kit-cli init --ai codex     # Codex
 npx claude-finance-kit-cli init --ai cursor    # Cursor
 npx claude-finance-kit-cli init --ai copilot   # GitHub Copilot
 npx claude-finance-kit-cli init                # Interactive (auto-detect)
@@ -15,11 +16,12 @@ npx claude-finance-kit-cli init                # Interactive (auto-detect)
 
 ## What Gets Installed
 
-| Platform    | Skills | Agents | References |
-| ----------- | ------ | ------ | ---------- |
-| Claude Code | 4      | 4      | 9          |
-| Cursor      | 4      | -      | 9          |
-| Copilot     | 4      | -      | 9          |
+| Platform    | Skills | Agents | Bundled references |
+| ----------- | ------ | ------ | ------------------ |
+| Claude Code | 1      | 5      | 9                  |
+| Codex       | 1      | -      | 9                  |
+| Cursor      | 1      | -      | 9                  |
+| Copilot     | 1      | -      | 9                  |
 
 **Skill:** finance-kit (orchestrator + all analysis workflows)
 
@@ -45,6 +47,7 @@ npx claude-finance-kit-cli --version                    # Show version
 
 ```bash
 npx claude-finance-kit-cli uninstall --ai claude
+npx claude-finance-kit-cli uninstall --ai codex
 npx claude-finance-kit-cli uninstall --ai cursor
 npx claude-finance-kit-cli uninstall --ai copilot
 ```
