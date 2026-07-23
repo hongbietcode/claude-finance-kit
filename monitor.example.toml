@@ -1,0 +1,32 @@
+[monitor]
+market = "VN"
+source = "SSI"
+symbols = ["ALL"]
+benchmark_symbol = "VNINDEX"
+database_path = "data/monitor.db"
+reports_dir = "reports"
+stale_after_seconds = 90
+future_skew_seconds = 10
+poll_interval_seconds = 60
+health_heartbeat_seconds = 30
+queue_size = 10000
+alert_threshold = 75
+flow_quantile = 0.995
+flow_imbalance_threshold = 0.6
+cluster_window_seconds = 300
+alert_cooldown_seconds = 900
+daily_report_event_limit = 5000
+
+[strategy]
+name = "trend-momentum"
+require_validation = true
+validation_path = "data/strategy-validation.json"
+validation_max_age_days = 30
+validation_data_max_age_days = 7
+
+[paper]
+starting_cash = 1000000000
+notional = 50000000
+
+[telegram]
+enabled = true

@@ -6,6 +6,8 @@ import pytest
 
 from claude_finance_kit._internal.http_client import sanitize_url, send_request
 from claude_finance_kit._internal.user_agent import get_headers
+from claude_finance_kit._provider._market_http import MarketHttpClient
+from claude_finance_kit.core.exceptions import AuthenticationError, ProviderError
 
 
 def test_sanitize_url_normalizes_host_and_preserves_query():
@@ -62,6 +64,54 @@ def test_send_request_does_not_fallback_on_successful_empty_payload(mock_get):
 
     assert result == {}
     mock_get.assert_called_once()
+
+
+@patch("claude_finance_kit._internal.http_client.requests.get")
+def test_send_request_does_not_fallback_or_expose_key_on_auth_failure(mock_get):
+    response = Mock(status_code=401, reason="Unauthorized")
+    mock_get.return_value = response
+    secret = "do-not-leak-this-key"
+
+    with pytest.raises(AuthenticationError) as captured:
+        send_request(
+            f"https://primary.example/data?apikey={secret}",
+            {},
+            fallback_urls=["https://fallback.example/data"],
+            allowed_hosts={"primary.example", "fallback.example"},
+        )
+
+    assert secret not in str(captured.value)
+    mock_get.assert_called_once()
+
+
+@patch("claude_finance_kit._internal.http_client.requests.get")
+def test_send_request_rejects_redirect_without_forwarding_headers(mock_get):
+    response = Mock(status_code=302, headers={"Location": "https://evil.example/steal"})
+    mock_get.return_value = response
+
+    with pytest.raises(ProviderError, match="Redirect rejected"):
+        send_request(
+            "https://primary.example/data",
+            {"X-API-Key": "secret"},
+            allowed_hosts={"primary.example"},
+        )
+
+    assert mock_get.call_args.kwargs["allow_redirects"] is False
+
+
+def test_market_http_client_rejects_redirect_without_forwarding_credentials():
+    client = MarketHttpClient(
+        "ALPACA",
+        {"data.alpaca.markets"},
+        {"APCA-API-KEY-ID": "secret"},
+    )
+    response = Mock(status_code=307, headers={"Location": "https://evil.example/steal"})
+    client.session.request = Mock(return_value=response)
+
+    with pytest.raises(ProviderError, match="redirect was rejected"):
+        client.request("GET", "https://data.alpaca.markets/v2/stocks/AAPL/bars")
+
+    assert client.session.request.call_args.kwargs["allow_redirects"] is False
 
 
 def test_vci_headers_remove_device_identifiers_after_overrides():

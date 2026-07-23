@@ -1,7 +1,7 @@
 {
     "name": "finance-kit",
-    "description": "Vietnamese stock market analysis toolkit for Claude Code. Skill: finance-kit (orchestrator — routes queries, collects data via scripts, spawns agents by name, produces HTML reports). Agents: fundamental-analyst (valuation, financials), technical-analyst (trend, momentum, S/R), macro-researcher (GDP, CPI, rates, FX), lead-analyst (synthesis, decisions for T3/T4). Data sources: VCI, KBS, MAS, VND, FMP, Perplexity.",
-    "version": "0.1.23",
+    "description": "Vietnam-focused analysis plugin plus a VN/US Python data, backtest, and paper-monitor runtime. Existing finance-kit agents remain unchanged.",
+    "version": "0.2.0",
     "author": {
         "name": "hongbietcode"
     },

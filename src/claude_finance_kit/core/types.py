@@ -67,9 +67,62 @@ class DataSource(str, Enum):
     MSN = "MSN"
     DNSE = "DNSE"
     SSI = "SSI"
+    ALPACA = "ALPACA"
+    SEC = "SEC"
     FMP = "FMP"
     BINANCE = "BINANCE"
 
     @classmethod
     def all_sources(cls) -> list[str]:
         return [s.value for s in cls]
+
+
+class MarketRegion(str, Enum):
+    """Market namespaces used to disambiguate symbols and route providers."""
+
+    VN = "VN"
+    US = "US"
+
+
+class ProviderCapability(str, Enum):
+    """Operations a provider can advertise through the capability registry."""
+
+    HISTORICAL_BARS = "historical_bars"
+    INTRADAY = "intraday"
+    PRICE_BOARD = "price_board"
+    TRADES = "trades"
+    ORDER_BOOK = "order_book"
+    FOREIGN_FLOW = "foreign_flow"
+    COMPANY = "company"
+    FUNDAMENTALS = "fundamentals"
+    FILINGS = "filings"
+    LISTING = "listing"
+    REALTIME_STREAM = "realtime_stream"
+
+
+class SignalAction(str, Enum):
+    """Long-only research actions emitted by strategies and the monitor."""
+
+    BUY = "BUY"
+    HOLD = "HOLD"
+    EXIT = "EXIT"
+    NO_TRADE = "NO_TRADE"
+
+
+class MarketRegime(str, Enum):
+    """Broad market condition used for strategy selection."""
+
+    BULL = "bull"
+    RANGE = "range"
+    BEAR = "bear"
+    UNKNOWN = "unknown"
+
+
+class FeedHealth(str, Enum):
+    """Runtime health state for a market-data feed."""
+
+    HEALTHY = "healthy"
+    DEGRADED = "degraded"
+    STALE = "stale"
+    IDLE = "idle"
+    DISCONNECTED = "disconnected"

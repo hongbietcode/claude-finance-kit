@@ -9,16 +9,44 @@ from claude_finance_kit.core.constants import (
     SECTOR_IDS,
 )
 from claude_finance_kit.core.exceptions import (
+    AuthenticationError,
     ClaudeFinanceKitError,
     DataNotFoundError,
     InvalidDateRangeError,
     InvalidSymbolError,
+    ProviderCapabilityError,
     ProviderError,
     RateLimitError,
     SourceNotAvailableError,
+    StaleDataError,
 )
-from claude_finance_kit.core.models import DateRange, StockInfo
-from claude_finance_kit.core.types import AssetType, DataSource, Exchange, InstrumentType, Interval
+from claude_finance_kit.core.models import (
+    Bar,
+    DateRange,
+    ForeignFlow,
+    MarketEvent,
+    Notification,
+    OrderBookLevel,
+    OrderBookSnapshot,
+    ProviderDescriptor,
+    ProviderProvenance,
+    Signal,
+    StockInfo,
+    TradeTick,
+    UnusualFlowEvent,
+)
+from claude_finance_kit.core.types import (
+    AssetType,
+    DataSource,
+    Exchange,
+    FeedHealth,
+    InstrumentType,
+    Interval,
+    MarketRegime,
+    MarketRegion,
+    ProviderCapability,
+    SignalAction,
+)
 
 
 def get_asset_type(symbol: str) -> str:
@@ -37,6 +65,9 @@ def get_instrument_type(symbol: str) -> InstrumentType:
 __all__ = [
     "ClaudeFinanceKitError",
     "ProviderError",
+    "ProviderCapabilityError",
+    "AuthenticationError",
+    "StaleDataError",
     "InvalidSymbolError",
     "DataNotFoundError",
     "RateLimitError",
@@ -49,6 +80,11 @@ __all__ = [
     "get_asset_type",
     "get_instrument_type",
     "DataSource",
+    "MarketRegion",
+    "ProviderCapability",
+    "SignalAction",
+    "MarketRegime",
+    "FeedHealth",
     "INDICES_INFO",
     "INDICES_MAP",
     "INDEX_GROUPS",
@@ -57,4 +93,15 @@ __all__ = [
     "EXCHANGES",
     "StockInfo",
     "DateRange",
+    "ProviderDescriptor",
+    "ProviderProvenance",
+    "Bar",
+    "TradeTick",
+    "OrderBookLevel",
+    "OrderBookSnapshot",
+    "ForeignFlow",
+    "MarketEvent",
+    "UnusualFlowEvent",
+    "Signal",
+    "Notification",
 ]

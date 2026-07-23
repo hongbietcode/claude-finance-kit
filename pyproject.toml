@@ -4,15 +4,15 @@ build-backend = "hatchling.build"
 
 [project]
 name = "claude-finance-kit"
-version = "0.1.23"
-description = "Vietnamese stock market data & analysis library"
+version = "0.2.0"
+description = "Vietnam and US market data, research signals, and paper monitoring"
 readme = "README.md"
 license = "MIT"
 requires-python = ">=3.10"
 authors = [
     { name = "claude-finance-kit contributors" },
 ]
-keywords = ["vietnam", "stock", "finance", "market", "analysis"]
+keywords = ["vietnam", "us-stocks", "stock", "finance", "market", "analysis", "backtest"]
 classifiers = [
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.10",
@@ -48,18 +48,26 @@ collector = [
     "nest-asyncio>=1.6.0",
     "websockets>=12.0",
 ]
+monitor = [
+    "websockets>=12.0",
+    "ssi-fc-data==2.2.2",
+    "tomli>=2.0.0; python_version < '3.11'",
+]
 news = [
     "scipy>=1.10.0",
     "pyarrow>=14.0.0",
 ]
 all = [
-    "claude-finance-kit[ta,collector,news,search]",
+    "claude-finance-kit[ta,collector,monitor,news,search]",
 ]
 dev = [
     "pytest>=7.0.0",
     "pytest-cov>=4.0.0",
     "ruff>=0.4.0",
 ]
+
+[project.scripts]
+cfk = "claude_finance_kit.cli:main"
 
 [project.urls]
 Homepage = "https://github.com/hongbietcode/claude-finance-kit"

@@ -7,6 +7,8 @@ from claude_finance_kit import Stock
 
 stock = Stock("FPT")                  # default source: VCI
 stock = Stock("FPT", source="KBS")    # alternative source
+stock = Stock("FPT", market="VN", source="AUTO")
+stock = Stock("AAPL", market="US", source="AUTO")
 ```
 
 Symbol is auto-uppercased. Source selects the data provider (see [Data Sources](#data-sources)).
@@ -74,6 +76,10 @@ metric-column structure. Quarterly rows use `Q1`-`Q4`; annual rows use `FY`.
 | Method | Returns | Description |
 |--------|---------|-------------|
 | `price_depth()` | `DataFrame` | Order book with bid/ask price levels and volumes |
+| `trades(start=None, end=None, limit=1000)` | `DataFrame` | Executed trades when supported |
+| `order_book(start=None, end=None, limit=1000)` | `DataFrame` | Historical/latest bid-ask data |
+| `foreign_flow(start=None, end=None)` | `DataFrame` | Foreign investor flow for VN symbols |
+| `filings(limit=40)` | `DataFrame` | SEC filings for US symbols |
 
 ## Data Models
 
@@ -166,8 +172,31 @@ Fields: `price` (float), `acc_volume`, `acc_buy_volume`, `acc_sell_volume`, `acc
 | `"MSN"` | MSN Finance | Historical OHLCV only. Resolves provider SecId dynamically. |
 | `"BINANCE"` | Binance | Crypto (BTCUSDT, ETHUSDT). No API key required. |
 | `"FMP"` | Financial Modeling Prep | Global stocks. Requires `FMP_API_KEY` env var or `api_key` kwarg. |
+| `"DNSE"` | DNSE OpenAPI | Official VN OHLCV, trades, bid/ask, foreign flow, instruments. |
+| `"SSI"` | SSI FastConnect | Official VN OHLCV/listings/foreign flow plus entitlement-based stream. |
+| `"ALPACA"` | Alpaca Market Data | US IEX bars, trades, quotes, snapshots, stream. |
+| `"SEC"` | SEC EDGAR | US company metadata, filings, and XBRL facts. |
 
-Source is set at construction and applies to all sub-module calls. FMP example: `Stock("AAPL", source="FMP", api_key="...")`.
+Source is set at construction and applies to all sub-module calls. Explicit
+providers remain strict. `source="AUTO"` selects per method and requires
+`market="VN"` or `market="US"` so ambiguous symbols cannot cross markets.
+AUTO provenance is available through `DataFrame.attrs` and includes
+`source`, `attempted_sources`, `market`, `fetched_at`, `data_timestamp`,
+`delayed_seconds`, and `coverage`.
+
+Authenticated AUTO providers accept isolated options:
+
+```python
+stock = Stock(
+    "AAPL",
+    market="US",
+    source="AUTO",
+    provider_options={
+        "ALPACA": {"api_key": "...", "api_secret": "..."},
+        "FMP": {"api_key": "..."},
+    },
+)
+```
 
 ## Examples
 

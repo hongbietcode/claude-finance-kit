@@ -1,6 +1,7 @@
 """Private provider implementations. Users should not import from here directly."""
 
 from claude_finance_kit._provider._base import (
+    AsyncStreamProvider,
     CommodityProvider,
     FundProvider,
     MacroProvider,
@@ -17,6 +18,7 @@ __all__ = [
     "FundProvider",
     "CommodityProvider",
     "StreamProvider",
+    "AsyncStreamProvider",
     "ProviderRegistry",
     "registry",
 ]

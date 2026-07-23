@@ -128,3 +128,44 @@ class InvalidDateRangeError(ClaudeFinanceKitError):
             "DATE_001",
             details,
         )
+
+
+class ProviderCapabilityError(ClaudeFinanceKitError):
+    """Raised when no provider can serve the requested market capability."""
+
+    def __init__(self, capability: str, market: str, attempted: list[str] | None = None):
+        super().__init__(
+            f"No provider supports capability '{capability}' for market '{market}'",
+            "CAPABILITY_001",
+            {
+                "capability": capability,
+                "market": market,
+                "attempted_sources": attempted or [],
+            },
+        )
+
+
+class AuthenticationError(ClaudeFinanceKitError):
+    """Raised for missing or rejected provider credentials."""
+
+    def __init__(self, provider: str, message: str | None = None):
+        super().__init__(
+            message or f"Authentication failed for provider '{provider}'",
+            "AUTH_001",
+            {"provider": provider},
+        )
+
+
+class StaleDataError(ClaudeFinanceKitError):
+    """Raised when a feed is too stale to safely produce a trade signal."""
+
+    def __init__(self, source: str, age_seconds: float, maximum_seconds: float):
+        super().__init__(
+            f"Feed '{source}' is stale",
+            "DATA_STALE",
+            {
+                "source": source,
+                "age_seconds": round(age_seconds, 3),
+                "maximum_seconds": maximum_seconds,
+            },
+        )

@@ -14,6 +14,12 @@ from tenacity import (
     wait_exponential,
 )
 
+from claude_finance_kit.core.exceptions import (
+    AuthenticationError,
+    ProviderError,
+    RateLimitError,
+)
+
 logger = logging.getLogger(__name__)
 
 DEFAULT_TIMEOUT = 30
@@ -21,6 +27,12 @@ DEFAULT_RETRY_ATTEMPTS = 3
 DEFAULT_RETRY_WAIT_MIN = 1
 DEFAULT_RETRY_WAIT_MAX = 8
 
+
+def redact_url(url: str) -> str:
+    """Remove credentials and query values before surfacing a URL."""
+
+    parsed = urlsplit(url)
+    return urlunsplit((parsed.scheme, parsed.netloc, parsed.path, "", ""))
 
 
 def sanitize_url(url: str, allowed_hosts: Iterable[str] | None = None) -> str:
@@ -61,25 +73,51 @@ def _do_request(
         }
         if method.upper() == "GET":
             kwargs["params"] = params
+            kwargs["allow_redirects"] = False
             response = requests.get(url, **kwargs)
         else:
+            kwargs["allow_redirects"] = False
             if isinstance(payload, dict):
                 kwargs["data"] = json.dumps(payload)
             elif isinstance(payload, str):
                 kwargs["data"] = payload
             response = requests.post(url, **kwargs)
 
-        if response.status_code != 200:
+        if response.status_code in {401, 403}:
+            raise AuthenticationError("HTTP", f"Authentication rejected by {redact_url(url)}")
+        if 300 <= response.status_code < 400:
+            raise ProviderError(
+                f"Redirect rejected for {redact_url(url)}",
+                provider="HTTP",
+                error_code="HTTP_REDIRECT",
+            )
+        if response.status_code == 429:
+            retry_after = response.headers.get("Retry-After")
+            raise RateLimitError(
+                "HTTP",
+                int(retry_after) if retry_after and retry_after.isdigit() else None,
+            )
+        if response.status_code >= 500:
             raise ConnectionError(
-                f"HTTP {response.status_code} {response.reason} from {url}"
+                f"HTTP {response.status_code} server error from {redact_url(url)}"
+            )
+        if response.status_code >= 400:
+            raise ProviderError(
+                f"HTTP {response.status_code} rejected request to {redact_url(url)}",
+                provider="HTTP",
+                error_code=f"HTTP_{response.status_code}",
             )
         try:
             return response.json()
         except (requests.exceptions.JSONDecodeError, ValueError) as exc:
-            raise ConnectionError(f"Invalid JSON response from {url}") from exc
+            raise ProviderError(
+                f"Invalid JSON response from {redact_url(url)}",
+                provider="HTTP",
+                error_code="HTTP_JSON",
+            ) from exc
 
-    except requests.exceptions.RequestException as exc:
-        raise ConnectionError(f"Request failed: {exc}") from exc
+    except requests.exceptions.RequestException:
+        raise ConnectionError(f"Request failed for {redact_url(url)}") from None
 
 
 @retry(
@@ -106,13 +144,13 @@ def send_request(
     for candidate in candidates:
         safe_url = sanitize_url(candidate, allowed_hosts=allowed_hosts)
         if show_log:
-            logger.debug("%s %s", method.upper(), safe_url)
+            logger.debug("%s %s", method.upper(), redact_url(safe_url))
         try:
             return _do_request(safe_url, headers, method, params, payload, timeout)
         except ConnectionError as exc:
             last_error = exc
             if show_log:
-                logger.warning("Provider request failed for %s: %s", safe_url, exc)
+                logger.warning("Provider request failed for %s: %s", redact_url(safe_url), exc)
 
     if last_error is not None:
         raise last_error

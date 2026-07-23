@@ -1,6 +1,7 @@
 """Abstract base classes for all provider types."""
 
 from abc import ABC, abstractmethod
+from collections.abc import AsyncIterator
 
 import pandas as pd
 
@@ -61,6 +62,37 @@ class StockProvider(ABC):
 
     @abstractmethod
     def price_depth(self, symbol: str) -> pd.DataFrame: ...
+
+    def trades(
+        self,
+        symbol: str,
+        start: str | None = None,
+        end: str | None = None,
+        limit: int = 1000,
+    ) -> pd.DataFrame:
+        raise NotImplementedError(f"{type(self).__name__} does not support trades().")
+
+    def order_book(
+        self,
+        symbol: str,
+        start: str | None = None,
+        end: str | None = None,
+        limit: int = 1000,
+    ) -> pd.DataFrame:
+        if start is None and end is None:
+            return self.price_depth(symbol)
+        raise NotImplementedError(f"{type(self).__name__} does not support historical order_book().")
+
+    def foreign_flow(
+        self,
+        symbol: str,
+        start: str | None = None,
+        end: str | None = None,
+    ) -> pd.DataFrame:
+        raise NotImplementedError(f"{type(self).__name__} does not support foreign_flow().")
+
+    def filings(self, symbol: str, limit: int = 40) -> pd.DataFrame:
+        raise NotImplementedError(f"{type(self).__name__} does not support filings().")
 
 
 class MarketProvider(ABC):
@@ -149,10 +181,23 @@ class CommodityProvider(ABC):
 
 
 class StreamProvider(ABC):
-    """Real-time streaming data provider."""
+    """Legacy callback stream contract retained for compatibility."""
 
     @abstractmethod
     def connect(self, symbols: list[str], on_message) -> None: ...
 
     @abstractmethod
     def disconnect(self) -> None: ...
+
+
+class AsyncStreamProvider(ABC):
+    """Async iterator contract used by the resilient market monitor."""
+
+    @abstractmethod
+    async def connect(self, symbols: list[str]) -> None: ...
+
+    @abstractmethod
+    async def disconnect(self) -> None: ...
+
+    @abstractmethod
+    def events(self) -> AsyncIterator[object]: ...

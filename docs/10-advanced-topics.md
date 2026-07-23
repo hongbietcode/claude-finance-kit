@@ -7,8 +7,9 @@ Provider system, error handling, type system, and configuration.
 All user-facing modules delegate to private providers via a registry pattern.
 
 ```
-Stock("FPT") → registry.get_stock("VCI") → VCIProvider → API calls
+Stock("FPT") → registry.get_stock("VCI") → VCIStockProvider → API calls
 Market()     → registry.get_market("VND") → VNDProvider → API calls
+Stock("FPT", market="VN", source="AUTO") → capability router → DNSE/SSI/VCI/KBS/MAS
 ```
 
 ### 6 Provider Types
@@ -20,7 +21,7 @@ Market()     → registry.get_market("VND") → VNDProvider → API calls
 | Macro | `MacroProvider` | MBK | `Macro` |
 | Fund | `FundProvider` | FMARKET | `Fund` |
 | Commodity | `CommodityProvider` | SPL | `Commodity` |
-| Stream | `StreamProvider` | — | Pipeline |
+| Stream | `AsyncStreamProvider` (`StreamProvider` retained for compatibility) | — | `MarketStream` |
 
 ### Provider Registry
 
@@ -32,6 +33,24 @@ registry.list_sources(provider_type="stock")
 ```
 
 The registry is a singleton with `register_*/get_*` methods for stock, market, macro, fund, commodity, stream.
+
+Each market-data provider can also publish a `ProviderDescriptor` containing
+its `MarketRegion`, `ProviderCapability`, authentication type, delay, coverage
+label, schema version, and stream symbol limit:
+
+```python
+from claude_finance_kit._provider import registry
+
+registry.list_descriptors(market="US", capability="historical_bars")
+registry.get_descriptor("ALPACA")
+```
+
+AUTO fallback is limited to transport errors, throttling, outages, and
+unsupported operations. Invalid symbols, authentication errors, malformed
+normalized payloads, and programming errors are surfaced immediately.
+AUTO-routed frames also carry provenance in `DataFrame.attrs`:
+`source`, `attempted_sources`, `market`, `fetched_at`, `data_timestamp`,
+`delayed_seconds`, and `coverage`.
 
 ### Switching Data Sources
 
@@ -52,6 +71,10 @@ market = Market("VNINDEX", source="VND")
 | KBS | Stock | KB Securities Vietnam — full coverage |
 | MAS | Stock | Mirae Asset Securities — quote, financials, price depth |
 | FMP | Stock | Financial Modeling Prep — global stocks, requires API key |
+| DNSE | Stock + Stream | Official VN market data; credentials required for stream |
+| SSI | Stock + Stream | Official FastConnect data; ALL watchlists require entitlement, stream coverage depends on entitlements |
+| ALPACA | Stock + Stream | US IEX free-tier data, partial-market coverage, 30-symbol stream limit |
+| SEC | Stock | Official EDGAR filings and XBRL company facts |
 | VND | Market | VNDirect |
 | MBK | Macro | MBBank economics data |
 | FMARKET | Fund | FMarket fund platform |
@@ -61,9 +84,11 @@ market = Market("VNINDEX", source="VND")
 | BINANCE | Stock | Crypto — history, intraday, depth (no API key required) |
 | MSN | Stock | Historical OHLCV with dynamic SecId resolution |
 
-VCI company, listing, and finance modules use Vietcap REST endpoints instead of
-GraphQL. Requests sanitize URLs, restrict configured hosts, and can fall back to
-a safe alternate listing URL when the primary endpoint is unavailable.
+AUTO routing respects the market boundary. Use `market="VN"` or `market="US"`
+when selecting `source="AUTO"` so symbols do not cross markets.
+US fundamentals use `SEC → FMP`; US price history uses `Alpaca → FMP`; VN
+history uses `DNSE → SSI → VCI → KBS → MAS`. Providers without configured
+credentials are skipped, while rejected credentials remain hard failures.
 
 ## Error Handling
 
@@ -117,7 +142,10 @@ Each exception has:
 ## Type System
 
 ```python
-from claude_finance_kit.core.types import Interval, Exchange, AssetType, DataSource, InstrumentType
+from claude_finance_kit.core.types import (
+    Interval, Exchange, AssetType, DataSource, InstrumentType,
+    MarketRegion, ProviderCapability, SignalAction, MarketRegime, FeedHealth,
+)
 ```
 
 | Enum | Values |

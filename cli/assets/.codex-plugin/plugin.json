@@ -1,7 +1,7 @@
 {
   "name": "claude-finance-kit",
-  "version": "0.1.23",
-  "description": "Vietnamese stock-market data and analysis workflows for Codex and AI coding assistants.",
+  "version": "0.2.0",
+  "description": "Vietnam-focused Codex analysis workflows plus VN/US Python market-data, backtest, and paper-monitor APIs.",
   "author": {
     "name": "hongbietcode",
     "url": "https://github.com/hongbietcode"

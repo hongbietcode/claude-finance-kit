@@ -1,0 +1,25 @@
+services:
+  monitor:
+    build: .
+    restart: unless-stopped
+    environment:
+      SSI_CONSUMER_ID: ${SSI_CONSUMER_ID:-}
+      SSI_CONSUMER_SECRET: ${SSI_CONSUMER_SECRET:-}
+      DNSE_API_KEY: ${DNSE_API_KEY:-}
+      DNSE_API_SECRET: ${DNSE_API_SECRET:-}
+      ALPACA_API_KEY: ${ALPACA_API_KEY:-}
+      ALPACA_API_SECRET: ${ALPACA_API_SECRET:-}
+      FMP_API_KEY: ${FMP_API_KEY:-}
+      CFK_SEC_USER_AGENT: ${CFK_SEC_USER_AGENT:-}
+      CFK_TELEGRAM_BOT_TOKEN: ${CFK_TELEGRAM_BOT_TOKEN:-}
+      CFK_TELEGRAM_CHAT_ID: ${CFK_TELEGRAM_CHAT_ID:-}
+    volumes:
+      - ./monitor.toml:/app/config/monitor.toml:ro
+      - monitor-data:/app/data
+      - ./reports:/app/reports
+    read_only: true
+    tmpfs:
+      - /tmp
+
+volumes:
+  monitor-data:

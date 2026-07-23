@@ -1,8 +1,8 @@
 """
-claude-finance-kit: Vietnamese stock market data & analysis library.
+claude-finance-kit: Vietnam and US market data, research signals, and paper monitoring.
 """
 
-__version__ = "0.1.15"
+__version__ = "0.2.0"
 
 __all__ = [
     "Stock",
@@ -11,6 +11,10 @@ __all__ = [
     "Macro",
     "Fund",
     "Commodity",
+    "MarketStream",
+    "Monitor",
+    "BacktestEngine",
+    "WalkForwardOptimizer",
 ]
 
 _LAZY_IMPORTS = {
@@ -20,6 +24,10 @@ _LAZY_IMPORTS = {
     "Macro": "claude_finance_kit.macro",
     "Fund": "claude_finance_kit.fund",
     "Commodity": "claude_finance_kit.commodity",
+    "MarketStream": "claude_finance_kit.stream",
+    "Monitor": "claude_finance_kit.monitor",
+    "BacktestEngine": "claude_finance_kit.strategy",
+    "WalkForwardOptimizer": "claude_finance_kit.strategy",
     "ta": "claude_finance_kit.ta",
     "collector": "claude_finance_kit.collector",
     "news": "claude_finance_kit.news",

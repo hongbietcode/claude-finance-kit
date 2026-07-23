@@ -1,7 +1,7 @@
 <p align="center">
   <h1 align="center">claude-finance-kit</h1>
   <p align="center">
-    Vietnamese stock market analysis toolkit for AI coding assistants.
+    Vietnam and US market data, research signals, and paper monitoring.
     <br />
     Fundamentals &bull; Technicals &bull; Macro &bull; News &bull; Screening &bull; Fund Analysis
   </p>
@@ -18,7 +18,13 @@
 
 ## Overview
 
-**claude-finance-kit** is a Python library + AI plugin that gives your coding assistant deep access to Vietnamese stock market data and analysis tools. It ships valid plugin manifests for **Codex** and **Claude Code**, and also supports **Cursor** and **GitHub Copilot** through the CLI installer.
+**claude-finance-kit** is a Python library for Vietnam/US market data,
+deterministic research signals, backtesting, and self-hosted paper monitoring.
+Its existing AI plugin remains focused on Vietnamese market analysis and ships
+valid manifests for **Codex** and **Claude Code**.
+
+Version `0.2.0` adds the self-hosted VN/US market monitor runtime alongside the
+existing data and strategy APIs.
 
 Ask natural language questions — the plugin auto-routes to the right analysis workflow:
 
@@ -49,7 +55,10 @@ Ask natural language questions — the plugin auto-routes to the right analysis 
 - **Fund Analysis** — 58+ mutual funds: NAV, holdings, industry allocation, performance
 - **Bond Analysis** — corporate and government bond discovery plus OHLCV, trades, and quotes
 - **Batch Collection** — scheduled OHLCV, financial, and intraday data collection tasks
-- **Multi-Source** — automatic fallback across 12 data providers
+- **Official Market Feeds** — DNSE, SSI FastConnect, Alpaca IEX, and SEC EDGAR
+- **Capability Routing** — opt-in `source="AUTO"` with `source`, `attempted_sources`, `market`, `fetched_at`, `data_timestamp`, `delayed_seconds`, and `coverage` provenance
+- **Signal Validation** — long-only regime strategies, next-bar backtests, and strict walk-forward holdout gates that downgrade to `NO_TRADE`
+- **Paper Monitor** — unusual-flow detection, restart-safe SQLite paper/equity state, Telegram alerts, daily HTML summaries, and Docker deployment; paper-trade only, no broker connections
 
 ## Installation
 
@@ -58,6 +67,19 @@ Ask natural language questions — the plugin auto-routes to the right analysis 
 ```bash
 pip install claude-finance-kit
 ```
+
+For realtime monitoring:
+
+```bash
+pip install "claude-finance-kit[monitor]"
+cfk monitor init
+cfk monitor doctor
+cfk monitor run
+```
+
+`monitor doctor` performs live data, stream-auth/entitlement, and Telegram
+authentication probes by default. Use `--offline` only for a local
+configuration check.
 
 ### 2. Install the AI plugin
 
@@ -165,6 +187,64 @@ fund = Fund()
 fund.listing("STOCK")
 ```
 
+### VN/US routing and trading data
+
+```python
+from claude_finance_kit import Stock
+
+vn = Stock("FPT", market="VN", source="AUTO")
+us = Stock("AAPL", market="US", source="AUTO")
+
+bars = us.quote.history(start="2025-01-01")
+trades = vn.trading.trades(limit=500)
+quotes = us.trading.order_book(limit=100)
+```
+
+Explicit sources remain strict and backward compatible. AUTO results record
+`source`, `attempted_sources`, `market`, `fetched_at`, `data_timestamp`,
+`delayed_seconds`, and `coverage` in `DataFrame.attrs`.
+
+### Realtime monitor
+
+The self-hosted monitor ships in `0.2.0` and is configured with `cfk monitor`.
+`cfk monitor init` creates both `monitor.toml` and a local `.env.example`.
+Populate the secrets for the providers you intend to use before running
+`cfk monitor doctor` and `cfk monitor run`:
+
+```text
+SSI_CONSUMER_ID
+SSI_CONSUMER_SECRET
+DNSE_API_KEY
+DNSE_API_SECRET
+ALPACA_API_KEY
+ALPACA_API_SECRET
+FMP_API_KEY
+CFK_SEC_USER_AGENT
+CFK_TELEGRAM_BOT_TOKEN
+CFK_TELEGRAM_CHAT_ID
+```
+
+An explicit VN watchlist can fall back to AUTO intraday polling when SSI/DNSE
+stream credentials are unavailable. The runtime labels that mode `degraded`,
+blocks BUY and never treats it as all-market scanning. SSI credentials and
+`ALL` entitlement remain mandatory for a full-market VN stream. US can use
+degraded FMP polling when Alpaca is unavailable, but still requires
+`FMP_API_KEY`.
+
+Passing validation is tied to the exact market, regime, benchmark, strategy
+name, parameter set, source-data fingerprint, and freshness window. Feed
+timestamps that are stale, out of order, duplicated, or too far in the future
+block BUY. Outside the configured weekday exchange hours the feed is `idle`;
+incoming extended-hours records are quarantined, and holiday calendars are not
+inferred. SQLite commits signal dedupe, paper state, and the Telegram outbox
+atomically so a notification failure does not lose the signal or stop the
+monitor. Completed minute aggregates are restored after a restart; routine
+HOLD states are not sent as recurring alerts.
+
+The monitor writes a daily HTML report to `reports/monitor-YYYY-MM-DD-report.html`.
+The `cfk backtest` command writes a backtest HTML report to
+`reports/{symbol}-{strategy}-backtest-report.html`.
+
 ### Technical Analysis
 
 ```python
@@ -195,6 +275,10 @@ ind.volume.obv()
 | **MAS** | Stock | Quote, intraday, financials, price depth |
 | **TVS** | Stock | Company overview only |
 | **VDS** | Stock | Intraday only |
+| **DNSE** | VN stock | Official OHLCV, trades, bid/ask, foreign flow, instruments, WebSocket |
+| **SSI** | VN stock | Official FastConnect OHLCV, listings, foreign flow, entitlement-based stream |
+| **Alpaca** | US stock | IEX bars, trades, quotes, snapshots, WebSocket — free tier is partial coverage |
+| **SEC** | US filings | Official EDGAR submissions and XBRL company facts |
 | **FMP** | Stock (global) | Quote, company, financials — requires `FMP_API_KEY` |
 | **BINANCE** | Crypto | History, intraday, depth — no API key |
 | **VND** | Market | P/E, P/B, top movers |
@@ -203,7 +287,9 @@ ind.volume.obv()
 | **SPL** | Commodity | Gold, oil, steel, gas, fertilizer, agricultural |
 | **Perplexity** | Search | Web search — requires `PERPLEXITY_API_KEY` |
 
-> **Source fallback:** If VCI returns 403 (common on cloud IPs), the library automatically falls back to KBS. You can also specify manually: `Stock("FPT", source="KBS")`.
+> **Source fallback:** Explicit providers never silently change source. Use
+> `Stock("FPT", market="VN", source="AUTO")` for capability-aware fallback.
+> Authentication, invalid-symbol, and malformed-data errors do not trigger fallback.
 
 ## Plugin Architecture
 
@@ -237,6 +323,11 @@ cli/                          # npm CLI installer (claude-finance-kit-cli)
 |----------|----------|-------------|
 | `FMP_API_KEY` | Optional | For global stock data via Financial Modeling Prep |
 | `PERPLEXITY_API_KEY` | Optional | For web search via Perplexity API |
+| `DNSE_API_KEY`, `DNSE_API_SECRET` | DNSE stream | Official DNSE credentials |
+| `SSI_CONSUMER_ID`, `SSI_CONSUMER_SECRET` | SSI | FastConnect credentials |
+| `ALPACA_API_KEY`, `ALPACA_API_SECRET` | US realtime | Alpaca Market Data credentials |
+| `CFK_SEC_USER_AGENT` | SEC | Application name and contact email |
+| `CFK_TELEGRAM_BOT_TOKEN`, `CFK_TELEGRAM_CHAT_ID` | Telegram | Outbound-only alerts |
 
 ## Documentation
 
@@ -254,6 +345,7 @@ cli/                          # npm CLI installer (claude-finance-kit-cli)
 | [Advanced Topics](docs/10-advanced-topics.md) | Provider registry, error handling |
 | [Search Module](docs/11-search-module.md) | Perplexity Search API |
 | [Bond Module](docs/12-bond-module.md) | Bond listing, OHLCV, trades, and quotes |
+| [Market Monitor](docs/13-market-monitor.md) | VN/US providers, backtests, unusual flow, Telegram, Docker |
 
 ## Development
 

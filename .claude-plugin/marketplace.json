@@ -1,7 +1,7 @@
 {
     "name": "claude-finance-kit",
     "id": "claude-finance-kit",
-    "description": "Vietnamese stock market analysis toolkit for Claude Code. Covers stock analysis, market research, technical analysis, fundamental analysis, macro research, news crawling, and batch data collection.",
+    "description": "Vietnam-focused AI analysis plugin plus a Python runtime for VN/US market data, backtesting, unusual-flow alerts, and paper monitoring.",
     "owner": {
         "name": "hongbietcode"
     },
@@ -9,8 +9,8 @@
         {
             "name": "claude-finance-kit",
             "source": "./cli/assets",
-            "description": "Vietnamese stock market analysis toolkit for Claude Code. Skill: finance-kit (orchestrator + stock analysis, market research, news sentiment, screening). Agents: fundamental-analyst, technical-analyst, macro-researcher, lead-analyst. Data sources: VCI, KBS, MAS, VND, FMP, Perplexity.",
-            "version": "0.1.23",
+            "description": "Vietnam-focused analysis workflows plus a VN/US Python data, backtest, and paper-monitor runtime. Existing finance-kit agents remain unchanged.",
+            "version": "0.2.0",
             "author": {
                 "name": "hongbietcode"
             },
